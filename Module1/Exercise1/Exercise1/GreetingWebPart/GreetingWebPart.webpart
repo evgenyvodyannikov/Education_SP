@@ -7,8 +7,8 @@
     </metaData>
     <data>
       <properties>
-        <property name="Title" type="string">Exercise1 - VisualWebPart1</property>
-        <property name="Description" type="string">Моя визуальная веб-часть</property>
+        <property name="Title" type="string">Greet Users</property>
+        <property name="Description" type="string">Welcomes the current user with a friendly message</property>
       </properties>
     </data>
   </webPart>
