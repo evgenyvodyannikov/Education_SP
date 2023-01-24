@@ -10,8 +10,8 @@
 namespace Exercise1.GreetingWebPart {
     
     
-    public partial class VisualWebPart1UserControl {
-        
+    public partial class GreetingWebPartUserControl
+    {
         /// <summary>
         /// lblGreeting элемент управления.
         /// </summary>

@@ -6,7 +6,7 @@ using Microsoft.SharePoint;
 
 namespace Exercise1.GreetingWebPart
 {
-    public partial class VisualWebPart1UserControl : UserControl
+    public partial class GreetingWebPartUserControl : UserControl
     {
         protected void Page_Load(object sender, EventArgs e)
         {

@@ -2,7 +2,7 @@
 <webParts>
   <webPart xmlns="http://schemas.microsoft.com/WebPart/v3">
     <metaData>
-      <type name="Exercise1.GreetingWebPart.VisualWebPart1, $SharePoint.Project.AssemblyFullName$" />
+      <type name="Exercise1.GreetingWebPart.GreetingWebPart, $SharePoint.Project.AssemblyFullName$" />
       <importErrorMessage>$Resources:core,ImportErrorMessage;</importErrorMessage>
     </metaData>
     <data>

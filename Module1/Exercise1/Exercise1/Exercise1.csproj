@@ -77,7 +77,9 @@
     <None Include="GreetingWebPart\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{0519096a-7a1b-46b7-aaed-38d05b7037d8}</SharePointProjectItemId>
     </None>
-    <None Include="GreetingWebPart\GreetingWebPart.webpart" />
+    <None Include="GreetingWebPart\GreetingWebPart.webpart">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Features\GreetingWebPart\GreetingWebPart.Template.xml">
