@@ -21,7 +21,7 @@ using System.Security;
 [assembly: ComVisible(false)]
 
 // Следующий GUID служит для идентификации библиотеки типов, если этот проект видим для COM
-[assembly: Guid("759f1de8-b98d-4f1a-b3ff-ef7146ea89bb")]
+[assembly: Guid("8fc4ab7a-750e-487a-a5fe-32e02345e19b")]
 
 // Сведения о версии сборки состоят из следующих четырех значений:
 //
