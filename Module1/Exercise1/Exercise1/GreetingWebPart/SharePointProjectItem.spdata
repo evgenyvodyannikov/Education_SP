@@ -6,6 +6,6 @@
     <ProjectItemFile Source="GreetingWebPartUserControl.ascx" Target="CONTROLTEMPLATES\Exercise1\GreetingWebPart\" Type="TemplateFile" />
   </Files>
   <SafeControls>
-    <SafeControl Name="SafeControlEntry1" Assembly="$SharePoint.Project.AssemblyFullName$" Namespace="Exercise1.VisualWebPart1" TypeName="*" IsSafe="true" IsSafeAgainstScript="false" />
+    <SafeControl Name="SafeControlEntry1" Assembly="$SharePoint.Project.AssemblyFullName$" Namespace="Exercise1.GreetingWebPart" TypeName="*" IsSafe="true" IsSafeAgainstScript="false" />
   </SafeControls>
 </ProjectItem>

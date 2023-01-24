@@ -7,7 +7,7 @@ using System.Web.UI.WebControls.WebParts;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.WebControls;
 
-namespace Exercise1.VisualWebPart1
+namespace Exercise1.GreetingWebPart
 {
     [ToolboxItemAttribute(false)]
     public class VisualWebPart1 : WebPart

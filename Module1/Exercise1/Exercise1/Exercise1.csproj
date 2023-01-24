@@ -54,16 +54,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VisualWebPart1\VisualWebPart1.cs" />
-    <Compile Include="VisualWebPart1\VisualWebPart1UserControl.ascx.cs">
-      <DependentUpon>VisualWebPart1UserControl.ascx</DependentUpon>
+    <Compile Include="GreetingWebPart\GreetingWebPart.cs" />
+    <Compile Include="GreetingWebPart\GreetingWebPartUserControl.ascx.cs">
+      <DependentUpon>GreetingWebPartUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="VisualWebPart1\VisualWebPart1UserControl.ascx.designer.cs">
-      <DependentUpon>VisualWebPart1UserControl.ascx.cs</DependentUpon>
+    <Compile Include="GreetingWebPart\GreetingWebPartUserControl.ascx.designer.cs">
+      <DependentUpon>GreetingWebPartUserControl.ascx.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Features\Feature1\Feature1.feature">
+    <None Include="Features\GreetingWebPart\GreetingWebPart.feature">
       <FeatureId>{7d5778a0-45e5-4c39-a996-e1c133b8b79d}</FeatureId>
     </None>
     <None Include="key.snk" />
@@ -73,17 +74,17 @@
     <None Include="Package\Package.Template.xml">
       <DependentUpon>Package.package</DependentUpon>
     </None>
-    <None Include="VisualWebPart1\SharePointProjectItem.spdata">
+    <None Include="GreetingWebPart\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{0519096a-7a1b-46b7-aaed-38d05b7037d8}</SharePointProjectItemId>
     </None>
-    <None Include="VisualWebPart1\VisualWebPart1.webpart" />
+    <None Include="GreetingWebPart\GreetingWebPart.webpart" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Features\Feature1\Feature1.Template.xml">
-      <DependentUpon>Feature1.feature</DependentUpon>
+    <Content Include="Features\GreetingWebPart\GreetingWebPart.Template.xml">
+      <DependentUpon>GreetingWebPart.feature</DependentUpon>
     </Content>
-    <Content Include="VisualWebPart1\Elements.xml" />
-    <Content Include="VisualWebPart1\VisualWebPart1UserControl.ascx" />
+    <Content Include="GreetingWebPart\Elements.xml" />
+    <Content Include="GreetingWebPart\GreetingWebPartUserControl.ascx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
