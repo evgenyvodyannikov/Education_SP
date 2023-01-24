@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package dslVersion="1.0.0.0" 
+        Id="ff254eb9-4cc6-475c-a923-622c78ce239b" 
+        solutionId="ff254eb9-4cc6-475c-a923-622c78ce239b" 
+        xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel" 
+        name="Exercise1"
+        sharePointProductVersion="15.0">
+</package>
