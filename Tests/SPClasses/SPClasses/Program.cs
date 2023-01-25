@@ -18,6 +18,17 @@ namespace SPClasses
             bool isAdmin = SPFarm.Local.CurrentUserIsAdministrator();
             Console.WriteLine("FarmID {0}\nisAdmin {1}", farmID, isAdmin);
 
+            // display all Services with Online status.
+            foreach (SPService service in SPFarm.Local.Services)
+            {
+                foreach (SPServiceInstance instance in service.Instances)
+                {
+                    if (instance.Status == SPObjectStatus.Online)
+                    {
+                        Console.WriteLine("\nInstance: {0} with type {1} is Online", instance, instance.TypeName);
+                    }
+                }
+            }
 
             Console.ReadKey();
 
