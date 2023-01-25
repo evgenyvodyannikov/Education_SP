@@ -19,16 +19,26 @@ namespace SPClasses
             Console.WriteLine("FarmID {0}\nisAdmin {1}", farmID, isAdmin);
 
             // display all Services with Online status.
-            foreach (SPService service in SPFarm.Local.Services)
-            {
-                foreach (SPServiceInstance instance in service.Instances)
-                {
-                    if (instance.Status == SPObjectStatus.Online)
-                    {
-                        Console.WriteLine("\nInstance: {0} with type {1} is Online", instance, instance.TypeName);
-                    }
-                }
-            }
+            //foreach (SPService service in SPFarm.Local.Services)
+            //{
+            //    foreach (SPServiceInstance instance in service.Instances)
+            //    {
+            //        if (instance.Status == SPObjectStatus.Online)
+            //        {
+            //            Console.WriteLine("\nInstance: {0} with type {1} is Online", instance, instance.TypeName);
+            //        }
+            //    }
+            //}
+
+            // Get a reference to the parent SPWebService instance.
+            var contentService = SPWebService.ContentService;
+            // Use an indexer to retrieve the web application by display name.
+            var webApp = contentService.WebApplications["Test"];
+            //// Change the maximum file size (in MB) that users can upload.
+            webApp.MaximumFileSize = 75;
+            //// Persist the changes.
+            webApp.Update();
+            Console.WriteLine(webApp.ToString());
 
             Console.ReadKey();
 
