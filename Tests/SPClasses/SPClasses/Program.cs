@@ -40,6 +40,22 @@ namespace SPClasses
             webApp.Update();
             Console.WriteLine(webApp.ToString());
 
+
+            // Pass a URL to the SPSite constructor.
+            var site1 = new SPSite("http://sharepoint:4444");
+            Console.WriteLine("site1: {0}", site1);
+            // Retrieve an SPSite from the parent SPWebApplication.
+            var contentService1 = SPWebService.ContentService;
+            var webApp1 = contentService1.WebApplications["Test"];
+            var site2 = webApp.Sites["sharepoint"];
+            Console.WriteLine("site2: {0}", site2);
+            // Retrieve an SPSite from the current execution context.
+            var site3 = SPContext.Current != null ? SPContext.Current.Site.ToString() : "not present";
+            Console.WriteLine("site3: {0}", site3);
+            // Dispose of SPSite objects where appropriate after use.
+            site1?.Dispose();
+            site2?.Dispose();
+
             Console.ReadKey();
 
         }
