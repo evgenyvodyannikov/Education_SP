@@ -11,11 +11,13 @@
         <div id="titleChecker">
             <p>This site includes the following subsites:</p>
             <asp:ListBox ID="lstWebs" runat="server" SelectionMode="Single" OnSelectedIndexChanged="lstWebs_SelectedIndexChanged" AutoPostBack="True" Rows="10" />
-            <asp:Panel ID="pnlUpdateControls" runat="server">
-                <p>Type a new title in the box below, and then click Update.</p>
-                <asp:TextBox ID="txtTitle" runat="server" Width="200px" />
-                <asp:Button ID="btnUpdate" Text="Update" runat="server" OnClick="btnUpdate_Click" />
-            </asp:Panel>
+            <SharePoint:SPSecurityTrimmedControl runat="server" PermissionsString="ManageWeb">                
+                <asp:Panel ID="pnlUpdateControls" runat="server">
+                    <p>Type a new title in the box below, and then click Update.</p>
+                    <asp:TextBox ID="txtTitle" runat="server" Width="200px" />
+                    <asp:Button ID="btnUpdate" Text="Update" runat="server" OnClick="btnUpdate_Click" />
+                </asp:Panel>
+            </SharePoint:SPSecurityTrimmedControl>
             <asp:Panel ID="pnlResult" runat="server">
                 <p>
                     <asp:Literal ID="litResult" runat="server" />
