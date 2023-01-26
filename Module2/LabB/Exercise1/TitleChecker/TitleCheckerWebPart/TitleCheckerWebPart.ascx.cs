@@ -12,6 +12,7 @@ namespace TitleChecker
     {
         Guid selectedSiteGuid = Guid.Empty;
         bool siteUpdated = false;
+        Guid siteCollID = Guid.Empty;
 
         // Uncomment the following SecurityPermission attribute only when doing Performance Profiling using
         // the Instrumentation method, and then remove the SecurityPermission attribute when the code is ready
@@ -32,6 +33,10 @@ namespace TitleChecker
         {
             pnlUpdateControls.Visible = false;
             pnlResult.Visible = false;
+
+            siteCollID = SPContext.Current.Site.ID;
+            var populateWebsList = new SPSecurity.CodeToRunElevated(PopulateWebsList);
+            SPSecurity.RunWithElevatedPrivileges(populateWebsList);
 
             var site = SPContext.Current.Site;
             lstWebs.Items.Clear();
@@ -62,6 +67,25 @@ namespace TitleChecker
             {
                 lstWebs.Items.FindByValue(selectedSiteGuid.ToString()).Selected = true;
                 pnlUpdateControls.Visible = true;
+            }
+        }
+
+        private void PopulateWebsList()
+        {
+            using (var site = new SPSite(siteCollID))
+            {
+                lstWebs.Items.Clear();
+                foreach (SPWeb web in site.AllWebs)
+                {
+                    try
+                    {
+                        lstWebs.Items.Add(new ListItem(web.Title, web.ID.ToString()));
+                    }
+                    finally
+                    {
+                        web.Dispose();
+                    }
+                }
             }
         }
 
