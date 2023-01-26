@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="0dadd973-b93a-4ffa-9c75-4a6e65d06579" solutionId="0dadd973-b93a-4ffa-9c75-4a6e65d06579" resetWebServer="false" sharePointProductVersion="15.0" name="TitleChecker" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <features>
+    <featureReference itemId="89d48437-e19a-4695-98bc-8370438dd98a" />
+  </features>
+</package>
