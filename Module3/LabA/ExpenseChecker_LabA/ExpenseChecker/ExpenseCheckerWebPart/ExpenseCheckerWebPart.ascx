@@ -33,20 +33,20 @@
                 <ItemTemplate>
                     <tr runat="server">
                         <td runat="server">
-                            <asp:CheckBox ID="chkUpdate" runat="server" />                            
-                            <asp:HiddenField ID="hiddenID" runat="server" Value='TODO' />
-                        </td>
-                        <td runat="server">                            
-                            <asp:Label ID="lblRequestor" runat="server" Text='TODO' />
+                            <asp:CheckBox ID="chkUpdate" runat="server" />
+                            <asp:HiddenField ID="hiddenID" runat="server" Value='<%# Eval("UniqueId") %>' />
                         </td>
                         <td runat="server">
-                            <asp:Label ID="lblCategory" runat="server" Text='TODO' />
+                            <asp:Label ID="lblRequestor" runat="server" Text='<%# Eval("CapExRequestor") %>' />
                         </td>
                         <td runat="server">
-                            <asp:Label ID="lblDescription" runat="server" Text='TODO' />
+                            <asp:Label ID="lblCategory" runat="server" Text='<%# Eval("CapExCategory") %>' />
                         </td>
-                        <td runat="server">                            
-                            <asp:Label ID="lblAmount" runat="server" Text='TODO' />
+                        <td runat="server">
+                            <asp:Label ID="lblDescription" runat="server" Text='<%# Eval("CapExDescription") %>' />
+                        </td>
+                        <td runat="server">
+                            <asp:Label ID="lblAmount" runat="server" Text='<%# Eval("CapExAmount", "{0:C2}") %>' />
                         </td>                        
                     </tr>
                 </ItemTemplate>
