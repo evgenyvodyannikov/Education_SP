@@ -29,11 +29,34 @@ namespace ExpenseChecker.ExpenseCheckerWebPart
         protected override void OnPreRender(EventArgs e)
         {
             // TODO: Ex1 Task 2 Create and configure a query object
+            SPQuery query = new SPQuery();
 
-                        
+            query.Query = @"
+		    <Where>
+		      <And>
+		         <Leq>
+		            <FieldRef Name=""CapExAmount""></FieldRef>
+		            <Value Type=""Currency"">500.00</Value>
+		         </Leq>
+		         <Eq>
+		            <FieldRef Name=""CapExStatus""></FieldRef>
+		            <Value Type=""Choice"">Pending</Value>
+		         </Eq>
+		      </And>
+		    </Where>";
+
+            query.ViewFields = @"
+		    <FieldRef Name=""UniqueId"" />
+		    <FieldRef Name=""CapExRequestor"" />
+		    <FieldRef Name=""CapExCategory"" />
+		    <FieldRef Name=""CapExDescription"" />
+		    <FieldRef Name=""CapExAmount"" />";
+
+
+
             // TODO: Ex1 Task 3 Query the list and bind the results to the lstExpenses control
 
- 
+
         }
 
         protected void Page_Load(object sender, EventArgs e)
