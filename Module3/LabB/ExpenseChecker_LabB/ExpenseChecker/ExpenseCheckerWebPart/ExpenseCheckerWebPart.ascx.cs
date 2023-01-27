@@ -69,10 +69,11 @@ namespace ExpenseChecker.ExpenseCheckerWebPart
             // Query the list and bind the results to the lstExpenses control.
             var web = SPContext.Current.Web;
             var list = web.Lists["Expenditure Requests"];
-            
+
             // TODO: Ex 1 Task 5 Create and configure a ContentIterator object
-            var items = list.GetItems(query);
-            lstExpenses.DataSource = items.GetDataTable();
+            ContentIterator iterator = new ContentIterator();
+            iterator.ProcessListItems(list, query, ProcessItem, ProcessError);
+            lstExpenses.DataSource = dtable;
             lstExpenses.DataBind();
         }
 
