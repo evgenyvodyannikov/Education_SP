@@ -77,9 +77,23 @@ namespace ExpenseChecker.ExpenseCheckerWebPart
         }
 
         // TODO: Ex 1 Task 3 Add the ProcessItem method
-
+        private void ProcessItem(SPListItem item)
+        {
+            string uniqueId = item["UniqueId"].ToString();
+            var field = item.Fields["Requested By"] as SPFieldUser;
+            var fieldValue = field.GetFieldValue(item["Requested By"].ToString()) as SPFieldUserValue;
+            string username = fieldValue.User.Name;
+            string category = item["Category"].ToString();
+            string description = item["Description"].ToString();
+            decimal amount = Decimal.Parse(item["Amount"].ToString());
+            dtable.Rows.Add(uniqueId, username, category, description, amount);
+        }
 
         // TODO: Ex 1 Task 4 Add the ProcessError method
+        private bool ProcessError(SPListItem item, Exception e)
+        {
+            throw new Exception("An error occurred during item processing", e);
+        }
 
 
         protected void Page_Load(object sender, EventArgs e)
