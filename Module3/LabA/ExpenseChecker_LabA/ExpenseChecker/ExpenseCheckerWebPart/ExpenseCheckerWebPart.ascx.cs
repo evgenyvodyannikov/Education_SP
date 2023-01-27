@@ -54,6 +54,7 @@ namespace ExpenseChecker.ExpenseCheckerWebPart
 
             // TODO: Ex1 Task 3 Query the list and bind the results to the lstExpenses control
             var web = SPContext.Current.Web;
+            // there are no such lists
             var list = web.Lists["Expenditure Requests"];
             var items = list.GetItems(query);
             lstExpenses.DataSource = items.GetDataTable();
@@ -85,7 +86,21 @@ namespace ExpenseChecker.ExpenseCheckerWebPart
                                 select item;
 
             // TODO: Ex 2 Task 1 Update the status of the list items
-
+            var web = SPContext.Current.Web;
+            var list = web.Lists["Expenditure Requests"];
+            foreach (var selectedItem in selectedItems)
+            {
+                // Get the unique identifier for each list item.
+                var hiddenField = selectedItem.FindControl("hiddenID") as HiddenField;
+                Guid itemID;
+                if (Guid.TryParse(hiddenField.Value, out itemID))
+                {
+                    // Retrieve the list item and update the status.
+                    SPListItem item = list.GetItemByUniqueId(itemID);
+                    item["Request Status"] = status;
+                    item.Update();
+                }
+            }
 
         }
 
