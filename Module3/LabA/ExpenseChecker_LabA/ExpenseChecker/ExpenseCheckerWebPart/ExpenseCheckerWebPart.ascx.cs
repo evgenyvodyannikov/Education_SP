@@ -52,10 +52,12 @@ namespace ExpenseChecker.ExpenseCheckerWebPart
 		    <FieldRef Name=""CapExDescription"" />
 		    <FieldRef Name=""CapExAmount"" />";
 
-
-
             // TODO: Ex1 Task 3 Query the list and bind the results to the lstExpenses control
-
+            var web = SPContext.Current.Web;
+            var list = web.Lists["Expenditure Requests"];
+            var items = list.GetItems(query);
+            lstExpenses.DataSource = items.GetDataTable();
+            lstExpenses.DataBind();
 
         }
 
