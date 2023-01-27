@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package dslVersion="1.0.0.0" 
+        Id="ed9d71f5-ffc3-4769-8000-b51c853f17e8" 
+        solutionId="ed9d71f5-ffc3-4769-8000-b51c853f17e8" 
+        xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel" 
+        name="ExpenseChecker"
+        sharePointProductVersion="15.0">
+    <features>
+        <featureReference itemId="aa27b850-8d9d-4da1-8036-6d2a6ef707ce" />
+    </features>
+</package>
