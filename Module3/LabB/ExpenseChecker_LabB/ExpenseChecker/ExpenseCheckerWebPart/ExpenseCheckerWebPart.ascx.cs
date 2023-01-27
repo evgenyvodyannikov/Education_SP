@@ -1,4 +1,6 @@
-﻿using Microsoft.SharePoint;
+﻿using Microsoft.Office.Server.Utilities;
+using System.Data;
+using Microsoft.SharePoint;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,7 +14,7 @@ namespace ExpenseChecker.ExpenseCheckerWebPart
     public partial class ExpenseCheckerWebPart : WebPart
     {
         // TODO: Ex 1 Task 2 Declare a DataTable variable
-
+        DataTable dtable;
 
         // Uncomment the following SecurityPermission attribute only when doing Performance Profiling using
         // the Instrumentation method, and then remove the SecurityPermission attribute when the code is ready
@@ -29,7 +31,12 @@ namespace ExpenseChecker.ExpenseCheckerWebPart
             InitializeControl();
 
             // TODO: Ex 1 Task 2 Instantiate the DataTable and add columns
-
+            dtable = new DataTable();
+            dtable.Columns.Add("UniqueId");
+            dtable.Columns.Add("CapExRequestor");
+            dtable.Columns.Add("CapExCategory");
+            dtable.Columns.Add("CapExDescription");
+            dtable.Columns.Add("CapExAmount", typeof(Decimal));
 
         }
 
