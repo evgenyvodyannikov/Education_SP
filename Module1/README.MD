@@ -9,6 +9,7 @@
 7. [Timer Jobs](#timer-jobs)
 8. [Event Recievers](#event-receivers)
 9. [Workflow](#workflow)
+10. [SharePoint Features](#sharepoint-features)
 
 ### **Workloads**:
 
@@ -238,3 +239,43 @@ By using workflows, you can **model and automate** business processes. Generally
 Continuing with this scenario, let us assume that you want to automate this publishing process. In this case, you can create a workflow that assigns a task to a user at each stage. When the user marks his or her task as complete and provides any required information to the workflow, the workflow logic proceeds to another stage. In this example, the workflow would use branching logic to determine who should see the document next.
 
 One of the key aspects of SharePoint workflow—and any other WF45 workflow—is that the **workflow is dormant (inactive) while waiting for user input**. In other words, the workflow does not actively wait for user input by polling for changes in field values or task completion statuses. Instead, WF45 will awaken, or rehydrate, the workflow when it has the information it requires to proceed. This enables workflows to become useful tools for managing long-running business processes.
+
+### **SharePoint Features**
+
+A SharePoint Feature is a framework for packaging and deploying declarative components. Features were introduced in SharePoint 2007 and have been a major component of SharePoint development ever since. The SharePoint development tools in Visual Studio 2012 automate much of the Feature development process and provide a Feature designer to help you assemble the Feature components. However, it is important for developers to understand what Features are and how they work. 
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/66135471/215471953-fc0d52ab-a99c-49f6-a988-b51535ddb659.png">
+</p>
+
+Features are contained within a folder. The **name of the folder is important**, because you will refer to the feature **by the name of this folder** when you install or uninstall the feature.
+
+The root of this folder always contains a file named Feature.xml. This is known as the feature manifest, which describes the contents of the Feature package and indicates what SharePoint should do with the contents of the Feature when it is installed and activated. The feature folder also typically contains subfolders and files that contain the contents and resources that make up the Feature.
+
+The following code shows a simple example of a feature manifest file:
+
+```XML
+A Feature Manifest File
+	<Feature xmlns="http://schemas.microsoft.com/sharepoint"
+	               Id="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+	               Title="Contoso Project Resources"
+	               Description="Contains site columns, content types, and lists for Contoso project sites."
+	               Scope="Web">
+	   <ElementManifests>
+	      <ElementManifest Location="SiteColumns\Elements.xml" />
+	      <ElementManifest Location="ContentTypes\Elements.xml" />
+	      <ElementFile Location="Pages\ContosoProject.aspx" />
+	      <ElementFile Location="Images\ProjectIcon.png" />
+	   </ElementManifests>
+	</Feature>
+```
+
+For now, there are three key aspects of note in this feature manifest example:
+
+- **Scope**. Features are always scoped to a particular level in the SharePoint hierarchy. The Scope attribute can take the values Farm, WebApplication, Site (a site collection), or Web (an individual sub-site). 
+
+- **Element manifests**. Features use ElementManifest elements to indicate the location of an element manifest within the folder structure of the Feature.
+
+- **Element files**. Features use ElementFile elements to indicate the location of files within the folder structure of the feature. Unlike element manifests, which SharePoint must parse to be able to provision the custom components described within, an element file is simply a file—such as an ASPX page or an image—that must be deployed by the Feature. 
+
+Features are typically deployed as part of a farm solution, a sandboxed solution, or a SharePoint app, which manages the feature installation and activation process. If you deploy a Feature within a SharePoint app or a sandboxed solution, the Feature is never copied to the server file system; instead, it remains in the content database from where it is accessed when required.
