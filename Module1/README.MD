@@ -8,6 +8,7 @@
 6. [Application Pages](#application-pages)
 7. [Timer Jobs](#timer-jobs)
 8. [Event Recievers](#event-receivers)
+9. [Workflow](#workflow)
 
 ### **Workloads**:
 
@@ -219,3 +220,21 @@ The following code shows a simple example of an event receiver class that handle
 	   }
 	}
 ```
+
+### **Workflow**
+
+By using workflows, you can **model and automate** business processes. Generally speaking, you create workflows when you want to capture user input from multiple people and perform actions in response to that user input. For example, suppose you wanted to automate a document publishing process. Your document might go through the following stages on the way to publication:
+
+- Authoring. A user creates a first draft of the document.
+
+- Technical review. Another user reviews the document for accuracy. If the technical reviewer is satisfied, the document proceeds to legal review. If not, the document goes back to the author for changes.
+
+- Legal review. A member of the legal team reviews the document for compliance with regulations and local statute. If the legal reviewer is satisfied, the document proceeds to copy edit. If not, the document goes back to the author for changes.
+
+- Copy edit. An editor checks the document for spelling, grammar, and style. If the editor requires major changes, the document goes back to the author for incorporation. If only minor changes are required, the document proceeds to publishing.
+
+- Publishing. The document is submitted for printing and distribution.
+
+Continuing with this scenario, let us assume that you want to automate this publishing process. In this case, you can create a workflow that assigns a task to a user at each stage. When the user marks his or her task as complete and provides any required information to the workflow, the workflow logic proceeds to another stage. In this example, the workflow would use branching logic to determine who should see the document next.
+
+One of the key aspects of SharePoint workflow—and any other WF45 workflow—is that the **workflow is dormant (inactive) while waiting for user input**. In other words, the workflow does not actively wait for user input by polling for changes in field values or task completion statuses. Instead, WF45 will awaken, or rehydrate, the workflow when it has the information it requires to proceed. This enables workflows to become useful tools for managing long-running business processes.
