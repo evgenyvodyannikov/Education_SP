@@ -3,4 +3,4 @@
 ---
 ## **Modules**: 
 
-## Module 1 - [First view to SharePoint](https://github.com/evgenyvodyannikov/Education_SP/tree/master/Module1/README.MD)
+## [Module 1 - First view to SharePoint](https://github.com/evgenyvodyannikov/Education_SP/tree/master/Module1/README.MD) (describes core SharePoint features, components, pages, and use cases)
