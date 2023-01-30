@@ -6,6 +6,7 @@
 4. [Declarative components](#declarative-components)
 5. [Web Parts](#web-parts)
 6. [Application Pages](#application-pages)
+7. [Timer Jobs](#timer-jobs)
 
 ### **Workloads**:
 
@@ -183,5 +184,10 @@ The **Microsoft.SharePoint.WebControls** namespace includes two base classes tha
 - LayoutsPageBase. Use this class when you want to create an application page that only privileged users can access.
 - UnsecuredLayoutsPageBase. Use this class when you want to create an application page that anyone (even unauthenticated users) can access.
 
+### **Timer Jobs**
 
+SharePoint timer jobs are used to run **background tasks** that do not require user interaction on a scheduled basis. SharePoint 2013 uses built-in timer jobs extensively for a wide range of tasks, such as scheduled approval and publishing, processing health and diagnostic data, upgrading site collections, and applying expiration policies.
 
+Custom timer jobs can be useful when you want to perform long-running or resource-intensive tasks without user interaction and without returning any information to a user. For example, you might use a timer job to aggregate and process list or site data across site collection boundaries. 
+
+Timer jobs run in a separate process—the SharePoint timer service, or owstimer.exe—rather than the IIS worker process, **w3wp.exe**. This means that timer jobs should not affect the performance and stability of individual IIS application pools. It also means that you can run long-running processes without the risk of the process being interrupted by an application pool recycle.
