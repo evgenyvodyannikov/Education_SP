@@ -10,6 +10,7 @@
 8. [Event Recievers](#event-receivers)
 9. [Workflow](#workflow)
 10. [SharePoint Features](#sharepoint-features)
+11. [Creating and Deploying a SharePoint Web Part](#creating-and-deploying-a-sharepoint-web-part)
 
 ### **Workloads**:
 
@@ -279,3 +280,58 @@ For now, there are three key aspects of note in this feature manifest example:
 - **Element files**. Features use ElementFile elements to indicate the location of files within the folder structure of the feature. Unlike element manifests, which SharePoint must parse to be able to provision the custom components described within, an element file is simply a file—such as an ASPX page or an image—that must be deployed by the Feature. 
 
 Features are typically deployed as part of a farm solution, a sandboxed solution, or a SharePoint app, which manages the feature installation and activation process. If you deploy a Feature within a SharePoint app or a sandboxed solution, the Feature is never copied to the server file system; instead, it remains in the content database from where it is accessed when required.
+
+### **Creating and Deploying a SharePoint Web Part**
+
+**Step 1: Create a project in Visual Studio**
+
+1. Run Vusial Studio and click New Project. (**work with SP 2013 available only on VS 2015 and less**)
+2. In the New Project dialog box, in the left navigation pane, under Templates, expand Visual C#, expand Office/SharePoint, and then click SharePoint Solutions.
+3. In the center pane, click SharePoint 2013 - Visual Web Part.
+4. Define project name, location and SP Site to debug.
+5. Click Deploy as a farm solution, and then click Finish.
+
+**Step 2: Configure the Web Part Solution**
+
+1. Rename all files from VisualWebPart1 to GreetingWebPart
+2. Edit GreetingWebPart.webpart file, change Title and Description properties
+```XML
+<property name="Title" type="string">Greet Users</property>
+<property name="Description" type="string">Welcomes the current user with a friendly message</property>
+```
+**Step 3: Create the Web Part User Interface**
+
+1. In Solution Explorer, double-click GreetingWebPart.ascx. 
+2. At the bottom of the design pane, click Design. 
+3. Click Toolbox, expand HTML, and then drag and drop a Div element into the dotted rectangle on the design pane.
+4. In the Properties pane, in the **(id)** row, type **greeting** and then press Enter.
+5. Click Toolbox, expand Standard (if it is not already expanded), and drag a Label control onto the div element on the design surface.
+6. In the Properties pane, in the Text row, delete the text **Label**.
+7. In the **(ID)** row, type **lblGreeting**, and then press Enter.
+8. At the bottom of the design pane, click Source.
+9. Verify that the page contains the following markup beneath the ASP.NET directives:
+```HTML
+<div id="greeting">
+    <asp:Label ID="lblGreeting" runat="server"></asp:Label>
+</div>
+```
+**Step 4: Add Code to Greet the Current User**
+
+1. Right-click the design surface, and then click View Code. 
+2. At the top of the code file, immediately under the last using directive, add 
+```C#
+using Microsoft.SharePoint;
+```
+3. Within the **Page_Load** method, add the following code:
+```C#
+public partial class GreetingWebPartUserControl : UserControl
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        var user = SPContext.Current.Web.CurrentUser;
+        var greeting = String.Format("Welcome, {0}!", user.Name);
+        lblGreeting.Text = greeting;
+    }
+}
+```
+4. Its all we need so then just Build Solution.
