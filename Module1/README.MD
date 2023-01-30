@@ -162,3 +162,26 @@ In SharePoint 2013, you should use apps instead, at least wherever possible. App
 However, there are still scenarios in which you might want to create Web Parts. This is most likely when you want to take advantage of Web Part connections; for example, to provide data to other Web Parts, consume data from other Web Parts, or provide filters to other Web Parts.
 
 ### **Application Pages**
+
+SharePoint uses application pages extensively to expose site management and administrative capabilities. Application pages are used to expose functionality that is not specific to sites or content.
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/66135471/215466831-aac61d40-5283-41d7-9153-ede201048265.png">
+</p>
+
+
+Creating a custom application page is one of the easier approaches to SharePoint development. You simply create an **ASP.NET forms (ASPX) page** and deploy it to the **15\TEMPLATE\LAYOUTS** folder (or a subfolder within) on each SharePoint WFE server. 
+
+Your page is then available on **every site through the _layouts virtual directory**. For example, if you created and deployed an application page named MyApplicationPage.aspx:
+- Users of a Finance site collection could access your page at http://finance.contoso.com/_layouts/MyApplicationPage.aspx.
+- Users of a Sales site collection could access your page at http://sales.contoso.com/_layouts/MyApplicationPage.aspx.
+- Users of a regional sales sub-site could access your page at http://sales.contoso.com/regions/EMEA/_layouts/MyApplicationPage.aspx.
+
+In terms of capabilities, **application pages run with full trust and have full access to the server-side object model**. As such, there is little that you cannot do with a custom application page. Typically, application pages are used when you want to **expose the same functionality to every site** in a SharePoint server farm.
+
+The **Microsoft.SharePoint.WebControls** namespace includes two base classes that you can use as the foundation for your custom application pages:
+- LayoutsPageBase. Use this class when you want to create an application page that only privileged users can access.
+- UnsecuredLayoutsPageBase. Use this class when you want to create an application page that anyone (even unauthenticated users) can access.
+
+
+
