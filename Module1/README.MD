@@ -7,6 +7,7 @@
 5. [Web Parts](#web-parts)
 6. [Application Pages](#application-pages)
 7. [Timer Jobs](#timer-jobs)
+8. [Event Recievers](#event-receivers)
 
 ### **Workloads**:
 
@@ -191,3 +192,30 @@ SharePoint timer jobs are used to run **background tasks** that do not require u
 Custom timer jobs can be useful when you want to perform long-running or resource-intensive tasks without user interaction and without returning any information to a user. For example, you might use a timer job to aggregate and process list or site data across site collection boundaries. 
 
 Timer jobs run in a separate process—the SharePoint timer service, or owstimer.exe—rather than the IIS worker process, **w3wp.exe**. This means that timer jobs should not affect the performance and stability of individual IIS application pools. It also means that you can run long-running processes without the risk of the process being interrupted by an application pool recycle.
+
+### **Event Receivers**
+
+You can use event receivers to create code that performs some action in response to an event in SharePoint. SharePoint 2013 exposes a wide variety of events. You can create event receivers for the following categories of events in SharePoint.
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/66135471/215468705-5fd4ba6f-308f-4b13-82b2-dbcaff4d37c3.png">
+</p>
+
+**There are two types of events in SharePoint:**
+
+- Before events. A before event is fired immediately before an action happens, which allows the event receiver to cancel the action if required. 
+- After events. An after event is fired immediately after an action happens, which allows the event receiver to perform any additional actions required in response to the action. 
+
+The following code shows a simple example of an event receiver class that handles the ItemDeleting event:
+
+```C#
+//Creating an Event Receiver
+	public class ContosoEventReceiver : SPItemEventReceiver
+	{
+	   public override void ItemDeleting(SPItemEventProperties properties)
+	   {
+	      properties.ErrorMessage = "You do not want to delete this item";
+	      properties.Status = SPEventReceiverStatus.CancelWithError;
+	   }
+	}
+```
