@@ -5,6 +5,7 @@
 1. [The SharePoint Object Hierarchy](#the-sharepoint-object-hierarchy)
 2. [The SPFarm Class](#the-spfarm-class)
 3. [Working with Services](#working-with-services)
+4. [Working with Web Applications](#working-with-web-applications)
 
 ### **The SharePoint Object Hierarchy**
 
@@ -121,3 +122,37 @@ The following code example shows how to enumerate the web applications in SPWebS
 	   // Perform actions on the Central Administration web application.
 	}
 ```
+
+### **Working with Web Applications**
+
+SharePoint **web applications are containers for site collections and sites**. Web applications are also the items in the object hierarchy that map SharePoint sites to Internet Information Services (IIS) websites. 
+
+By default, there is a **one-to-one** mapping between SharePoint web applications and IIS websites. If you use the Central Administration website to create a web application, SharePoint provisions a corresponding IIS website for you, using the URL, port number, and host header you specify. Many settings are configured at the web application level, such as resource throttling settings, authentication providers, and permission policies.
+
+In the SharePoint object model, web applications are represented by the **SPWebApplication** class. Although you can create and delete web applications programmatically (by working with the parent SPWebService object), this is not a common requirement. Web applications are typically created by administrators, using either Windows PowerShell or the Central Administration website. As a developer, you are more likely to work with existing **SPWebApplication** objects to retrieve or modify application-scoped settings.
+
+You can instantiate an SPWebApplication object in various ways. For example, you can:
+- Enumerate or index the **WebApplications** property of the parent SPWebService object.
+- Use the **SPWebApplication constructor** and specify the display name of the web application, the parent SPWebService object, and the **SPApplicationPool** object that represents the credentials under which the web application process runs.
+- Retrieve the **WebApplication** property from an **SPSite** object, to get the parent web application for a specific site collection.
+
+The following code example shows how to retrieve an SPWebApplication object and modify settings:
+
+```C#
+	// Get a reference to the parent SPWebService instance.
+	var contentService = SPWebService.ContentService;
+	// Use an indexer to retrieve the web application by display name.
+	var webApp = contentService.WebApplications["Contoso Content"];
+	// Change the maximum file size (in MB) that users can upload.
+	webApp.MaximumFileSize = 75;
+	// Persist the changes.
+	webApp.Update();
+```
+
+In common with many SharePoint objects, **you must call the Update method** after making changes to an SPWebApplication object. The Update method serializes the SPWebApplication object and updates the configuration database. Any changes you make will not be applied to the web application if you do not call the Update method.
+
+**Web application zones**
+
+In most cases, a SharePoint web application has a **one-to-one relationship with an IIS website**. However, you can extend a web application to additional IIS websites. In the SharePoint logical architecture, each additional IIS website is represented by a web application zone. 
+
+A single web application can be extended to up to five zones. Extending a SharePoint web application to additional zones effectively provides users with additional paths to the same content. Each IIS website provides access to the same set of site collections, but each can have a unique URL, port number, host header, protocol, bindings, and Web.config file. 
