@@ -28,6 +28,10 @@ Together, these classes represent the hierarchy of a SharePoint deployment in it
 
 SPFarm objects are the highest-level object in the hierarchy and, as their name implies, they represent the SharePoint farm as a logical entity. The SPFarm class **does not include a constructor**. Instead, the class **provides a global static object** that represents the current farm through the Local property.
 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/66135471/215716257-20e27591-89ba-47da-9657-e39ade82a58a.png">
+</p>
+
 The following code example shows how to get a reference to the local SharePoint farm by using the server-side object model:
 
 ```C#
