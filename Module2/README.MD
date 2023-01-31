@@ -7,6 +7,7 @@
 3. [Working with Services](#working-with-services)
 4. [Working with Web Applications](#working-with-web-applications)
 5. [Site Collections and the SPSite Class](#site-collections-and-the-spsite-class)
+6. [Individual Sites and the SPWeb Class](#individual-sites-and-the-spweb-class)
 
 ### **The SharePoint Object Hierarchy**
 
@@ -201,3 +202,50 @@ Each of the client-side object models for SharePoint 2013 provides a way of work
 - When you use the managed client object model, site collections are represented by the ```Microsoft.SharePoint.Client.Site``` class.
 
 When you use the REST API, you can access a site collection by constructing a URL in the format ```http://{site_collection_URL}/_api/site```, for example http://team.contoso.com/_api/site.
+
+### **Individual Sites and the SPWeb Class**
+
+In the SharePoint server-side object model, an individual site is represented by the **SPWeb** class.
+
+Almost all the information that end users work with on SharePoint sites is stored in **lists** of some sort. These range from simple lists, such as **tasks lists** or **announcements lists**, through calendars, to document libraries and page libraries. Every list in SharePoint belongs to an **individual site**. As such, instantiating an SPWeb object is very often the first thing you do when you want to programmatically interact with SharePoint content. 
+
+**Note:** The names SPSite and SPWeb refer to site collections, and sites can be confusing. Whereas farm administrators and end users typically talk in terms of site collections and sites, developers often talk in terms of **sites** (meaning site collections) and **webs** (meaning individual sites). 
+
+Every **SPSite object has a root web**, which is the **SPWeb** object that shares the URL of the SPSite object. As such, an SPSite object always contains at least one SPWeb. End users (or developers) with sufficient privileges can add additional webs to the site collection, up to a supported limit of 250,000 webs per site collection in most scenarios.
+
+ Unlike other objects in the SharePoint hierarchy, **SPWeb objects can act as parents to other SPWeb objects**. From an end user perspective, this allows users to develop an information architecture consisting of sites, subsites, sub-subsites, and so on. In other words, you can structure your maximum of 250,000 webs per site collection into as many hierarchical levels as you want.
+
+You can instantiate an SPWeb object in several different ways. For example, you can:
+
+- Access the **RootWeb** property of an **SPSite** object.
+- Enumerate or index the **AllWebs** collection of an **SPSite** object.
+- Retrieve a specific web by calling the **SPSite.OpenWeb** method.
+- Retrieve the current web from the execution context, by using static properties of the **SPContext** class.
+
+The following code example shows how to use various approaches to retrieve an SPWeb instance:
+
+```C#
+Instantiating SPWeb Objects
+	var site = new SPSite("http://team.contoso.com");
+	// Get the root web for the site collection.
+	var web1 = site.RootWeb;
+	// Retrieve a specific web from the parent site collection.
+	var web2 = site.AllWebs["finance"];
+	var web3 = site.OpenWeb("finance");
+	// Retrieve a web from the current execution context.
+	var web4 = SPContext.Current.Web;
+	// Dispose of objects where appropriate after use.
+	web1.Dispose();
+	web2.Dispose();
+	web3.Dispose();
+	site.Dispose();
+```
+
+Creating SPWeb objects is **memory-intensive**, and after you finish using an SPWeb object, you must **dispose** of it. SPWeb objects are similar to SPSite objects in this regard.
+
+**Webs in client-side code**
+
+Each of the client-side object models for SharePoint 2013 provides a way of working with webs:
+- When you use the JavaScript object model, site collections are represented by the **SP.Web** object.
+- When you use the managed client object model, site collections are represented by the **Microsoft.SharePoint.Client.Web** class.
+- When you use the REST API, you can access a web by constructing a URL in the format ```http://{web_URL}/_api/web```, for example http://team.contoso.com/finance/_api/web.
