@@ -6,6 +6,7 @@
 2. [The SPFarm Class](#the-spfarm-class)
 3. [Working with Services](#working-with-services)
 4. [Working with Web Applications](#working-with-web-applications)
+5. [Site Collections and the SPSite Class](#site-collections-and-the-spsite-class)
 
 ### **The SharePoint Object Hierarchy**
 
@@ -156,3 +157,47 @@ In common with many SharePoint objects, **you must call the Update method** afte
 In most cases, a SharePoint web application has a **one-to-one relationship with an IIS website**. However, you can extend a web application to additional IIS websites. In the SharePoint logical architecture, each additional IIS website is represented by a web application zone. 
 
 A single web application can be extended to up to five zones. Extending a SharePoint web application to additional zones effectively provides users with additional paths to the same content. Each IIS website provides access to the same set of site collections, but each can have a unique URL, port number, host header, protocol, bindings, and Web.config file. 
+
+### **Site Collections and the SPSite Class**
+
+As the name suggests, a site collection is a collection of individual sites. Site collections also represent the point in the object hierarchy at which control shifts from farm administrators (who work primarily on the server) to end users (who interact with SharePoint through a web browser). In the SharePoint object model, site collections are represented by the **SPSite** class.
+
+**Note:** The shift in focus from farm administrators to end users is also reflected in the server-side object model namespace. The classes discussed up to this point all reside in the ```Microsoft.SharePoint.Administration``` namespace. 
+The **SPSite** class, together with the classes beneath it in the object model hierarchy, resides in the ```Microsoft.SharePoint``` namespace.
+
+As a SharePoint developer, you will work with site collections on a regular basis. Site collections are significant for several reasons. 
+
+First, they provide a security boundary in SharePoint deployments. SharePoint **groups**, **users**, and various **security settings** are defined and managed at the site collection level. 
+
+Although **authentication** is managed at the **web application** (or web application zone) level, **authorization** is managed at the **site collection** level and below. 
+
+Many artifacts, such as site columns, content types, master pages, apps, Web Parts, and themes, are typically (if not strictly always) deployed to and scoped at the site collection level.
+
+You can instantiate an SPSite object in several different ways. For example, you can:
+- Pass a URL to the SPSite constructor.
+- Enumerate or index the Sites collection of the parent SPWebApplication object.
+- Retrieve the current site collection from the execution context, by using static properties of the SPContext class.
+
+The following code example shows how to use various approaches to retrieve an SPSite instance:
+
+```C#
+	// Pass a URL to the SPSite constructor.
+	var site1 = new SPSite("http://team.contoso.com");
+	// Retrieve an SPSite from the parent SPWebApplication.
+	var contentService = SPWebService.ContentService;
+	var webApp = contentService.WebApplications["Contoso Content"];
+	var site2 = webApp.Sites["team.contoso.com"];
+	// Retrieve an SPSite from the current execution context.
+	var site3 = SPContext.Current.Site;
+	// Dispose of SPSite objects where appropriate after use.
+	site1.Dispose();
+	site2.Dispose();
+```
+
+Creating SPSite objects is **memory intensive**, and after you finish using an SPSite object, you must **dispose** of it.
+
+Each of the client-side object models for SharePoint 2013 provides a way of working with site collections:
+- When you use the JavaScript object model, site collections are represented by the **SP.Site object**.
+- When you use the managed client object model, site collections are represented by the ```Microsoft.SharePoint.Client.Site``` class.
+
+When you use the REST API, you can access a site collection by constructing a URL in the format ```http://{site_collection_URL}/_api/site```, for example http://team.contoso.com/_api/site.
