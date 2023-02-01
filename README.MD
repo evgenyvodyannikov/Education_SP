@@ -5,3 +5,4 @@
 
 ## 1. [First view to SharePoint](https://github.com/evgenyvodyannikov/Education_SP/tree/master/Module1/README.MD) (describes core SharePoint features, components, pages, and use cases)
 ## 2. [Working with SharePoint objects](https://github.com/evgenyvodyannikov/Education_SP/tree/master/Module2/README.MD) (describes SharePoint object hierarchy, life cycles, classes and show ho to work with it)
+## 2. [Working with Lists and Libraries](https://github.com/evgenyvodyannikov/Education_SP/tree/master/Module3/README.MD)
