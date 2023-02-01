@@ -41,3 +41,72 @@ You can deploy a Feature in three different ways:
 - **Include** the Feature **in a farm solution or a sandboxed solution**. You can use SharePoint solutions to deploy and retract Features. The Features are installed when the solution is added and uninstalled when the feature is removed. Features deployed within solutions are automatically synchronized across every server in the farm.
 
 - **Include** the Feature **in an app for SharePoint**. Features are used within app packages to provision declarative components on the app web and the host web.
+
+### **Anatomy of a Feature**
+
+When you create a Feature, every component of the Feature is contained within a top-level Feature folder. **The name of this folder is important**, because this is the name by which you will **refer to the Feature** if you install and uninstall it by using Windows PowerShell.
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/66135471/216037693-70595839-9821-4cb8-abdb-0beafacca2b8.png">
+</p>
+
+**The Feature manifest file**
+
+The Feature manifest file is created at the root of the Feature folder. The Feature manifest file must always be placed in the root Feature folder, rather than in any subfolders, and the Feature manifest file is always named **Feature.xml**. 
+
+The Feature manifest file performs several important roles:
+
+- It defines a **unique identifier**, a **title**, and a **description** for the Feature.
+
+- It defines the **scope** of the Feature.
+
+- It identifies the **element manifest files** that belong to the Feature, and specifies their relative **location** within the Feature folder.
+
+The following code example shows a feature manifest file. This is taken from the built-in DocumentLibrary feature, which defines the Document Library list template:
+
+```XML
+	<Feature Id="00BFEA71-E717-4E80-AA17-D0C71B360101"
+	               Title="$Resources:core,documentlibraryFeatureTitle;"
+	               Description="$Resources:core,documentlibraryFeatureDesc;"
+	               Version="1.0.0.0"
+	               Scope="Web"
+	               Hidden="TRUE"
+	               DefaultResourceFile="core"
+	              xmlns="http://schemas.microsoft.com/sharepoint/">
+	   <ElementManifests>
+	      <ElementManifest Location="ListTemplates\DocumentLibrary.xml" />
+	   </ElementManifests>
+	</Feature>
+```
+
+The key points in this example are as follows:
+
+- The Feature **is scoped at the web level**. This means that the Feature can be activated and deactivated on individual sites. 
+
+- The Feature **is hidden**. This means that the Feature cannot be managed through the user interface.
+
+- The Feature includes a **single element manifest**. The Feature manifest references a single element manifest file named DocumentLibrary.xml, which is in a subfolder named ListTemplates within the top-level Feature folder.
+
+**Element manifest files**
+
+Features can contain one or more element manifest files. Element manifest files are often **organized in subfolders** within the top-level Feature folder. However, this is not mandatory—beneath the top-level Feature folder and the Feature manifest file, you can structure your Feature any way you want. You can also choose any name you want for subfolders and element manifest files.
+
+The following code example shows an element manifest file. This is taken from the built-in DocumentLibrary feature:
+
+```XML
+	<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+	   <ListTemplate
+	        Name="doclib"
+	        Type="101"
+	        BaseType="1"
+	        OnQuickLaunch="TRUE"
+	        SecurityBits="11"
+	        Sequence="110"
+	        DisplayName="$Resources:core,doclibList;"
+	        Description="$Resources:core,doclibList_Desc_15;"
+	        Image="/_layouts/15/images/itdl.png?rev=23"
+	        DocumentTempalte="121"
+	</Elements>
+```
+
+The top-level XML element in an element manifest file is always an **Elements** element. The Elements element supports various child elements that you can use to define different types of functionality.
