@@ -604,3 +604,39 @@ To specify the scope of an SPSiteDataQuery instance, you use the Webs and Lists 
 - `<Webs Scope="SiteCollection" />`. In this case, the query will return **data from all webs** in the current site collection.
 
 To specify which lists the query should consider, you set the Lists property to a Lists element. You can configure the Lists element in various ways. The following table shows some examples of Lists elements.
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/66135471/216024003-99bc91d5-106e-4b7d-aeb0-e5fe55374b2a.png">
+</p>
+
+The **SPWeb.GetSiteData** method returns results as a **DataTable**. As such, you cannot use the **SPSiteDataQuery** approach to retrieve multiple list items for editing. 
+
+As with the SPQuery class, you can use the ViewFields property to restrict the field values returned by the query to only those fields in which you are interested.
+
+The following code example shows how to use the SPSiteDataQuery class to retrieve data from multiple lists:
+
+```C#
+	// Construct an SPSiteDataQuery instance.
+	SPSiteDataQuery query = new SPSiteDataQuery();
+	query.Query = "
+	   <Where>
+	      <Eq>
+	         <FieldRef Name=\"Task Status\"></FieldRef>
+	         <Value Type=\"Choice\">Not Started</Value>
+	      </Eq>
+	   </Where>
+	   ";
+	// Set the query scope.
+	query.Webs = @"<Webs Scope=""SiteCollection"" />";
+	query.Lists = @"<Lists ServerTemplate=""107"" />";
+	// Specify the fields you want to return.
+	query.ViewFields = @"
+	   <FieldRef Name=""Task Name"" />
+	   <FieldRef Name=""Description"" />
+	   <FieldRef Name=""Due Date"" />
+	   <FieldRef Name=""Assigned To"" />
+	   <FieldRef Name=""Task Status"" />
+	   ";
+	// Execute the query against an SPWeb.
+	DataTable results = SPContext.Current.Web.GetSiteData(query);
+```
