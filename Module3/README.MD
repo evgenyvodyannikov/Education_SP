@@ -7,6 +7,7 @@
 3. [Creating and Deleting List and Library Objects](#creating-and-deleting-list-and-library-objects)
 4. [Working with List Items](#working-with-list-items)
 5. [Working with Fields](#working-with-fields)
+6. [Working with Files](#working-with-files)
 
 ### **Understanding the List and Library Class Hierarchy**
 
@@ -342,3 +343,106 @@ The following example shows how to use the SPField.GetFieldValue method:
 	var fieldValue = field.GetFieldValue(item["Employee"].ToString()) as SPFieldUserValue;
 	string displayName = fieldValue.User.Name;
 ```
+
+### **Working with Files**
+
+In the SharePoint object model, files on a SharePoint site are represented by the **SPFile** class. 
+
+If the file is a document in a document library, there is a one-to-one relationship between the **SPFile** object and the **SPListItem** object:
+
+- You can retrieve the SPFile instance from the **SPListItem.File** property.
+- You can retrieve the SPListItem instance from the **SPFile.Item** property.
+
+The SPListItem class and the SPFile class represent different aspects of a document in a document library. You use the SPListItem class if you want to work with the **metadata of the document**, for example to update field values. 
+
+You use the SPFile class if you want to work with the **document itself**, for example to check the document in or out, view version history, or to access the contents of a file as a stream or a byte array.
+
+**Retrieving files**
+
+Although you can retrieve SPFile instances from individual list items, this is not the best approach unless you specifically want to retrieve the SPListItem instance as well as the SPFile instance. 
+
+The primary mechanism for accessing files is through the **SPWeb** class or the **SPFolder** class. Both of these classes include a Files property, which exposes an enumerable collection of **SPFile** objects. The SPWeb class also includes various methods that you can use to retrieve specific files or folders.
+
+The following code example shows how to retrieve files programmatically:
+
+```C#
+	var web = SPContext.Current.Web;
+	// Get the contents of a file as a string.
+	string contents = web.GetFileAsString("Documents/Text.txt");
+	// Get the contents of a file as a byte array.
+	SPFile image = web.GetFile("Documents/Image.bmp");
+	byte[] imageBytes = image.OpenBinary();
+	// Get the contents of a file as a stream and save to the local file system.
+	SPFile video = web.GetFile("Documents/Video.mp4");
+	int bufferSize = 10 * 1024;
+	using (Stream stream = video.OpenBinaryStream())
+	{
+	   using (FileStream fs = new FileStream(@"C:\LocalPath\Video.mp4", FileMode.Create, FileAccess.Write))
+	   {
+	      byte[] buffer = new byte[bufferSize];
+	      int byteCount = 0;
+	      while ((byteCount = stream.Read(buffer, 0, buffer.Length)) > 0)
+	      {
+	         fs.Write(buffer, 0, byteCount);
+	      }
+	   }
+	}
+```
+
+**Checking files in and out**
+
+Check-outs and check-ins are a mechanism that enables users to prevent other users from modifying a document while they make changes. 
+
+If a user checks out a document in a document library, the document is locked for editing by that user. No other users can make changes to the document while the check-out is in place. When the user checks in the document, the lock is removed and changes made by the user are visible to everyone.
+
+You can use the SPFile class to check documents in and out programmatically. For example, you might want to develop a "bulk check-in" solution, so that users who have uploaded multiple documents to a library do not have to check in each file individually.
+
+To check out a file, you call the **SPFile.CheckOut method**. If required, you can also specify a check-out type by providing a member of the **SPFile.SPCheckOutType** enumeration as an argument to the CheckOut method. The **SPFile.SPCheckOutType** enumeration defines the following values:
+
+- None. This indicates that the document is not checked out.
+
+- Offline. This indicates that the document is checked out for editing on a local computer. This is equivalent to selecting the Use my local drafts folder option when you check out a file through the browser UI.
+
+- Online. This indicates that the document is checked out for editing on the server. This is the default value when you check out a document.
+
+To check in a file, you call the **SPFile.CheckIn** method and provide a comment. If required, you can also use the **SPCheckinType** enumeration to indicate whether you are checking in a major version or a minor version, or whether you want to overwrite the current version.
+
+The following code example shows how to check files in and out:
+
+```C#
+	var web = SPContext.Current.Web;
+	// Retrieve the file.
+	var file = web.GetFile("Documents/Invoice.docx");
+	// Check the file out.
+	if (file.CheckOutType == SPFile.SPCheckOutType.None)
+	{
+	   file.CheckOut();
+	   // Update the file as required….
+	   // Check the file back in.
+	   file.CheckIn("Invoice updated.");
+	}
+```
+
+**Adding and updating files**
+
+To add a file to a SharePoint site, you call the **Add** method on an **SPFileCollection** object. Both the SPWeb class and the SPFolder class include a Files property that exposes an SPFileCollection object.
+
+The **SPFileCollection.Add** method includes 19 overloads that enable you to add files in a multitude of different ways. In each case, you must provide a **site-relative or server-relative URL** to indicate the location at which you want to add the file. You typically provide the contents of the file as a byte array or a stream. Other overload variations enable you to specify file properties in various different ways.
+
+The following code example shows how to add a file to a SharePoint site:
+
+```C#
+	var web = SPContext.Current.Web;
+	// Get a byte array from another file, either from the local file system or from elsewhere on SharePoint.
+	SPFile source = web.GetFile("Documents/Image.bmp");
+	byte[] imageBytes = source.OpenBinary();
+	// Add the file to a library.
+	SPFile file = web.Files.Add(@"Images/NewImage.bmp", fileBytes);
+	// Check in the file after adding it.
+	file.CheckIn("New image added.");
+```
+
+You can also use the Add method to update existing files. Several Add method overloads include a Boolean parameter that you can use to indicate whether you want to overwrite existing files with the same name. This enables you to add a file as a new version of an existing file.
+
+
+
