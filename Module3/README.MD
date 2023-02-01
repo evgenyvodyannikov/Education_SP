@@ -8,6 +8,7 @@
 4. [Working with List Items](#working-with-list-items)
 5. [Working with Fields](#working-with-fields)
 6. [Working with Files](#working-with-files)
+7. [Approaches to Querying List Data](#approaches-to-querying-list-data)
 
 ### **Understanding the List and Library Class Hierarchy**
 
@@ -444,5 +445,45 @@ The following code example shows how to add a file to a SharePoint site:
 
 You can also use the Add method to update existing files. Several Add method overloads include a Boolean parameter that you can use to indicate whether you want to overwrite existing files with the same name. This enables you to add a file as a new version of an existing file.
 
+### **Approaches to Querying List Data**
+
+In many scenarios, you will want to retrieve one or more list items that match certain criteria. 
+
+For example, you might want to retrieve all list items that were modified after a particular date, or all list items that were modified by a particular user, or all list items that contain specific field values. You can approach these tasks in various ways.
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/66135471/215994257-032607f3-1d5f-4b87-a28c-49531377d376.png">
+</p>
 
 
+**Why you should not enumerate list items**
+
+If you are new to SharePoint development, you might be tempted to retrieve list items by enumerating a list item collection and testing each list item against your selection criteria, as shown by the following example:
+
+```C#
+	var web = SPContext.Current.Web;
+	var list = web.Lists["Inventory"];
+	foreach (SPListItem item in list.Items)
+	{
+	   // Do something with the list item.
+	}
+```
+
+This approach is considered **bad practice**. When you enumerate a list item collection, the enumerator must instantiate each list item in the collection. Instantiating a list item is a **computationally expensive process**, particularly if the list item contains large amounts of field data.
+
+Rather than enumerating list item collections, SharePoint provides two optimized approaches that you can use to retrieve list items: **query classes**, and **LINQ to SharePoint**.
+
+**Using query classes**
+
+SharePoint provides two query classes for efficient retrieval of list data:
+
+- **SPQuery**. Use the SPQuery class to retrieve list items that match specific criteria from a single list.
+
+- **SPSiteDataQuery**. Use the SPSiteDataQuery class to retrieve and aggregate list item data from multiple lists in a site collection.
+
+Both of these classes require you to create a query by using Collaborative Application Markup Language (CAML).
+
+**Using LINQ to SharePoint**
+
+You can use **Language Integrated Query (LINQ)** syntax to retrieve data from SharePoint lists. For server-side code, this functionality is provided by the **LINQ to SharePoint Provider**, which converts LINQ queries into CAML queries.
+Before you can use LINQ to SharePoint in your code, you must generate entity classes to represent the lists you want to work with. SharePoint includes a command-line tool, **SPMetal.exe**, which you can use to generate entity classes for the lists in a specified site collection.
