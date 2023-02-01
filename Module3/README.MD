@@ -5,6 +5,7 @@
 1. [Understanding the List and Library Class Hierarchy](#understanding-the-list-and-library-class-hierarchy)
 2. [Retrieving List and Library Objects](#retrieving-list-and-library-objects)
 3. [Creating and Deleting List and Library Objects](#creating-and-deleting-list-and-library-objects)
+4. [Working with List Items](#working-with-list-items)
 
 ### **Understanding the List and Library Class Hierarchy**
 
@@ -159,3 +160,85 @@ The following code example illustrates how to delete a list:
 In most scenarios, calling the **SPList.Delete** method is the easiest way to delete a list. The **SPListCollection.Delete method** may be preferable if you can provide a **GUID** identifier for the list you want to delete without first instantiating an SPList object.
 
 You can also recycle a list by calling the **SPList.Recycle** method, which returns the GUID for the list. When using this method, the list is placed in the recycle bin of the user account that runs the code.
+
+### **Working with List Items**
+
+Items in a SharePoint list are represented by the **SPListItem** class. This applies regardless of the type of list: for example, an **SPListItem** instance can represent an event in a **calendar**, a **document** in a **document library**, a **contact** in a contacts list, and so on. 
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/66135471/215985766-4a8a67d1-7c5f-48db-a64a-863a43b090de.png">
+</p>
+
+The list items in a SharePoint list are stored in an enumerable collection of type **SPListItemCollection**, which you can access through the **SPList.Items** property.
+
+**Adding items to a list**
+
+The process for adding a new item to a SharePoint list consists of three high-level steps:
+
+1. Call the **SPListItemCollection.Add method**. This creates a new list item and returns an SPListItem instance.
+2. Specify **field values**, and other properties as required, on the SPListItem instance.
+3. Call the **Update** method on the SPListItem instance to write the changes to the content database.
+
+The following code example shows how to add a new item to a SharePoint list:
+
+```C#
+	var web = SPContext.Current.Web;
+	var list = web.Lists["Project Contacts"];
+	// Step 1: Call the SPListItemCollection.Add method.
+	SPListItem contact = list.Items.Add();
+	// Step 2: Specify field values.
+	contact["Last Name"] = "Kretowicz";
+	contact["First Name"] = "Marcin";
+	contact["Company"] = "Contoso Pharmaceuticals";
+	contact["Job Title"] = "Sales Director";
+	contact["Business Phone"] = "425-555-8910";
+	contact["Email Address"] = "marcin@contoso.com";
+	// Step 3: Call the Update method.
+	contact.Update();
+```
+
+**Retrieving and modifying list items**
+
+The SPListItem class includes two identifier properties:
+
+- The **SPListItem.ID** property returns an integer identifier for the list item. SharePoint lists assign incrementally increasing integer identifiers to new list items.
+
+- The **SPListItem.UniqueId** property returns a **GUID** value that uniquely identifies the list item.
+
+The SPList class provides methods that you can use to retrieve a list item using either the integer ID or the unique ID of the item:
+
+- The **SPList.GetItemById** method returns the list item with the specified integer identifier.
+- The **SPList.GetItemByUniqueId** method returns the list item with the specified GUID identifier.
+
+You can also retrieve list items by using an indexer with an **SPListItemCollection** instance (for example, `myList.Items[identifier]`). 
+
+The indexer allows you to specify a GUID value or an integer value. However, you should use this approach with extreme caution. The integer value you provide to the indexer represents the position of the list item in the collection. This is not necessarily the same as the integer identifier of the list item. 
+
+As such, best practice is to use one of the SPList methods, rather than the SPListItemCollection indexer, to retrieve specific list items.
+
+SharePoint list items often include many fields, and these fields can contain large amounts of data. As a result, retrieving a list item is **computationally expensive**. The **SPList.GetItemByIdSelectedFields** method provides a more efficient way to retrieve a list item, by specifying which field values you want to retrieve. This method returns an **SPListItem** instance in the same way as the **SPList.GetItemById** method, but the returned SPListItem instance only contains field values for the fields you specify when you call the method.
+
+The following code example shows how to use the **SPList.GetItemByIdSelectedFields** method:
+
+```C#
+	var web = SPContext.Current.Web;
+	var list = web.Lists["Project Contacts"];
+	// This identifier value is typically retrieved by using a query class or LINQ to SharePoint.
+	int itemID = 1;
+	// Retrieve a list item containing only field values for Job Title and Email Address.
+	SPListItem contact = list.GetItemByIdSelectedFields(itemID, "Job Title", "Email Address");
+	// Update the selected field values.
+	contact["Job Title"] = "Vice President, Sales";
+	contact["Email Address"] = "vpsales@contoso.com";
+	contact.Update();
+```
+
+After you retrieve a list item, you update field values and call the Update method in the same way as if you had created a new list item.
+
+**Deleting list items**
+
+You can delete a list item in three ways:
+
+- You can call the **SPListItem.Delete** method on the list item you want to delete.
+- You can call the **SPListItemCollection.Delete** method, and specify the **index** of the list item you want to delete.
+- You can call the **SPListItemCollection.DeleteItemById** method, and specify the integer identifier of the list item you want to delete.
