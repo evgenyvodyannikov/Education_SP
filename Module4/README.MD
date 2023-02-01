@@ -5,6 +5,7 @@
 1. [Understanding Features](#understanding-features)
 2. [Anatomy of a Feature](#anatomy-of-a-feature)
 3. [Understanding Feature Scopes](#understanding-feature-scopes)
+4. [Understanding Solutions](#understanding-solutions)
 
 ### **Understanding Features**
 
@@ -134,3 +135,51 @@ This attribute can take four possible values:
 Choosing the most appropriate scope is an important design consideration when you create a Feature. It is important to understand that you do not scope a Feature to a specific web application, site collection, or site. 
 
 Instead, if you deploy a WebApplication-scoped Feature, the Feature is available for activation on every web application in the SharePoint farm. The administrator can choose to activate the Feature if the functionality is relevant to that specific web application.
+
+## **Understanding Solutions**
+
+In reality, you will rarely, if ever, manually deploy a Feature. There are two main reasons why manually deploying Features is not a good idea:
+
+- You must **manually add the Feature folder** to the SharePoint file system, and remove it when it is no longer required.
+
+- You must **manually copy the Feature folder to every server** in the SharePoint farm, and make sure the Feature contents remain synchronized on every server.
+
+Fortunately, SharePoint provides a more satisfactory way of managing the life cycle of custom components in the form of the SharePoint solution package.
+
+**What is a solution?**
+
+In SharePoint terminology, a solution is essentially a cabinet file with a **.wsp** file name extension. The solution framework enables you to **package**, **deploy**, and **manage** the life cycle of various custom components for SharePoint.
+
+There are three types of solutions in SharePoint 2013:
+
+- **Farm solutions**. Farm solutions are deployed at the farm scope by a farm administrator. You can use a farm solution to package and deploy any custom functionality to SharePoint, including fully-trusted server-side code.
+
+- **Sandboxed solutions**. Sandboxed solutions, also known as user solutions, are deployed at the site collection scope by a site collection administrator. Any custom code within a sandboxed solution runs under an isolated process with limited permissions, and sandboxed solutions are subject to various monitoring and throttling constraints.
+
+- **Solutions within apps** for SharePoint. When you create an app for SharePoint, any components that you want to deploy to the app web are packaged in a solution. This solution package cannot contain any server-side code.
+
+The big advantage of using solutions is that they provide **clean deployment**, **activation**, and **removal** of **custom components**. 
+
+For example, if you deploy a Feature within a farm solution, SharePoint will ensure that the Feature files are added to every web server in the server farm. 
+
+When you retract the solution, SharePoint will remove the Feature files from every web server in the server farm. More broadly, any changes that are made when you activate a solution will be reversed when you retract the solution.
+
+**What can you include in a solution?**
+
+You can use a solution package to deploy two types of component to a SharePoint environment:
+
+- **Features**. You can use solution packages to deploy Features by including the entire contents of the Feature, including the Feature manifest file, within the solution package.
+
+- **Assemblies**. If your custom components include server-side code, you can use the solution package to deploy the assembly to the global assembly cache or the bin folder for a specific IIS web application. In sandboxed solutions, assemblies are stored in the content database and loaded by an isolated worker process.
+
+**Note:** Assemblies that are deployed to the global assembly cache are automatically granted full trust. 
+
+Every solution package includes a solution manifest file named **Manifest.xml** that specifies what the package contains. You can also use the solution manifest file to perform various configuration tasks, such as adding **safe control** entries to the **Web.config** file when you deploy an assembly.
+
+**How are solutions deployed?**
+
+To deploy a farm solution, a farm administrator must add the solution to the farm using Windows PowerShell, and then install it using either Windows PowerShell or the Central Administration website. 
+
+To deploy a sandboxed solution, a site collection administrator must add the solution to the Solutions gallery on a site collection. Farm administrators can also deploy sandboxed solutions to specific site collections using Windows PowerShell.
+
+Solutions contained within app packages are deployed automatically as part of the app installation process.
