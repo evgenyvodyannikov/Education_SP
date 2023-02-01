@@ -11,6 +11,7 @@
 7. [Approaches to Querying List Data](#approaches-to-querying-list-data)
 8. [Building CAML Queries](#building-caml-queries)
 9. [Using the SPQuery Class](#using-the-spquery-class)
+10. [Using the SPSiteDataQuery Class](#using-the-spsitedataquery-class)
 
 ### **Understanding the List and Library Class Hierarchy**
 
@@ -583,3 +584,23 @@ In addition to the Query property, you can use various other properties of the S
 - **Joins**. You can construct more sophisticated queries by specifying joins that merge data across two or more lists, in the form of a CAML Joins element. The lists must be connected through a lookup field.
 
 - **ProjectedFields**. If the list you are querying includes a lookup field, you can use the ProjectedFields property to **add fields from the foreign list** to your query results.
+
+### **Using the SPSiteDataQuery Class**
+
+You can use the **SPSiteDataQuery** class to execute a query against multiple lists in a site collection. This is useful in scenarios where you want to aggregate list data from multiple sources. 
+
+For example, you might want to provide a summary list of outstanding tasks from task lists on various different project sites.
+
+To use the SPSiteDataQuery class, you perform the following high-level steps:
+
+1. Construct an **SPSiteDataQuery instance**.
+2.  Set properties on the SPSiteDataQuery instance to **specify query parameters**.
+3. Call the **SPWeb.GetSiteData method**, supplying the SPSiteDataQuery instance as an argument.
+
+To specify the scope of an SPSiteDataQuery instance, you use the Webs and Lists properties. There are three options for the Webs property:
+
+- **Not set**. By default, the query will **only** return data **from the current web** (in other words, the web on which you call the GetSiteData method).
+- `<Webs Scope="Recursive" />`. In this case, the query will return data from the **current web and any children** of the current web.
+- `<Webs Scope="SiteCollection" />`. In this case, the query will return **data from all webs** in the current site collection.
+
+To specify which lists the query should consider, you set the Lists property to a Lists element. You can configure the Lists element in various ways. The following table shows some examples of Lists elements.
