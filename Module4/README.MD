@@ -6,6 +6,7 @@
 2. [Anatomy of a Feature](#anatomy-of-a-feature)
 3. [Understanding Feature Scopes](#understanding-feature-scopes)
 4. [Understanding Solutions](#understanding-solutions)
+5. [Anatomy of a Solution](#anatomy-of-a-solution)
 
 ### **Understanding Features**
 
@@ -183,3 +184,52 @@ To deploy a farm solution, a farm administrator must add the solution to the far
 To deploy a sandboxed solution, a site collection administrator must add the solution to the Solutions gallery on a site collection. Farm administrators can also deploy sandboxed solutions to specific site collections using Windows PowerShell.
 
 Solutions contained within app packages are deployed automatically as part of the app installation process.
+
+### **Anatomy of a Solution**
+
+A SharePoint solution package is a cabinet file with a **.wsp** file name extension. The contents and behavior of the solution are specified by the solution manifest file, which is an XML file named **Manifest.xml**.
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/66135471/216042056-f68a5c62-ef58-44b7-b124-27e312ff84a0.png">
+</p>
+
+The following code example shows a typical solution manifest file:
+
+```XML
+	<Solution xmlns="http://schemas.microsoft.com/sharepoint/"
+	                 SolutionID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+	                 SharePointProductVersion="15.0">
+	   <FeatureManifests>
+	      <FeatureManifest Location="ContosoProject\feature.xml" />
+	   </FeatureManifests>
+	   <RootFiles>
+	      <RootFile Location="Resources\contoso.resx" />
+	      <RootFile Location="Resources\contoso.en-US.resx" />
+	      <RootFile Location="Resources\contoso.en-ES.resx" />
+	   </RootFiles>
+	   <TemplateFiles>
+	      <TemplateFile Location="Controls\ContosoLogIn.ascx" />
+	   </TemplateFiles>
+	   <Assemblies>
+	      <Assembly Location="ContosoSolution.dll" DeploymentTarget="GlobalAssemblyCache">
+	      <SafeControls>
+	         <SafeControl Assembly="[Assembly strong name]" 
+	                               Namespace="[Namespace]"
+	                               TypeName="*" />
+	      <SafeControls>
+	   </Assemblies>
+	</Solution>
+```
+
+This example illustrates the deployment of various different types of custom component. For example:
+
+- **Features**. To include a Feature in a solution, add a **FeatureManifest element** for each Feature. The Location attribute indicates the relative path to the Feature manifest file within the solution package.
+
+- **Resources files**. To include localization resources in a solution, add a **RootFile element** for each resource file. The Location attribute indicates the relative path to the resource file within the solution package.
+
+- **Template files**. To include template files in a solution, add a **TemplateFile element** for each template file. Template files are typically items that you want to add to the server file system, such as **ASCX control** files or **default webpages**. The Location attribute indicates the relative path to the template file within the solution package.
+
+- **Assemblies**. To include assemblies in a solution, add an **Assembly element** for each assembly. The Location attribute indicates the relative path to the assembly within the solution package, and the **DeploymentTarget attribute** specifies whether you want to deploy the assembly to the global assembly cache or the web application bin folder. You can use a SafeControl child element to register classes within the assembly, such as Web Part classes, as safe controls in the Web.config file.
+
+
+
