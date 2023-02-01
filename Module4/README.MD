@@ -4,6 +4,7 @@
 
 1. [Understanding Features](#understanding-features)
 2. [Anatomy of a Feature](#anatomy-of-a-feature)
+3. [Understanding Feature Scopes](#understanding-feature-scopes)
 
 ### **Understanding Features**
 
@@ -111,3 +112,25 @@ The following code example shows an element manifest file. This is taken from th
 ```
 
 The top-level XML element in an element manifest file is always an **Elements** element. The Elements element supports various child elements that you can use to define different types of functionality.
+
+### **Understanding Feature Scopes**
+
+Every SharePoint Feature **must be scoped** to a level in the SharePoint logical architecture. 
+
+The scope defines the level at which the Feature must be activated and where the functionality defined by the Feature is available.
+
+The scope of a Feature is defined by the Scope attribute of the Feature element in the Feature manifest file. 
+
+This attribute can take four possible values:
+
+- **Farm**. The Farm scope specifies that the functionality contained within the Feature is available to all web applications, site collections, and sites within the farm. Farm-scoped Features must be activated by a farm administrator.
+
+- **WebApplication**. The WebApplication scope applies to all of the sites collections and sites contained within a specific web application.
+
+- **Site**. The Site scope scopes the Feature to an individual site collection. Site-scoped Features must be activated by the site collection administrator.
+
+- **Web**. The Web scope is the most restrictive of scopes because it applies to a single site; however, it can be activated by a site owner.
+
+Choosing the most appropriate scope is an important design consideration when you create a Feature. It is important to understand that you do not scope a Feature to a specific web application, site collection, or site. 
+
+Instead, if you deploy a WebApplication-scoped Feature, the Feature is available for activation on every web application in the SharePoint farm. The administrator can choose to activate the Feature if the functionality is relevant to that specific web application.
