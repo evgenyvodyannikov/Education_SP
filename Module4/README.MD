@@ -3,6 +3,7 @@
 ## **Topics**:
 
 1. [Understanding Features](#understanding-features)
+2. [Anatomy of a Feature](#anatomy-of-a-feature)
 
 ### **Understanding Features**
 
