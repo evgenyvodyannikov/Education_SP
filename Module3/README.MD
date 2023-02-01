@@ -10,6 +10,7 @@
 6. [Working with Files](#working-with-files)
 7. [Approaches to Querying List Data](#approaches-to-querying-list-data)
 8. [Building CAML Queries](#building-caml-queries)
+9. [Using the SPQuery Class](#using-the-spquery-class)
 
 ### **Understanding the List and Library Class Hierarchy**
 
@@ -546,3 +547,39 @@ The following example shows a CAML query that returns all the items where the In
 **Building more complex CAML queries**
 
 You can make your CAML queries more sophisticated in a variety of ways. For example, you can add ordering and grouping criteria, and you can work with list relationships by using joins and projected fields. 
+
+### **Using the SPQuery Class**
+
+The **SPQuery** class provides a container for a **CAML query**. You can use the SPQuery class to execute a CAML query against an individual list. To use this approach, you perform the following high-level steps:
+
+1. Construct an **SPQuery instance**.
+2. Set **properties** on the SPQuery instance to specify the **CAML query text**, along with various other query properties as required.
+3. Call the **SPList.GetItems method**, supplying the SPQuery instance as an argument.
+
+The following code example shows how to use the SPQuery class to retrieve items from a list:
+
+```C#
+	// Construct an SPQuery instance.
+	SPQuery query = new SPQuery();
+	query.Query = @"
+	   <Where>
+	      <Eq>
+	         <FieldRef Name=""Color""></FieldRef>
+	         <Value Type=""Choice"">Blue</Value>
+	      </Eq>
+	   </Where>
+	   ";
+	// Retrieve a list instance.
+	var web = SPContext.Current.Web;
+	var list = web.Lists["Company Cars"];
+	// Execute the query against the list.
+	SPListItemCollection items = list.GetItems(query);
+```
+
+In addition to the Query property, you can use various other properties of the SPQuery class to control what data is returned by your query. For example:
+
+- **ViewFields**. You can set the ViewFields property to specify **which field values you want to be populated** in the returned list items, in the same way that you can use the **SPList.GetItemByIdSelectedFields** method to return a single list item with selected fields only. Setting the ViewFields property can make your queries more efficient, because you are retrieving only the field values that you specifically request.
+
+- **Joins**. You can construct more sophisticated queries by specifying joins that merge data across two or more lists, in the form of a CAML Joins element. The lists must be connected through a lookup field.
+
+- **ProjectedFields**. If the list you are querying includes a lookup field, you can use the ProjectedFields property to **add fields from the foreign list** to your query results.
