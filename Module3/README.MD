@@ -6,6 +6,7 @@
 2. [Retrieving List and Library Objects](#retrieving-list-and-library-objects)
 3. [Creating and Deleting List and Library Objects](#creating-and-deleting-list-and-library-objects)
 4. [Working with List Items](#working-with-list-items)
+5. [Working with Fields](#working-with-fields)
 
 ### **Understanding the List and Library Class Hierarchy**
 
@@ -242,3 +243,102 @@ You can delete a list item in three ways:
 - You can call the **SPListItem.Delete** method on the list item you want to delete.
 - You can call the **SPListItemCollection.Delete** method, and specify the **index** of the list item you want to delete.
 - You can call the **SPListItemCollection.DeleteItemById** method, and specify the integer identifier of the list item you want to delete.
+
+### **Working with Fields**
+
+Up to this point, you have seen how to set simple string-based field values when you work with list items. However, in practice, SharePoint lists include fields of many different types, such as Text, DateTime, Lookup, Currency, and Geolocation. 
+
+These field types are defined by the **SPFieldType** enumeration, and you can check the type of a field by retrieving the **SPField.Type** property. 
+
+There are approximately thirty built-in field types, and you can also define custom field types if your project demands it.
+
+When you set a field value on a list item, you must provide an object of the appropriate type. For simple field types, this is straightforward. 
+
+For more complex field types, SharePoint provides **field value classes**. To set the value of a complex field type, you should provide an instance of the appropriate field value class.
+
+**Field classes and field value classes**
+
+The SharePoint object model includes several classes to represent different field types. These classes all inherit from the SPField class, and the class names all begin with SPField. For example:
+
+- The **SPFieldBoolean** class represents a Boolean field.
+- The **SPFieldCalculated** class represents a calculated field.
+- The **SPFieldChoice** class represents a choice field.
+
+For more complex field types, where the value cannot be represented by a simple .NET type, the object model includes a field value class that corresponds to the field class. For example:
+
+- The **SPFieldUrl** class represents a field that contains URL values, and the **SPFieldUrlValue** class represents the associated field value.
+- The **SPFieldLookup** class represents a lookup field, and the **SPFieldLookupValue** class represents the associated field value.
+- The **SPFieldGeolocation** class represents a geographical location field, and the **SPFieldGeolocationValue** class represents the associated field value.
+
+In many cases, field classes can parse values provided in various formats into an appropriate field value class instance. For example, you can set the value of an SPFieldGeolocation field by providing a string value in **Well-Known Text (WKT)** format. However, your code will typically be more robust (stable) if you construct an appropriate field value instance when you need to set the value of a list item field.
+
+**Setting complex field values**
+
+The following code example shows how to set values for complex field types:
+
+```C#
+	// Retrieve an arbitrary list item.
+	var list = SPContext.Current.Web.Lists["Offices"];
+	SPListItem item = list.GetItemById(1);
+	// Set the value of a geolocation field.
+	Double latitude = 51.4198;
+	Double longitude = -2.6147;
+	var geoValue = new SPFieldGeolocationValue(latitude, longitude);
+	item["location"] = geoVal;
+	// Set the value of a URL field.
+	var urlValue = new SPFieldUrlValue();
+	urlValue.Url = "http://bristol.contoso.com";
+	urlValue.Description = "Bristol Office";
+	item["website"] = urlValue;
+	// Set the value of a multiple choice field.
+	var multiValue = new SPFieldMultiChoiceValue();
+	multiValue.Add("Parking");
+	multiValue.Add("Meeting Rooms");
+	multiValue.Add("Cafe");
+	item["facilities"] = multiValue;
+	// Call the Update method when you have finished making changes.
+	item.Update();
+```
+
+**Retrieving complex field values**
+
+When you use an indexer to retrieve the value of a list item field, the indexer returns a **System.Object**. You must cast the returned object to an appropriate type before you can get the field values in a meaningful format.
+
+The following code example shows how to retrieve field values for complex field types:
+
+```C#
+	// Retrieve an arbitrary list item.
+	var list = SPContext.Current.Web.Lists["Offices"];
+	SPListItem item = list.GetItemById(1);
+	// Retrieve the value of a geolocation field.
+	var geoValue = item["location"] as SPFieldGeolocationValue;
+	Double latitude = geoValue.Latitude;
+	Double longitude = geoValue.Longitude;
+	// Retrieve the value of a URL field.
+	var urlValue = item["website"] as SPFieldUrlValue;
+	string url = urlValue.Url;
+	string description = urlValue.Description;
+	// Retrieve the values in a multiple choice field.
+	var selectedValues = new List<String>();
+	var multiValue = item["facilities"] as SPFieldMultiChoiceValue;
+	for (int i = 0; i < multiValue.Count; i++)
+	{
+	   selectedValues.Add(multiValue[i]);
+	}
+```
+
+When you use an indexer with an **SPListItemCollection**, the indexer returns an object with an underlying type of String. In some cases, you cannot cast this string to the appropriate field value class. In these cases, you must use the **SPField.GetFieldValue** method to convert the string value into the appropriate field value type. 
+
+For example, you cannot convert the string representation of a user field value into an **SPFieldUserValue** instance.
+
+The following example shows how to use the SPField.GetFieldValue method:
+
+```C#
+	// Retrieve an arbitrary list item.
+	var list = SPContext.Current.Web.Lists["Appraisals"];
+	SPListItem item = list.GetItemById(1);
+	// Retrieve the value of a user field and get the display name of the user.
+	var field = item.Fields["Employee"] as SPFieldUser;
+	var fieldValue = field.GetFieldValue(item["Employee"].ToString()) as SPFieldUserValue;
+	string displayName = fieldValue.User.Name;
+```
