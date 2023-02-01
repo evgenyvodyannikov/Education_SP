@@ -9,6 +9,7 @@
 5. [Working with Fields](#working-with-fields)
 6. [Working with Files](#working-with-files)
 7. [Approaches to Querying List Data](#approaches-to-querying-list-data)
+8. [Building CAML Queries](#building-caml-queries)
 
 ### **Understanding the List and Library Class Hierarchy**
 
@@ -487,3 +488,61 @@ Both of these classes require you to create a query by using Collaborative Appli
 
 You can use **Language Integrated Query (LINQ)** syntax to retrieve data from SharePoint lists. For server-side code, this functionality is provided by the **LINQ to SharePoint Provider**, which converts LINQ queries into CAML queries.
 Before you can use LINQ to SharePoint in your code, you must generate entity classes to represent the lists you want to work with. SharePoint includes a command-line tool, **SPMetal.exe**, which you can use to generate entity classes for the lists in a specified site collection.
+
+### **Building CAML Queries**
+
+It is almost impossible for a SharePoint developer to avoid working with CAML. 
+
+Although it is possible to retrieve list item data without using CAML, you are likely to require a rudimentary knowledge of CAML queries at some point in your SharePoint development career. This topic provides an introduction to creating queries in CAML.
+
+**Note:** As CAML queries grow longer and more complex, they can become increasingly difficult to create and debug. There are various third-party tools available that provide an interactive interface for building and testing CAML queries.
+
+**The Where clause**
+
+The **top-level element** of a CAML query is always a **Where element**. The Where clause is functionally equivalent to the **SELECT** statement in SQL. Within the Where element, the query can contain logical joins, comparison operators, grouping and ordering operators, and various field references and constants. 
+
+**Comparison operators**
+
+If you want to specify criteria that determine which list items you want your query to return, you use a comparison operator. The CAML query schema includes the following comparison operators:
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/66135471/215996327-8cb661a3-9b8b-44da-9faf-d55d3bd7cdfe.png">
+</p>
+
+The following example shows a CAML query that returns all the items where the Inventory field value is less than or equal to 300:
+
+```XML
+	<Query>
+	   <Where>
+	      <Leq>
+	         <FieldRef Name="Inventory"></FieldRef>
+	         <Value Type="Integer">300</Value>
+	      </Leq>
+	   </Where>
+	</Query>
+```
+
+**Combining comparison operators**
+
+The following example shows a CAML query that returns all the items where the Inventory field value is less than or equal to 300 and the OrderPlaced field value is equal to false:
+
+```XML
+	<Query>
+	   <Where>
+	      <And>
+	         <Leq>
+	            <FieldRef Name="Inventory"></FieldRef>
+	            <Value Type="Integer">300</Value>
+	         </Leq>
+	         <Eq>
+	            <FieldRef Name="OrderPlaced"></FieldRef>
+	            <Value Type="Boolean">false</Value>
+	         </Eq>
+	      </And>
+	   </Where>
+	</Query>
+```
+
+**Building more complex CAML queries**
+
+You can make your CAML queries more sophisticated in a variety of ways. For example, you can add ordering and grouping criteria, and you can work with list relationships by using joins and projected fields. 
