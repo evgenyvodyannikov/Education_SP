@@ -13,6 +13,7 @@
 9. [Managing Solution Upgrades](#managing-solution-upgrades)
 10. [Administering Features and Solutions](#administering-features-and-solutions)
 11. [Creating Feature Receivers](#creating-feature-receivers)
+12. [Lab Scenario](#lab-scenario)
 
 ## **Understanding Features**
 
@@ -551,3 +552,7 @@ The following code example shows a Feature manifest file that registers an event
 	               ReceiverClass="[Fully-qualified class name]">
 	</Feature>
 ```
+
+## **Lab Scenario**
+
+Follow the instructions, but when need to choose content type **RESTART** Visual Studio. VS not always synchronizes existing content types, so it may cause issue
