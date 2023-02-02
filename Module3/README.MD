@@ -15,7 +15,7 @@
 11. [Using LINQ to SharePoint](#using-linq-to-sharepoint)
 12. [Using SPMetal to Generate Entity Classes](#using-spmetal-to-generate-entity-classes)
 
-### **Understanding the List and Library Class Hierarchy**
+## **Understanding the List and Library Class Hierarchy**
 
 The SharePoint object model provides classes that you can use to work with lists, libraries, and files in your code.
 
@@ -29,7 +29,7 @@ The **SPListItem** class represents an individual item in a SharePoint list. A l
 
 The **SPFolder** class represents a folder. This can be a folder within a list or library, or it can be a virtual directory on the SharePoint site. Both the SPList class and the SPWeb class expose collections of folders. The SPFolder class includes a collection of SPFile objects.
 
-### **Retrieving List and Library Objects**
+## **Retrieving List and Library Objects**
 
 The SPList class **does not include a constructor**. When you need to work with a list or library in code, you **retrieve the SPList** instance from the **parent SPWeb** object. You can do this in various ways:
 
@@ -85,7 +85,7 @@ As illustrated by the code example, the SPDocumentLibrary class includes some ad
 
 For example, the **CheckedOutFiles** property returns a list of all the files that are currently checked out in the library, and the **DocumentTemplateUrl** property enables you to get or set the template that is applied when a user creates a new document in the library.
 
-### **Creating and Deleting List and Library Objects**
+## **Creating and Deleting List and Library Objects**
 
 You can use the SharePoint object model to create and delete lists and libraries programmatically.
 
@@ -169,7 +169,7 @@ In most scenarios, calling the **SPList.Delete** method is the easiest way to de
 
 You can also recycle a list by calling the **SPList.Recycle** method, which returns the GUID for the list. When using this method, the list is placed in the recycle bin of the user account that runs the code.
 
-### **Working with List Items**
+## **Working with List Items**
 
 Items in a SharePoint list are represented by the **SPListItem** class. This applies regardless of the type of list: for example, an **SPListItem** instance can represent an event in a **calendar**, a **document** in a **document library**, a **contact** in a contacts list, and so on. 
 
@@ -251,7 +251,7 @@ You can delete a list item in three ways:
 - You can call the **SPListItemCollection.Delete** method, and specify the **index** of the list item you want to delete.
 - You can call the **SPListItemCollection.DeleteItemById** method, and specify the integer identifier of the list item you want to delete.
 
-### **Working with Fields**
+## **Working with Fields**
 
 Up to this point, you have seen how to set simple string-based field values when you work with list items. However, in practice, SharePoint lists include fields of many different types, such as Text, DateTime, Lookup, Currency, and Geolocation. 
 
@@ -350,7 +350,7 @@ The following example shows how to use the SPField.GetFieldValue method:
 	string displayName = fieldValue.User.Name;
 ```
 
-### **Working with Files**
+## **Working with Files**
 
 In the SharePoint object model, files on a SharePoint site are represented by the **SPFile** class. 
 
@@ -450,7 +450,7 @@ The following code example shows how to add a file to a SharePoint site:
 
 You can also use the Add method to update existing files. Several Add method overloads include a Boolean parameter that you can use to indicate whether you want to overwrite existing files with the same name. This enables you to add a file as a new version of an existing file.
 
-### **Approaches to Querying List Data**
+## **Approaches to Querying List Data**
 
 In many scenarios, you will want to retrieve one or more list items that match certain criteria. 
 
@@ -493,7 +493,7 @@ Both of these classes require you to create a query by using Collaborative Appli
 You can use **Language Integrated Query (LINQ)** syntax to retrieve data from SharePoint lists. For server-side code, this functionality is provided by the **LINQ to SharePoint Provider**, which converts LINQ queries into CAML queries.
 Before you can use LINQ to SharePoint in your code, you must generate entity classes to represent the lists you want to work with. SharePoint includes a command-line tool, **SPMetal.exe**, which you can use to generate entity classes for the lists in a specified site collection.
 
-### **Building CAML Queries**
+## **Building CAML Queries**
 
 It is almost impossible for a SharePoint developer to avoid working with CAML. 
 
@@ -551,7 +551,7 @@ The following example shows a CAML query that returns all the items where the In
 
 You can make your CAML queries more sophisticated in a variety of ways. For example, you can add ordering and grouping criteria, and you can work with list relationships by using joins and projected fields. 
 
-### **Using the SPQuery Class**
+## **Using the SPQuery Class**
 
 The **SPQuery** class provides a container for a **CAML query**. You can use the SPQuery class to execute a CAML query against an individual list. To use this approach, you perform the following high-level steps:
 
@@ -587,7 +587,7 @@ In addition to the Query property, you can use various other properties of the S
 
 - **ProjectedFields**. If the list you are querying includes a lookup field, you can use the ProjectedFields property to **add fields from the foreign list** to your query results.
 
-### **Using the SPSiteDataQuery Class**
+## **Using the SPSiteDataQuery Class**
 
 You can use the **SPSiteDataQuery** class to execute a query against multiple lists in a site collection. This is useful in scenarios where you want to aggregate list data from multiple sources. 
 
@@ -643,7 +643,7 @@ The following code example shows how to use the SPSiteDataQuery class to retriev
 	DataTable results = SPContext.Current.Web.GetSiteData(query);
 ```
 
-### **Using LINQ to SharePoint**
+## **Using LINQ to SharePoint**
 
 Many developers do not like writing CAML queries. The syntax can be unintuitive, particularly as queries grow more complex, and troubleshooting CAML can be challenging (a "bad" CAML query typically fails quietly and returns no results).
 
@@ -673,7 +673,7 @@ Individual lists are represented by the ```EntityList<TEntity>``` class. **TEnti
 
 For example, a contacts list could be represented by an ```EntityList<Contact>``` instance. The content type class includes strongly-typed properties for every field in the content type.
 
-### **Using SPMetal to Generate Entity Classes**
+## **Using SPMetal to Generate Entity Classes**
 
 **SPMetal** is a command-line tool that you can use to generate entity classes for LINQ to SharePoint. 
 
