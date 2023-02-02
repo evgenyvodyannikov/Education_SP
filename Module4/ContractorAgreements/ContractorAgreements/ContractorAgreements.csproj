@@ -24,6 +24,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -51,9 +52,36 @@
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Features\ContractingResources\ContractingResources.EventReceiver.cs">
+      <DependentUpon>ContractingResources.feature</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="AgreementEndDate\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{ab56cc6b-90f2-4bf9-9812-23ed7938ed42}</SharePointProjectItemId>
+    </None>
+    <None Include="AgreementStartDate\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{3f3eeb9a-0ad5-4a5f-a1ed-951df244f9b7}</SharePointProjectItemId>
+    </None>
+    <None Include="ContosoManager\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{1a30a444-ecd0-4d5e-8f0c-4e1bfc47f044}</SharePointProjectItemId>
+    </None>
+    <None Include="ContosoTeam\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{b62e609e-97af-4324-ac7f-d8c6ada4c255}</SharePointProjectItemId>
+    </None>
+    <None Include="ContractorAgreementsList\ContractorAgreementsListInstance\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{b1555044-028b-4b91-9da0-c6c3074c0e2a}</SharePointProjectItemId>
+    </None>
+    <None Include="ContractorAgreementsList\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{1ba58541-1f02-492c-ac6d-c3509ee52071}</SharePointProjectItemId>
+    </None>
+    <None Include="DailyRate\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{b3fe2a97-7ab8-46aa-a71f-1d237585cb57}</SharePointProjectItemId>
+    </None>
+    <None Include="Features\ContractingResources\ContractingResources.feature">
+      <FeatureId>{b3c9cad7-f251-4a04-8d85-000c4d3420da}</FeatureId>
+    </None>
     <None Include="key.snk" />
     <None Include="Package\Package.package">
       <PackageId>{712d41fc-cee1-4821-ac2f-cddd410a7016}</PackageId>
@@ -61,9 +89,28 @@
     <None Include="Package\Package.Template.xml">
       <DependentUpon>Package.package</DependentUpon>
     </None>
+    <None Include="SecurityCleared\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{fd826ec2-a961-48cc-b1d1-fe219b38e816}</SharePointProjectItemId>
+    </None>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Features\" />
+    <Content Include="AgreementEndDate\Elements.xml" />
+    <Content Include="AgreementStartDate\Elements.xml" />
+    <Content Include="ContosoManager\Elements.xml" />
+    <Content Include="ContosoTeam\Elements.xml" />
+    <Content Include="ContractorAgreementsList\ContractorAgreementsListInstance\Elements.xml" />
+    <Content Include="ContractorAgreementsList\EditDlg.htm" />
+    <Content Include="ContractorAgreementsList\Elements.xml" />
+    <Content Include="ContractorAgreementsList\FileDlg.htm" />
+    <Content Include="ContractorAgreementsList\Repair.aspx" />
+    <Content Include="ContractorAgreementsList\Schema.xml" />
+    <Content Include="ContractorAgreementsList\Upload.aspx" />
+    <Content Include="DailyRate\Elements.xml" />
+    <Content Include="Features\ContractingResources\ContractingResources.Template.xml">
+      <DependentUpon>ContractingResources.feature</DependentUpon>
+    </Content>
+    <Content Include="SecurityCleared\Elements.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

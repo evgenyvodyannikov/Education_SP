@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <ListInstance Title="Contractor Agreements" OnQuickLaunch="TRUE" TemplateType="101" Url="Lists/Contractor Agreements" Description="Use this list to manage contracts between Contoso Pharmaceuticals and external contractors"></ListInstance>
+</Elements>
