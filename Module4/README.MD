@@ -7,6 +7,7 @@
 3. [Understanding Feature Scopes](#understanding-feature-scopes)
 4. [Understanding Solutions](#understanding-solutions)
 5. [Anatomy of a Solution](#anatomy-of-a-solution)
+6. [Planning and Configuring Feature Dependencies](#planning-and-configuring-feature-dependencies)
 
 ### **Understanding Features**
 
@@ -231,5 +232,50 @@ This example illustrates the deployment of various different types of custom com
 
 - **Assemblies**. To include assemblies in a solution, add an **Assembly element** for each assembly. The Location attribute indicates the relative path to the assembly within the solution package, and the **DeploymentTarget attribute** specifies whether you want to deploy the assembly to the global assembly cache or the web application bin folder. You can use a SafeControl child element to register classes within the assembly, such as Web Part classes, as safe controls in the Web.config file.
 
+### **Planning and Configuring Feature Dependencies**
 
+The built-in Features in SharePoint 2013 use Feature activation dependencies extensively. Feature activation dependencies enable you to require the activation of an existing Feature before an administrator can activate a new Feature. 
 
+Dependencies are a useful tool when you design your own Feature sets.
+
+**Dependency scenarios**
+
+Feature activation dependencies are used in two main scenarios:
+
+- **Grouping**. You can use dependencies to group multiple granular Features together in a single Feature. Suppose you create a set of hidden Features that each deploy a site column. You could then create one or more visible Features that depend on a subset of these hidden Features to deploy commonly-used sets of site columns, such as site columns for finance teams or project management tasks. When you activate the visible Feature, SharePoint will automatically activate the hidden Features that are included as dependencies. This approach enables you to define functionality at a very granular level but expose functionality at a business requirements level.
+
+- **Resource guarantees**. You can use dependencies to make sure particular components are available before your Feature is activated. For example, suppose you create a Feature that binds a content type to a list instance. You could use Feature dependencies to make sure both the Feature that provisions the content type and the Feature that provisions the list instance are activated before your content type binding Feature is activated.
+
+**Dependency rules**
+
+Feature dependencies are governed by a series of rules that are designed to prevent circular dependencies and performance issues. The most notable rules are as follows:
+
+- **Dependency chains**. Generally speaking, dependency chains are not supported. If Feature A depends on Feature B, Feature B cannot include dependencies to any other visible Features. Feature B can include dependencies on hidden Features.
+
+- **Hidden Features**. Typically, hidden Features are intended to be used as dependencies by other Features. Hidden Features cannot themselves include dependencies. SharePoint will automatically deactivate a hidden Feature when the last visible Feature that depends on it is deactivated.
+
+- **Same-scope dependencies**. If Feature A depends on Feature B, and both Features are at the same scope, SharePoint will automatically activate Feature B when you activate Feature A.
+
+- **Cross-scope dependencies**. Features can only depend on other Features at a less restrictive scope. For example, a Web-scoped Feature can include a dependency on a Site-scoped Feature, but a Site-scoped Feature cannot include a dependency on a Web-scoped Feature. SharePoint will never automatically activate Features referenced in cross-scope dependencies—instead, the activation will fail and the administrator will be prompted to install the dependency Feature first. You cannot create cross-scope dependencies on hidden Features.
+
+**Configuring dependencies**
+
+When you define a Feature, you can specify dependencies on other Features by adding **ActivationDependency** elements to your Feature manifest file. Visual Studio 2012 includes a designer that can aid you in this process.
+
+The following code example shows a Feature manifest file with two activation dependencies:
+
+```XML
+	<Feature xmlns="http://schemas.microsoft.com/sharepoint/"
+	                Title="FinanceAssets"
+	                Id="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+	                Scope="Web">
+	    <ActivationDependencies>
+	      <ActivationDependency FeatureId="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+	                                              FeatureTitle="FinanceSiteColumns" />
+	      <ActivationDependency FeatureId="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+	                                              FeatureTitle="FinanceContentTypes" />
+	   </ActivationDependencies>
+	</Feature>
+```
+
+**Note:** When you add an ActivationDependency element, you only need to specify a **FeatureId** attribute. The FeatureTitle attribute is optional and simply serves to make your Feature manifest file more comprehensible for other humans.
