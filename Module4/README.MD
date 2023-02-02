@@ -8,6 +8,7 @@
 4. [Understanding Solutions](#understanding-solutions)
 5. [Anatomy of a Solution](#anatomy-of-a-solution)
 6. [Planning and Configuring Feature Dependencies](#planning-and-configuring-feature-dependencies)
+7. [Creating Solution Activation Dependencies](#creating-solution-activation-dependencies)
 
 ### **Understanding Features**
 
@@ -279,3 +280,26 @@ The following code example shows a Feature manifest file with two activation dep
 ```
 
 **Note:** When you add an ActivationDependency element, you only need to specify a **FeatureId** attribute. The FeatureTitle attribute is optional and simply serves to make your Feature manifest file more comprehensible for other humans.
+
+### **Creating Solution Activation Dependencies**
+
+In addition to creating Features that require the activation of one or more existing Features, you can create **solutions that require the activation of one or more existing solutions**. 
+
+Solution activation dependencies are used **far less commonly** than Feature activation dependencies. This is because a solution, as the name suggests, typically represents a complete and self-contained set of components. By contrast, Features often represent more granular functionality.
+
+To define a solution activation dependency, you must add an **ActivationDependency** element to the solution manifest file. You must provide a **SolutionId** attribute, and you can also specify an optional SolutionName attribute to make your manifest more readable. 
+
+In contrast to Feature activation dependencies, the Visual Studio designer does not provide tooling for adding solution activation dependencies and you must manually edit the solution manifest.
+
+The following code example shows a solution manifest file that includes an activation dependency:
+```XML
+	<Solution xmlns="http://schemas.microsoft.com/sharepoint/"
+	              SolutionId="xxxxxxxx-xxxx-xxxx-xxxxxxxxxxxx"
+	              SharePointProductVersion="15.0">
+	   <ActivationDependencies>
+	      <ActivationDependency SolutionId="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+	                                              SolutionName="ContosoFinanceTools" />
+	   </ActivationDependencies>
+	   <!-- Other solution manifest content -->
+	</Solution>
+```
