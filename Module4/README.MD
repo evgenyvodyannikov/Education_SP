@@ -10,7 +10,7 @@
 6. [Planning and Configuring Feature Dependencies](#planning-and-configuring-feature-dependencies)
 7. [Creating Solution Activation Dependencies](#creating-solution-activation-dependencies)
 
-### **Understanding Features**
+## **Understanding Features**
 
 A Feature is a set of files that provisions custom SharePoint functionality or components. 
 
@@ -48,7 +48,7 @@ You can deploy a Feature in three different ways:
 
 - **Include** the Feature **in an app for SharePoint**. Features are used within app packages to provision declarative components on the app web and the host web.
 
-### **Anatomy of a Feature**
+## **Anatomy of a Feature**
 
 When you create a Feature, every component of the Feature is contained within a top-level Feature folder. **The name of this folder is important**, because this is the name by which you will **refer to the Feature** if you install and uninstall it by using Windows PowerShell.
 
@@ -117,7 +117,7 @@ The following code example shows an element manifest file. This is taken from th
 
 The top-level XML element in an element manifest file is always an **Elements** element. The Elements element supports various child elements that you can use to define different types of functionality.
 
-### **Understanding Feature Scopes**
+## **Understanding Feature Scopes**
 
 Every SharePoint Feature **must be scoped** to a level in the SharePoint logical architecture. 
 
@@ -187,7 +187,7 @@ To deploy a sandboxed solution, a site collection administrator must add the sol
 
 Solutions contained within app packages are deployed automatically as part of the app installation process.
 
-### **Anatomy of a Solution**
+## **Anatomy of a Solution**
 
 A SharePoint solution package is a cabinet file with a **.wsp** file name extension. The contents and behavior of the solution are specified by the solution manifest file, which is an XML file named **Manifest.xml**.
 
@@ -233,7 +233,7 @@ This example illustrates the deployment of various different types of custom com
 
 - **Assemblies**. To include assemblies in a solution, add an **Assembly element** for each assembly. The Location attribute indicates the relative path to the assembly within the solution package, and the **DeploymentTarget attribute** specifies whether you want to deploy the assembly to the global assembly cache or the web application bin folder. You can use a SafeControl child element to register classes within the assembly, such as Web Part classes, as safe controls in the Web.config file.
 
-### **Planning and Configuring Feature Dependencies**
+## **Planning and Configuring Feature Dependencies**
 
 The built-in Features in SharePoint 2013 use Feature activation dependencies extensively. Feature activation dependencies enable you to require the activation of an existing Feature before an administrator can activate a new Feature. 
 
@@ -281,7 +281,7 @@ The following code example shows a Feature manifest file with two activation dep
 
 **Note:** When you add an ActivationDependency element, you only need to specify a **FeatureId** attribute. The FeatureTitle attribute is optional and simply serves to make your Feature manifest file more comprehensible for other humans.
 
-### **Creating Solution Activation Dependencies**
+## **Creating Solution Activation Dependencies**
 
 In addition to creating Features that require the activation of one or more existing Features, you can create **solutions that require the activation of one or more existing solutions**. 
 
