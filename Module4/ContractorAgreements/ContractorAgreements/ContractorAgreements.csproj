@@ -82,6 +82,9 @@
     <None Include="Features\ContractingResources\ContractingResources.feature">
       <FeatureId>{b3c9cad7-f251-4a04-8d85-000c4d3420da}</FeatureId>
     </None>
+    <None Include="Features\ContractorAgreementsList\ContractorAgreementsList.feature">
+      <FeatureId>{ddd20bb7-8728-4602-86a5-2dc85c578ec4}</FeatureId>
+    </None>
     <None Include="key.snk" />
     <None Include="Package\Package.package">
       <PackageId>{712d41fc-cee1-4821-ac2f-cddd410a7016}</PackageId>
@@ -109,6 +112,9 @@
     <Content Include="DailyRate\Elements.xml" />
     <Content Include="Features\ContractingResources\ContractingResources.Template.xml">
       <DependentUpon>ContractingResources.feature</DependentUpon>
+    </Content>
+    <Content Include="Features\ContractorAgreementsList\ContractorAgreementsList.Template.xml">
+      <DependentUpon>ContractorAgreementsList.feature</DependentUpon>
     </Content>
     <Content Include="SecurityCleared\Elements.xml" />
   </ItemGroup>
