@@ -10,6 +10,7 @@
 6. [Planning and Configuring Feature Dependencies](#planning-and-configuring-feature-dependencies)
 7. [Creating Solution Activation Dependencies](#creating-solution-activation-dependencies)
 8. [Managing Feature Upgrades](#managing-feature-upgrades)
+9. [Managing Solution Upgrades](#managing-solution-upgrades)
 
 ## **Understanding Features**
 
@@ -372,3 +373,72 @@ Within a VersionRange element, you can include the following child elements to p
 
 - **CustomUpgradeAction**. Use this element to specify Feature upgrade event receiver classes that you want to execute when the Feature is upgraded.
 You do not have to include a VersionRange attribute in your Feature manifest file; all the preceding elements can be added directly to the UpgradeActions element if you want your actions to apply to all versions of the Feature. However, it is good practice to always specify a version range for readability and backward compatibility.
+
+## **Managing Solution Upgrades**
+
+Like any software component, custom SharePoint solutions are likely to evolve over time. Just like Features, the SharePoint solution framework provides mechanisms to help ensure that solution updates are applied smoothly and reliably. 
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/66135471/216283635-dc78d84b-1a59-4967-bfb7-e1c8ee88bbbc.png">
+</p>
+
+To create a new version of a solution, you simply build a new solution package (**.wsp**) with any required changes. You can then update deployed instances of the solution in one of two ways:
+
+- Remove the existing solution and then deploy the updated version.
+- Perform an in-place update by using the **Update-SPSolution** Windows PowerShell cmdlet.
+Determining the most appropriate approach depends on various aspects of the SharePoint environment and the solution contents.
+
+**Uninstalling and then reinstalling the solution**
+
+Uninstalling the previous version of the solution and then installing the new version of the solution provides the most flexible approach to updates. 
+
+When you update a solution in this way, you can choose to uninstall the solution and remove it from the solution store, or just uninstall the solution. If you choose to only uninstall the solution, but not to remove the solution from the solution store, you must use a new name and solution ID when you deploy the updated solution. 
+
+If you remove the solution from the solution store, you can reinstall by using the same name and solution ID. 
+
+The major drawback of this approach is that it requires you to be able to uninstall the existing solution. In practice, this is often not possible. For example, if your solution includes a content type that has been deployed and used in a list, you will not be able to uninstall the solution while the content type remains in use. 
+
+This is not possible without losing data. In these circumstances, you will usually need to perform an in-place update by using the Update-SPSolution cmdlet. 
+
+**Performing an in-place update**
+
+To perform an in-place update, you use the Update-SPSolution cmdlet to update the solution. 
+
+When you call the Update-SPSolution cmdlet, you should use the Identity parameter to specify the GUID of the solution and you should use the LiteralPath parameter to specify the location of the revised solution package. 
+
+Performing an in-place update enables you to update your solution without first uninstalling it. This prevents data loss, which would be necessary with an uninstall/reinstall solution update; however, in-place updates do not support any of the following changes:
+
+- Adding or removing a Feature
+- Changing the solution ID
+- Changing the scope of a Feature
+- Updating a Feature receiver
+- Adding, removing, or editing an element manifest file
+- Adding, removing or editing a Property element in the Feature.xml file
+
+If you need to make any of these changes, you must either perform an uninstall/reinstall update, or consider developing a new solution with your new changes. You can make the new solution dependent on the original solution if appropriate.
+
+**Assembly binding redirection**
+
+In many cases, when you update a solution, you will need to replace assemblies within the solution with new versions. 
+
+When you update an assembly, you should increment the version number. However, this may break other components if they are dependent on the old version of the assembly. 
+
+In ASP.NET, you typically solve this problem by adding **bindingRedirect** elements to your **Web.config** files. 
+
+In SharePoint, you can add **BindingRedirect** child elements to your solution manifest. For each BindingRedirect element that you specify in your solution manifest file, when you run the solution update, SharePoint adds a bindingRedirect element to the Web.config file of each web application on every server in the SharePoint farm. 
+
+The following code example shows a solution manifest file that includes assembly binding redirection:
+```XML
+	<Solution xmlns="http://schemas.microsoft.com/sharepoint/" 
+	                 SolutionId="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX" 
+	                 SharePointProductVersion="15">
+	    <Assemblies>
+	        <Assembly Location="ContosoAssembly.dll" DeploymentTarget="GlobalAssemblyCache">
+	            <BindingRedirects>
+	                <BindingRedirect OldVersion="1.0.0.0" />
+	            </BindingRedirects>
+	        </Assembly>
+	    </Assemblies>
+	    ...
+	</Solution>
+```
