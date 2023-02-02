@@ -11,6 +11,7 @@
 7. [Creating Solution Activation Dependencies](#creating-solution-activation-dependencies)
 8. [Managing Feature Upgrades](#managing-feature-upgrades)
 9. [Managing Solution Upgrades](#managing-solution-upgrades)
+10. [Administering Features and Solutions](#administering-features-and-solutions)
 
 ## **Understanding Features**
 
@@ -442,3 +443,50 @@ The following code example shows a solution manifest file that includes assembly
 	    ...
 	</Solution>
 ```
+
+## **Administering Features and Solutions**
+
+As a developer, you will not often have to administer Features and solutions. In a production environment, Features and solutions are managed by farm administrators or site collection administrators. In your development environment, Visual Studio 2012 largely automates the process for you. However, as a well-rounded SharePoint developer, you should understand the basic techniques for deploying and managing Features and solutions.
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/66135471/216285532-042a11f6-806b-45d7-b7fd-3d57e22468ba.png">
+</p>
+
+**Administering farm solutions**
+
+To administer farm solutions, you need to understand the solution life cycle. To activate the functionality within a solution, a farm administrator must:
+
+1. Add the solution to the solution store. You can use the **Add-SPSolution** cmdlet in Windows PowerShell to add the solution.
+
+2. Install the solution. You can use the **Install-SPSolution** cmdlet in Windows PowerShell to install the solution. Alternatively, you can install the solution from the Central Administration website.
+
+When you install a solution, SharePoint will automatically install any Features contained within the solution.
+
+To remove a solution from the SharePoint farm, the farm administrator must:
+
+1. Retract the solution. You can use the **Uninstall-SPSolution** cmdlet to retract a solution. Alternatively, you can retract the solution from the Central Administration website. SharePoint will not allow you to retract a solution if items within the solution, such as content types, are currently in use.
+
+2. Remove the solution from the solution store. You can use the **Remove-SPSolution** cmdlet to remove a solution from the solution store. You can also use the Central Administration website to remove solutions.
+
+**Note:** The administration process for sandboxed solutions differs from the administration process for farm solutions.
+
+**Administering Features**
+
+Like solutions, making the functionality defined by Features available to users involves two steps:
+
+1. Install the Feature. You can use the **Install-SPFeature** cmdlet in Windows PowerShell to do this.
+
+2. Activate the Feature. You can use the **Enable-SPFeature** cmdlet in Windows PowerShell to do this. You can also activate Features from the Central Administration website (for farm or web application-scoped Features) or the SharePoint site user interface (for site collection or site-scoped Features).
+
+To remove a Feature, the administrator must also perform two steps:
+
+1. Deactivate the Feature. You can use the **Disable-SPFeature** cmdlet to do this. You can also deactivate Features through the Central Administration website or the SharePoint site user interface, depending on the scope of the Feature.
+
+2. Uninstall the Feature. You can use the **Uninstall-SPFeature** cmdlet to do this.
+In most cases, Features are deployed within solutions or app packages. In these cases, you do not need to install or uninstall the Feature. Features are installed when the parent solution or app package is installed, and Features are uninstalled when the parent solution or app package is uninstalled. 
+
+In contrast to the default experience when you deploy a solution from Visual Studio, installing a solution does not automatically activate any Features within the solution. Installing the solution makes the Features available at the specified scope. 
+
+Administrators at the specified scope can then choose whether they want to activate the Features provided by the solution.
+
+
