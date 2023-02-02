@@ -12,6 +12,7 @@
 8. [Managing Feature Upgrades](#managing-feature-upgrades)
 9. [Managing Solution Upgrades](#managing-solution-upgrades)
 10. [Administering Features and Solutions](#administering-features-and-solutions)
+11. [Creating Feature Receivers](#creating-feature-receivers)
 
 ## **Understanding Features**
 
@@ -489,4 +490,64 @@ In contrast to the default experience when you deploy a solution from Visual Stu
 
 Administrators at the specified scope can then choose whether they want to activate the Features provided by the solution.
 
+## **Creating Feature Receivers**
 
+When you deploy a Feature within a solution, you can add code that runs in response to Feature life cycle events. This is useful in a variety of scenarios, such as when you need to register custom components such as timer jobs or to programmatically modify configuration files. 
+
+**Creating a Feature receiver class**
+
+To create a Feature receiver, add a class that inherits from **SPFeatureReceiver** to your solution. The **abstract SPFeatureReceiver** class includes methods that respond to various events in the Feature life cycle. 
+
+You add functionality to your Feature receiver by overriding the appropriate base class method:
+
+- To run code after a Feature is installed, override the **FeatureInstalled** method.
+
+- To run code after a Feature is activated, override the **FeatureActivated** method.
+
+- To run code when a Feature is upgraded, override the **FeatureUpgrading** method.
+
+- To run code when a Feature is deactivated, override the **FeatureDeactivating** method.
+
+- To run code when a Feature is uninstalled, override the **FeatureUninstalling** method.
+
+The following code example shows a Feature receiver class. This example adds an announcement to a list when the Feature is activated:
+
+```C#
+	public class InvoiceListEventReceiver : SPFeatureReceiver
+	{
+	   public override void FeatureActivated(SPFeatureReceiverProperties properties)
+	   {
+	      var web = properties.Feature.Parent as SPWeb;
+	      var listAnnouncements = web.Lists.TryGetList("Announcements");
+	      if (listAnnouncements != null)
+	      {
+	         var announcement = listAnnouncements.Items.Add();
+	         announcement["Title"] = "Invoice List Feature Activated!";
+	         announcement["Body"] = String.Format("{0} was activated at: {1}", 
+	                                                      properties.Definition.DisplayName,
+	                                                      DateTime.Now.ToString());
+	         announcement.Update();
+	      }
+	   }
+	}
+```
+
+**Best Practice:** If you use the **FeatureInstalled** method to make changes when a Feature is installed, you should also use the **FeatureUninstalling** method to **reverse your changes** if the Feature is uninstalled. 
+
+Similarly, if you use the **FeatureActivated** method to make changes when a Feature is activated, you should use the **FeatureDeactivating** method to reverse the changes when the Feature is deactivated.
+
+**Registering a Feature receiver**
+
+After you create a Feature receiver class, you need to associate it with your Feature. You can do this by specifying **ReceiverAssembly** and **ReceiverClass** attributes in the Feature manifest file.
+
+The following code example shows a Feature manifest file that registers an event receiver class:
+
+```XML
+	<Feature xmlns="http://schemas.microsoft.com/sharepoint/"
+	               Id="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+	               Title="Invoice List"
+	               Scope="Site"
+	               ReceiverAssembly="[Assembly strong name]"
+	               ReceiverClass="[Fully-qualified class name]">
+	</Feature>
+```
