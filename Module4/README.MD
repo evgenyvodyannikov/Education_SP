@@ -9,6 +9,7 @@
 5. [Anatomy of a Solution](#anatomy-of-a-solution)
 6. [Planning and Configuring Feature Dependencies](#planning-and-configuring-feature-dependencies)
 7. [Creating Solution Activation Dependencies](#creating-solution-activation-dependencies)
+8. [Managing Feature Upgrades](#managing-feature-upgrades)
 
 ## **Understanding Features**
 
@@ -303,3 +304,71 @@ The following code example shows a solution manifest file that includes an activ
 	   <!-- Other solution manifest content -->
 	</Solution>
 ```
+
+## **Managing Feature Upgrades**
+
+In any organization, custom software components are likely to evolve over time. It is very rare that an organization will release version 1.0 of a component and then make no additional changes. 
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/66135471/216281110-c93b106f-48e9-41de-b84c-558f2b081f6c.png">
+</p>
+
+SharePoint 2013 provides a mechanism for managing component evolution and version in the form of Feature upgrades. An upgraded Feature must be able to do two things:
+
+- Where a previous version of the Feature is not activated, it must provision every component within the Feature.
+
+- Where a previous version of the Feature is activated, it must modify the existing components and add new components as required.
+
+SharePoint meets these requirements by enabling you to target upgrade actions to specific Feature versions.
+
+**Upgrading a Feature**
+
+You can use the following high-level steps to upgrade a Feature:
+
+1. Add any new or modified files to the Feature folder.
+2. Add new element manifest files for any new items. Do not modify the existing element manifest files.
+3. In the Feature manifest file, set the Version attribute to a new version number. 
+4. In the Feature manifest file, add an **UpgradeActions** element.
+5. Within the **UpgradeActions** element, add one or more **VersionRange** elements to target changes to specific Feature versions or version ranges.
+
+The following code example shows a Feature manifest file that includes upgrade actions:
+
+```XML
+	<Feature Id="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+	                Title="Invoicing Resources"
+	                Scope="Site"
+	                Version="3.0.0.0">
+	   <UpgradeActions>
+	      <VersionRange BeginVersion="1.0.0.0" EndVersion="2.9.9.9">
+	         <ApplyElementManifests>
+	            <ElementManifest Location="Columns\InvoiceOwner.xml" />
+	            <ElementManifest Location="Columns\ClientContact.xml" />
+	         </ApplyElementManifests>
+	         <AddContentTypeField ContentTypeId="0x01…"
+	                FieldId="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+	                PushDown="True" />
+	         <AddContentTypeField ContentTypeId="…"
+	                FieldId="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+	                PushDown="True" />
+	      </VersionRange>
+	   </UpgradeActions>
+	   <ElementManifests>
+	      <!—Register all element manifests here as before. -->
+	   </ElementManifests>
+	</Feature>
+```
+
+**Note:** In many cases, Features are deployed without specifying a Version attribute. In these instances, SharePoint treats the version number as 0.0.0.0.
+
+**Feature upgrade capabilities**
+
+Within a VersionRange element, you can include the following child elements to perform various upgrade tasks:
+
+- **ApplyElementManifests**. Use this to apply additional element manifests to a range of Feature versions. The element manifests specified here should be those that are missing from the specified range of Feature versions.
+
+- **MapFile**. Use this element to replace an existing file with a new file in the specified range of Feature versions. Use the FromPath and ToPath to identify the locations of the existing file and the new file, respectively, within the Feature folder.
+
+- **AddContentTypeField**. Use this element to add a new field to a site content type. The site content type you specify must be defined in the previous version of the Feature. Use the PushDown attribute to specify whether you want to cascade changes to list content types and inherited content types.
+
+- **CustomUpgradeAction**. Use this element to specify Feature upgrade event receiver classes that you want to execute when the Feature is upgraded.
+You do not have to include a VersionRange attribute in your Feature manifest file; all the preceding elements can be added directly to the UpgradeActions element if you want your actions to apply to all versions of the Feature. However, it is good practice to always specify a version range for readability and backward compatibility.
