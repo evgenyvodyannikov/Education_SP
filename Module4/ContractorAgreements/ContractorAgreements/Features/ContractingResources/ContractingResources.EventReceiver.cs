@@ -90,9 +90,16 @@ namespace ContractorAgreements.Features.ContractingResources
 
         // Раскомментируйте ниже метод для обработки события, возникающего перед деактивацией компонента.
 
-        //public override void FeatureDeactivating(SPFeatureReceiverProperties properties)
-        //{
-        //}
+        public override void FeatureDeactivating(SPFeatureReceiverProperties properties)
+        {
+            var site = properties.Feature.Parent as SPSite;
+            var web = site.RootWeb;
+            SPContentType contractingCT = web.ContentTypes[ctid];
+            if (contractingCT != null)
+            {
+                web.ContentTypes.Delete(ctid);
+            }
+        }
 
 
         // Раскомментируйте ниже метод для обработки события, возникающего после установки компонента.
