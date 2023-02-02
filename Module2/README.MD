@@ -9,7 +9,7 @@
 5. [Site Collections and the SPSite Class](#site-collections-and-the-spsite-class)
 6. [Individual Sites and the SPWeb Class](#individual-sites-and-the-spweb-class)
 
-### **The SharePoint Object Hierarchy**
+## **The SharePoint Object Hierarchy**
 
 All of the SharePoint 2013 object models provide a core set of classes that represent key components of a SharePoint deployment. Just like the logical architecture of a SharePoint deployment, these classes are arranged in a hierarchical manner.
 
@@ -28,7 +28,7 @@ The core classes in the server-side object model are as follows:
 
 Together, these classes represent the hierarchy of a SharePoint deployment in its entirety. Each object exposes an enumerable collection of the objects below it in the hierarchy.
 
-### **The SPFarm Class**
+## **The SPFarm Class**
 
 SPFarm objects are the highest-level object in the hierarchy and, as their name implies, they represent the SharePoint farm as a logical entity. The SPFarm class **does not include a constructor**. Instead, the class **provides a global static object** that represents the current farm through the Local property.
 
@@ -63,7 +63,7 @@ The following code example shows how to work with SPFarm properties and methods:
 **Note:** You can also work with SPFarm objects in Windows PowerShell. The **Get-SPFarm** cmdlet returns the local farm instance.
 Because the SPFarm class represents farm-level configuration and infrastructure settings, you cannot use the SPFarm class from sandboxed solutions or from client-side code. There is no client-side equivalent to the SPFarm class. For the same reasons, you cannot use the SPFarm class when you work with SharePoint Online subscriptions.
 
-### **Working with Services**
+## **Working with Services**
 
 SharePoint 2013 provides functionality through **several farm-wide services**. Many services, such as Excel Calculation Services or the User Profile Service, underpin specific service applications. Other services, such as the Microsoft SharePoint Foundation Web Application service or the Distributed Cache service, underpin a broader range of SharePoint functionality.
 
@@ -125,7 +125,7 @@ The following code example shows how to enumerate the web applications in SPWebS
 	}
 ```
 
-### **Working with Web Applications**
+## **Working with Web Applications**
 
 SharePoint **web applications are containers for site collections and sites**. Web applications are also the items in the object hierarchy that map SharePoint sites to Internet Information Services (IIS) websites. 
 
@@ -159,7 +159,7 @@ In most cases, a SharePoint web application has a **one-to-one relationship with
 
 A single web application can be extended to up to five zones. Extending a SharePoint web application to additional zones effectively provides users with additional paths to the same content. Each IIS website provides access to the same set of site collections, but each can have a unique URL, port number, host header, protocol, bindings, and Web.config file. 
 
-### **Site Collections and the SPSite Class**
+## **Site Collections and the SPSite Class**
 
 As the name suggests, a site collection is a collection of individual sites. Site collections also represent the point in the object hierarchy at which control shifts from farm administrators (who work primarily on the server) to end users (who interact with SharePoint through a web browser). In the SharePoint object model, site collections are represented by the **SPSite** class.
 
@@ -203,7 +203,7 @@ Each of the client-side object models for SharePoint 2013 provides a way of work
 
 When you use the REST API, you can access a site collection by constructing a URL in the format ```http://{site_collection_URL}/_api/site```, for example http://team.contoso.com/_api/site.
 
-### **Individual Sites and the SPWeb Class**
+## **Individual Sites and the SPWeb Class**
 
 In the SharePoint server-side object model, an individual site is represented by the **SPWeb** class.
 

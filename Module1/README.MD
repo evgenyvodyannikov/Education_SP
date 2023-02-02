@@ -12,7 +12,7 @@
 10. [SharePoint Features](#sharepoint-features)
 11. [Creating and Deploying a SharePoint Web Part](#creating-and-deploying-a-sharepoint-web-part)
 
-### **Workloads**:
+## **Workloads**:
 
 SharePoint 2013 provides functionality across several broad functional areas, commonly known as **workloads**.
 
@@ -24,7 +24,7 @@ SharePoint 2013 provides functionality across several broad functional areas, co
 - **Business Connectivity Services**. SharePoint enables you to integrate data from external systems into solutions for SharePoint sites and Microsoft Office 2013 applications. 
 - **Business Intelligence**. SharePoint provides a range of capabilities for providing insight into business data, from built-in tools such as Excel Services and PerformancePoint Services, to integration with SQL Server 2012 Analysis Services and SQL Server 2012 Reporting Services.
 
-### **The SharePoint 2013 Technology Stack**:
+## **The SharePoint 2013 Technology Stack**:
 
 SharePoint Server 2013 builds on a variety of products and technologies. Understanding how these products and technologies fit together can be helpful when you design and build solutions for the SharePoint platform.
 
@@ -56,7 +56,7 @@ SharePoint Server 2013 builds on a variety of products and technologies. Underst
      
      SharePoint Server 2013 builds on SharePoint Foundation 2013 to provide more advanced functionality in each of the key workload areas.
 
-### **The SharePoint Page Rendering Process**:
+## **The SharePoint Page Rendering Process**:
 
 In SharePoint, the parsing and page rendering process underpins almost all aspects of functionality and user experience. It is essential to gain a solid understanding of this process before you begin developing customizations for the SharePoint platform.
 
@@ -80,7 +80,7 @@ In terms of parsing and rendering, there are two distinct types of pages in Shar
 
      *Customized (or unghosted) content pages are parsed and rendered by the SharePoint safe mode parser*, rather than the ASP.NET parser. The safe mode parser includes various restrictions to prevent malicious users from using customized pages to launch attacks. In particular, the safe mode parser blocks the processing of any pages that contain inline script.
 
-### **Declarative components**:
+## **Declarative components**:
 
 With SharePoint, you can define and configure a wide range of custom components using **CAML** *(Collaborative Application Markup Language (CAML) is an XML-based language that is used in Microsoft SharePoint Foundation to define the fields and views that are used in sites and lists)*.
 
@@ -123,7 +123,7 @@ Declarative components are easier to read than their imperative equivalents. Bec
 
 Declarative components are the most flexible of all approaches to building custom SharePoint functionality. You can deploy declarative components in SharePoint Features within solutions or apps, and you can use declarative components with both SharePoint Online and on-premises SharePoint 2013 deployments. 
 
-### **Web Parts**
+## **Web Parts**
 
 A Web Part is a **type of ASP.NET control**, and SharePoint Web Parts build on the ASP.NET Web Part framework. This framework is designed to enable users to modify the content and behavior of webpages by adding **custom controls** (the Web Parts) to **specific regions on the page (Web Part zones)**. 
 
@@ -166,7 +166,7 @@ In addition to deploying the assembly that contains your Web Part code, *you mus
 In SharePoint 2013, you should use apps instead, at least wherever possible. Apps provide a more consistent installation, deployment, and life cycle management experience.
 However, there are still scenarios in which you might want to create Web Parts. This is most likely when you want to take advantage of Web Part connections; for example, to provide data to other Web Parts, consume data from other Web Parts, or provide filters to other Web Parts.
 
-### **Application Pages**
+## **Application Pages**
 
 SharePoint uses application pages extensively to expose site management and administrative capabilities. Application pages are used to expose functionality that is not specific to sites or content.
 
@@ -188,7 +188,7 @@ The **Microsoft.SharePoint.WebControls** namespace includes two base classes tha
 - LayoutsPageBase. Use this class when you want to create an application page that only privileged users can access.
 - UnsecuredLayoutsPageBase. Use this class when you want to create an application page that anyone (even unauthenticated users) can access.
 
-### **Timer Jobs**
+## **Timer Jobs**
 
 SharePoint timer jobs are used to run **background tasks** that do not require user interaction on a scheduled basis. SharePoint 2013 uses built-in timer jobs extensively for a wide range of tasks, such as scheduled approval and publishing, processing health and diagnostic data, upgrading site collections, and applying expiration policies.
 
@@ -196,7 +196,7 @@ Custom timer jobs can be useful when you want to perform long-running or resourc
 
 Timer jobs run in a separate process—the SharePoint timer service, or owstimer.exe—rather than the IIS worker process, **w3wp.exe**. This means that timer jobs should not affect the performance and stability of individual IIS application pools. It also means that you can run long-running processes without the risk of the process being interrupted by an application pool recycle.
 
-### **Event Receivers**
+## **Event Receivers**
 
 You can use event receivers to create code that performs some action in response to an event in SharePoint. SharePoint 2013 exposes a wide variety of events. You can create event receivers for the following categories of events in SharePoint.
 
@@ -223,7 +223,7 @@ The following code shows a simple example of an event receiver class that handle
 	}
 ```
 
-### **Workflow**
+## **Workflow**
 
 By using workflows, you can **model and automate** business processes. Generally speaking, you create workflows when you want to capture user input from multiple people and perform actions in response to that user input. For example, suppose you wanted to automate a document publishing process. Your document might go through the following stages on the way to publication:
 
@@ -241,7 +241,7 @@ Continuing with this scenario, let us assume that you want to automate this publ
 
 One of the key aspects of SharePoint workflow—and any other WF45 workflow—is that the **workflow is dormant (inactive) while waiting for user input**. In other words, the workflow does not actively wait for user input by polling for changes in field values or task completion statuses. Instead, WF45 will awaken, or rehydrate, the workflow when it has the information it requires to proceed. This enables workflows to become useful tools for managing long-running business processes.
 
-### **SharePoint Features**
+## **SharePoint Features**
 
 A SharePoint Feature is a framework for packaging and deploying declarative components. Features were introduced in SharePoint 2007 and have been a major component of SharePoint development ever since. The SharePoint development tools in Visual Studio 2012 automate much of the Feature development process and provide a Feature designer to help you assemble the Feature components. However, it is important for developers to understand what Features are and how they work. 
 
@@ -281,7 +281,7 @@ For now, there are three key aspects of note in this feature manifest example:
 
 Features are typically deployed as part of a farm solution, a sandboxed solution, or a SharePoint app, which manages the feature installation and activation process. If you deploy a Feature within a SharePoint app or a sandboxed solution, the Feature is never copied to the server file system; instead, it remains in the content database from where it is accessed when required.
 
-### **Creating and Deploying a SharePoint Web Part**
+## **Creating and Deploying a SharePoint Web Part**
 
 **Step 1: Create a project in Visual Studio**
 
