@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">  
+  <Field
+       ID="{a66121f9-aca5-4983-bf8c-fa352a5a7ed9}"
+       Name="DailyRate"
+       DisplayName="Daily Rate"
+       Type="Currency"
+       LCID="1033"
+       Decimals="0"
+       Required="TRUE"
+       Group="Custom Site Columns">
+  </Field>
+</Elements>

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">  
+  <Field
+       ID="{ca394445-aee2-477c-8cd7-b05133c68330}"
+       Name="AgreementStartDate"
+       DisplayName="Agreement Start Date"
+       Type="DateTime"
+       Format="DateOnly"
+       Required="TRUE"
+       Group="Custom Site Columns">
+  </Field>
+</Elements>

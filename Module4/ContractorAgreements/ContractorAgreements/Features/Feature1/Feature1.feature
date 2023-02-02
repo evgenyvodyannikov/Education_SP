@@ -1,0 +1,3 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<feature deploymentPath="$SharePoint.Project.FileNameWithoutExtension$_$SharePoint.Feature.FileNameWithoutExtension$" title="ContractorAgreements Feature1" dslVersion="1.0.0.0" Id="af79697e-a5c4-4712-8322-00e8ddc38881" featureId="af79697e-a5c4-4712-8322-00e8ddc38881" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/FeatureModel">
+</feature>
