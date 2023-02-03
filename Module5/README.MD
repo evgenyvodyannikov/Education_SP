@@ -10,6 +10,7 @@
 6. [Developing an Event Receiver](#developing-an-event-receiver)
 7. [Deploying an Event Receiver](#deploying-an-event-receiver)
 8. [Introduction to Timer Jobs](#introduction-to-timer-jobs)
+9. [Developing a Timer Job](#developing-a-timer-job)
 
 ## **Introduction to Web Parts**
 
@@ -332,3 +333,47 @@ Timer jobs do not run in the IIS worker process; instead, they run in the **OWST
 Also, by default, the **OWSTIMER.exe** process runs under the farm service account. This provides access for code running in a timer job to both the content and configuration databases. 
 
 Furthermore, whereas by default, the ASP .NET code runs by using an impersonated identity of the current user, which is likely to further restrict your code's access to SharePoint and the server, the timer job uses the process identity to run code, which provides you with the most complete access to SharePoint and the server. 
+
+## **Developing a Timer Job**
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/66135471/216573311-ee672843-1eaf-4c26-9870-8fa3ca750731.png">
+</p>
+
+To develop a timer job definition, complete the following steps:
+
+1. Create a new class that inherits from the **SPJobDefinition** class (in the `Microsoft.SharePoint.Administration` namespace). 
+
+2. Add a default constructor to the class. 
+
+3. Add a non-default constructor that accepts four parameters:
+   - A string representing the **name** of the timer job. 
+   - A **SPWebApplication** representing the web application that owns the timer job.
+   - A **SPServer** representing the server with which this job is associated.
+   - A **SPLockType** identifying the lock type that should be used for this job (this enables you to specify whether the job can be run on more than one server at a time, and whether this needs to run for each content database, or just once.
+
+4. Modify the non-default constructor to call the equivalent constructor on the base class.
+
+5. Override the Execute method. You should add your custom logic to this method. 
+
+The following code example shows how to develop a custom timer job. 
+```C#
+	// Define a class that inherits from the SPJobDefinition class. 
+	public class ContosoTimerJob : SPJobDefinition
+	{
+	    // Define a default constructor.
+	    public ContosoTimerJob()
+	    {
+	    }
+	    // Define a non-default constructor
+	    public ContosoTimerJob(string name, SPWebApplication webApplication, 
+	        SPServer server, SPJobLockType lockType)
+	        : base(name, webApplication, server, lockType) // Call the constructor of the base class.
+	    {
+	    }
+	    public override void Execute(Guid targetInstanceId)
+	    {
+	        // Add custom logic here.
+	    }
+    }
+```
