@@ -13,6 +13,7 @@
 9. [Developing a Timer Job](#developing-a-timer-job)
 10. [Deploying a Timer Job](#deploying-a-timer-job)
 11. [Work Item Timer Jobs](#work-item-timer-jobs)
+12. [Developing a Work Item Timer Job](#developing-a-work-item-timer-job)
 
 ## **Introduction to Web Parts**
 
@@ -498,3 +499,71 @@ Alternatively, you could use an event receiver to process list items that have c
 In this example, you might use a work item timer job in conjunction with an event receiver, by using the event receiver to add an added or change item to the work item timer job queue, and then processing the item in the work item timer job according to the work item timer job schedule (or at a later date if you specify a start date in the future when you add the item to the queue).
 
 Finally, work item timer jobs enable you to process either a single item at a time, or to retrieve a set of items that are queued for processing and process them all at the same time. If you choose to implement batch processing, you can set a maximum batch size.
+
+## **Developing a Work Item Timer Job**
+
+To develop a work item timer job, complete the following steps:
+
+1. Create a new class that inherits from the **SPWorkItemJobDefinition** class (in the `Microsoft.SharePoint.Administration` namespace). 
+
+2. Add a default constructor to the class. 
+
+3. Add a non-default constructor that accepts two parameters:
+   - A string representing the **name** of the work item timer job. 
+   - A **SPWebApplication** representing the web application that owns the timer job.
+
+4. Modify the non-default constructor to call the equivalent constructor on the base class.
+
+5. Override the **WorkItemType** method to return a **Guid** that identifies the work item timer job. This should always return the same value, and you use this when you queue an item to be processed by your work item timer job. 
+
+6. Override the **DisplayName** property to return a display name for your work item timer job. This should always return the same value. 
+
+7. Optionally, override the **BatchFetchLimit** property to return an int identifying the **maximum number of work items** that should be retrieved from the work item queue each time the timer job runs. 
+
+8. Override the **ProcessWorkItem**, or **ProcessWorkItems** method. You should override the ProcessWorkItem method to process a single item at a time or the ProcessWorkItems method if you will process a batch of items. Add your custom logic to this method. After your custom logic, add code to delete the work item from the work item queue to prevent it from being processed more than once.
+
+The following code example shows how to develop a custom work item timer job.
+
+```C#
+	public class WorkItemTimerJob : SPWorkItemJobDefinition
+	{
+	    public WorkItemTimerJob()
+	    {
+	    }
+	    public WorkItemTimerJob(string name, SPWebApplication webApplication
+	        : base(name, webApplication)
+	    {
+	    }
+	    public override Guid WorkItemType()
+	    {
+	        return new Guid("{7B1F0F56-2A2D-4AA3-B962-FCAD66ED02C8}");
+	    }
+	    public override string DisplayName
+	    {
+	        get
+	        {
+	            return "Contoso Work Item Timer Job";
+	        }
+	    }
+	    public override int BatchFetchLimit
+	    {
+	        get
+	        {
+	            return 100;
+	        }
+	    }
+	    public override bool ProcessWorkItem(SPContentDatabase contentDatabase, SPWorkItemCollection workItems, SPWorkItem workItem, SPJobState jobState)
+	    {
+	        // Add code to process work item. 
+	        // Delete the work item.
+	        workItems.DeleteWorkItem(workItem.Id);
+	    }
+	}
+
+```
+
+To deploy a work item timer job, you use the same procedure as you use to deploy a normal timer job. 
+
+After you have deployed a work item timer job, you can add items to the work item queue for your timer job to process. You use the **AddWorkItem** method of an **SPSite** instance to add an item to the queue. 
+
+You must use elevated privileges, or be logged in to SharePoint as a site collection administrator to call the AddWorkItem method. When you call the AddWorkItem method, you should provide the **Guid** that you return in the WorkItemType method as the gWorkItemType parameter.
