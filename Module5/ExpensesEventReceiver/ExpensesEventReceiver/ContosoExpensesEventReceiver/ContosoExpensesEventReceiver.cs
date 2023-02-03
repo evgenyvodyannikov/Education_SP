@@ -35,6 +35,22 @@ namespace ExpensesEventReceiver.ContosoExpensesEventReceiver
             base.ItemDeleted(properties);
         }
 
+        private void UpdatePropertyBag(SPWeb web, double change)
+        {
+            string keyName = "ContosoDepartmentalExpenseTotal";
+            double currentValue = 0;
+            if (web.Properties[keyName] != null)
+            {
+                currentValue = double.Parse(web.Properties[keyName]);
+            }
+            else
+            {
+                web.Properties.Add(keyName, "");
+            }
+            currentValue += change;
+            web.Properties[keyName] = currentValue.ToString();
+            web.Properties.Update();
+        }
 
     }
 }
