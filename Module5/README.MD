@@ -12,6 +12,7 @@
 8. [Introduction to Timer Jobs](#introduction-to-timer-jobs)
 9. [Developing a Timer Job](#developing-a-timer-job)
 10. [Deploying a Timer Job](#deploying-a-timer-job)
+11. [Work Item Timer Jobs](#work-item-timer-jobs)
 
 ## **Introduction to Web Parts**
 
@@ -470,3 +471,30 @@ The following code example shows a Feature receiver to install a timer job.
 	    }
     }
 ```
+
+## **Work Item Timer Jobs**
+
+**Work item timer jobs** are a special type of timer job specifically designed to **process a set of items**. A work item timer job works by processing items in a queue. 
+
+A work item timer job, like other timer jobs, works on a scheduled basis; however, when a work item timer job is scheduled to run, SharePoint will only execute the timer job logic if at least one work item has been added to the queue for that timer job. 
+
+This provides a two-part split for work item timer jobs:
+
+- The work item timer job definition, which contains the logic for processing items. 
+- A queue of items to be processed.
+
+You must develop the work item timer job definition, but you do not need to develop the queue; SharePoint provides a queue, persisted in the database, that you use. 
+
+You must write code to add items to the queue. Your code to add items to the queue must run in the context of a site collection administrator, or use elevated privileges; for this reason, you cannot add items to a work item timer job queue by using a sandboxed solution. 
+
+Work item timer jobs are particularly beneficial if you need to process items across multiple lists, or need to only process particular items from a list, such as items that have changed or been added to the list. 
+
+Alternatively, you could use an event receiver to process list items that have changes or been added, but work item timer jobs provide advantages over event receivers:
+
+- They run in the **OWSTIMER.exe** process, which grants them more security permission than an event receiver that may run in the context of the current user, or the web application service account. 
+
+- They may run during off peak hours when the impact of processor intensive operations is less significant.
+
+In this example, you might use a work item timer job in conjunction with an event receiver, by using the event receiver to add an added or change item to the work item timer job queue, and then processing the item in the work item timer job according to the work item timer job schedule (or at a later date if you specify a start date in the future when you add the item to the queue).
+
+Finally, work item timer jobs enable you to process either a single item at a time, or to retrieve a set of items that are queued for processing and process them all at the same time. If you choose to implement batch processing, you can set a maximum batch size.
