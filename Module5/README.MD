@@ -17,6 +17,7 @@
 13. [Configuration Storage Options](#configuration-storage-options)
 14. [Using Property Bags](#using-property-bags)
 15. [Manipulating Web.config Files](#manipulating-webconfig-files)
+16. [Storing Hierarchical Data](#storing-hierarchical-data)
 
 ## **Introduction to Web Parts**
 
@@ -704,3 +705,98 @@ The following code example shows how to use code to modify the Web.config file f
 After you call the **ApplyWebConfigModifications** methods, SharePoint will schedule a timer job to process your updates. 
 
 You must call the **ApplyWebConfigModifications** method in the context of a user who is an administrator on the web servers. The changes will normally be made quickly; however, there may be a delay before the changes are applied. 
+
+## **Storing Hierarchical Data**
+
+You may need to store **hierarchical** configuration data. SharePoint enables you to store hierarchical storage information in the SharePoint configuration database by using the **SPPersistedObject** base class (from the `Microsoft.SharePoint.Administration` namespace). This is sometimes known as the hierarchical object store. 
+
+To store hierarchical configuration data, you must first develop a class to represent your configuration values. 
+
+To do this, complete the following steps:
+
+1. Create a class that inherits from the **SPPersistedObject** class.
+
+2. Annotate your class with a **Guid** attribute (`System.Runtime.InteropServices` namespace).
+
+3. Add a default constructor to your class.
+
+4. Add a non-default constructor to your class that accepts two parameters:
+
+   - A string representing the **name** of the object.
+
+   - A **SPPersistedObject** representing the parent object in the hierarchy.
+
+5. Modify the non-default constructor to call the equivalent constructor on the base class.
+
+6. Add fields and properties to your class. Avoid automatic properties as only fields can be stored.
+
+7. Annotate any fields that should be persisted with the Persisted attribute (`Microsoft.SharePoint.Administration` namespace). You should only store fields that are of a type that is serializable. 
+
+**Note:** SharePoint serializes objects persisted in the hierarchical object store. If you attempt to persist a field that is not serializable, or if you do not include a default constructor, you may corrupt your configuration database.
+
+The following code example shows how to develop a class to store configuration data in the hierarchical object store. 
+
+```C#
+	// Annotate the class with a Guid attribute.
+	[Guid("EAD5BAE5-3C66-42B4-B0CC-039AA67373A4")]
+	public class PersistedClass : SPPersistedObject  // Inherit from the SPPersistedObject class.
+	{
+	    // Always include a default constructor.
+	    public PersistedClass()
+	    {
+	    }
+	    // Always include a non-default constructor.
+	    public PersistedClass(string name, SPPersistedObject parent)
+	        : base(name, parent) // Class the base class constructor.
+	    {
+	    }
+	    [Persisted] // Annotate fields that must be stored.
+	    string Value1;
+	    [Persisted] // Annotate fields that must be stored.
+	    string Value2;
+	    [Persisted] // Annotate fields that must be stored.
+	    int Value 3;
+	    // Add methods and properties.
+	    ...
+	}
+```
+
+To store your configuration data, you simply create a new instance of your class by specifying a name and a parent object. For the root of your configuration, you will typically use either a SPFarm instance or a SPWebApplication instance, both of these classes inherit from the SPPersistedObject class. 
+
+After you create an instance of your class, you should set properties on the class, before finally calling the classes Update method.
+
+To retrieve values from the hierarchical object store, you use the generic **GetChild** method exposed by all objects that inherit from the **SPPersistedObject** class. You specify the type parameter, and the name of the object you want to retrieve. 
+
+The following code example shows how to store and retrieve items in the hierarchical object store.
+
+```C#
+	// Obtain a reference to the parent item.
+	SPFarm farm = SPFarm.Local;
+	// Create a root item.
+	// Create a new instance of the class by specifying the data item name, and root item. 
+	PersistedClass rootClass = new PersistedClass("ContosoRootItem", farm);
+	// Set properties on the item.
+	rootClass.Value1 = "Stored Data";
+	rootClass.Value2 = "More Store Data";
+	rootClass.Value3 = 4;
+	// Call the Update method to persist the changes. 
+	rootClass.Update();
+	// Create a new item as a child of the root item.
+	// Create a new instance of the class by specifying the data item name, and root item. 
+	PersistedClass childClass = new PersistedClass("ContosoChildIte2m", rootClass);
+	// Set properties on the item.
+	childClass.Value1 = "Stored Data Item";
+	// Call the Update method to persist the changes. 
+	childClass.Update();
+	// Retrieve an item from the hierarchical data store.
+	//Obtain a reference to the root item.
+	SPFarm farm = SPFarm.Local;
+	// Use the generic GetChild method to retrieve the item.
+	PersistedClass retrievedValue = farm.GetChild<PersistedClass>("ContosoRootItem");
+```
+
+Configuration data stored in the hierarchical object store is stored in the SharePoint configuration database. 
+
+In most deployments, access to this database is restricted to the farm account and farm administrators. This limits when you can use the hierarchical object store as you cannot normally access it from when your code is running in the context of a user or a web application. 
+
+However, the timer service does normally have access to the configuration database, making the hierarchical data store a convenient storage location when you are developing timer jobs. 
