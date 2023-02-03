@@ -11,6 +11,7 @@
 7. [Deploying an Event Receiver](#deploying-an-event-receiver)
 8. [Introduction to Timer Jobs](#introduction-to-timer-jobs)
 9. [Developing a Timer Job](#developing-a-timer-job)
+10. [Deploying a Timer Job](#deploying-a-timer-job)
 
 ## **Introduction to Web Parts**
 
@@ -374,6 +375,98 @@ The following code example shows how to develop a custom timer job.
 	    public override void Execute(Guid targetInstanceId)
 	    {
 	        // Add custom logic here.
+	    }
+    }
+```
+
+## **Deploying a Timer Job**
+
+To deploy a timer job, you must use code. The most common technique to deploy a timer job is to use a **Feature** with a **Feature receiver**. You should use the **FeatureActivated** method to install your timer job, and the **FeatureDeactivated** method to uninstall your timer job. 
+
+You must provide a name for your timer job. You can define a string constant in your Feature receiver class to store the timer job name. You should always check to ensure that a timer job with the same name does not already exist before you install your timer job. If a timer job with the same name already exists, you should uninstall that timer job first.
+
+To uninstall a timer job, you complete the following steps:
+
+1. Obtain a reference to the web application with which the timer job is associated. You can obtain this by using the properties parameter passed to the **FeatureDeactivated** method. 
+
+2. Iterate over the **JobDefinitions** collection property exposed by the web application object. For each job in the collection, check whether the **Name** property matches your timer job's name. If it does, call the Delete method on the job.
+
+When you deploy a schedule, you must create a schedule for the job. The **schedule** determines how often the job should run, and when the job should run. 
+
+You create a schedule by creating an instance of one of the following classes:
+
+- SPMinuteSchedule
+- SPHourlySchedule
+- SPDailySchedule
+- SPWeeklySchedule
+- SPMonthlySchedule
+- SPYearlySchedule
+
+When you create an instance of one of these classes, you define a **begin time**, an **end time**, and an **interval**. The begin time specifies the earliest that the timer job can start running. The end time specifies the latest that the timer job can start running. 
+
+For example, with a **SPMinuteSchedule**, you can specify the BeginSecond and EndSecond properties. If you specify a BeginSecond of 1 and an EndSecond of 5, the timer job will start running between 16:00:01, and 16:00:05 (assuming that the job was due to run at some point during the minute at 16:00). 
+
+A timer job can continue to run after the end time is reached; this only specifies the time period during which the job may start, not when the job must finish. 
+
+The Interval property specifies how often the job should run. In the **SPMinuteSchedule** example, an Interval of 5 would indicate that the timer job should run every **5 minutes**. An advantage of specifying a time window instead of an explicit start time is that SharePoint can run the timer job at different times, within the time window, on different servers in your server farm. 
+This helps to ensure that your farm remains responsive when processor-intensive timer jobs are running. 
+
+To install a timer job, you complete the following steps:
+
+1. Obtain a reference to the web application with which the timer job should be associated. You can obtain this by using the properties parameter passed to the FeatureActivated method. 
+
+2. Create a new instance of the timer job class, specifying the constant name, and the web application as parameters for the constructor. 
+
+3. Create a schedule for the timer job.
+
+4. Set the Schedule property of the timer job to the schedule object you created in the previous step. 
+
+5. Call the job's Update method to persist the changes. 
+
+The following code example shows a Feature receiver to install a timer job.
+
+```C#
+	public class TimerJobInstaller : SPFeatureReceiver
+	{
+	    // Define a constant with the job name.
+	    const string JobName = "ContosoTimerJob";
+	    // Create a method to remove the job if it is installed.
+	    private void RemoveJob(SPWebApplication webApplication)
+	    {
+	        foreach (var job in webApplication.JobDefinitions)
+	        {
+	            if (job.Name.Equals(JobName))
+	            {
+	                job.Delete();
+	            }
+	        }
+	    }
+	    // Override the FeatureActivated method to install the job. 
+	    public override void FeatureActivated(SPFeatureReceiverProperties properties)
+	    {
+	        // Obtain a reference to the web application.
+	        SPWebApplication webApplication = ((SPSite)properties.Feature.Parent).WebApplication;
+	        // Remove the timer job if it is already installed.
+	        RemoveJob(webApplication);
+	        // Create a new instance of the timer job.
+	        ContosoTimerJob timerJob = new ContosoTimerJob(JobName, webApplication);
+	        // Create a schedule for the job.
+	        SPMinuteSchedule schedule = new SPMinuteSchedule();
+	        schedule.BeginSecond = 0;
+	        schedule.EndSecond = 5;
+	        schedule.Interval = 10;
+	        // Assign the schedule to the job.
+	        timerJob.Schedule = schedule;
+	        // Call the Update method to persist the changes.
+	        timerJob.Update();
+	    }
+	    // Override the FeatureDeactivated method to uninstall the job. 
+	    public override void FeatureDeactivated(SPFeatureReceiverProperties properties)
+	    {
+	        // Obtain a reference to the web application.
+	        SPWebApplication webApplication = ((SPSite)properties.Feature.Parent).WebApplication;
+	        // Remove the timer job.
+	        RemoveJob(webApplication);
 	    }
     }
 ```
