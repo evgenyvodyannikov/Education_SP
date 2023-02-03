@@ -8,6 +8,7 @@
 4. [The .webpart File](#the-webpart-file)
 5. [Introduction to Event Receivers](#introduction-to-event-receivers)
 6. [Developing an Event Receiver](#developing-an-event-receiver)
+7. [Deploying an Event Receiver](#deploying-an-event-receiver)
 
 ## **Introduction to Web Parts**
 
@@ -212,4 +213,103 @@ The following code example shows how to cancel an event.
 	    properties.Status = SPEventReceiverStatus.CancelWithRedirectUrl;
 	    properties.RedirectUrl = "CustomErrorPage.aspx";
 	}
+```
+
+## **Deploying an Event Receiver**
+
+You can choose to deploy an event receiver manually, by installing the event receiver assembly in the global assembly cache, and then you can use Windows PowerShell to associate, or bind, the event receiver with an event source. 
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/66135471/216560315-9823debc-a32a-4680-aefc-a049403ecb40.png">
+</p>
+
+However, if you deploy manually, you must deploy the assembly to every server, and the process includes inherent risks (for example, a typographical error). 
+
+Alternatively, you can use a solution and a Feature to deploy an event receiver. When you use a Feature to deploy an event receiver, you can choose one of two options; you can either bind the event receiver with an event source declaratively, or bind the event receiver with an event source by using code.
+
+Whichever approach you choose, you should package the assembly containing the compiled event receiver in the solution.
+
+Regardless of your approach, you will need to provide the same information:
+
+- **Assembly**. You must use the strong name for your handler assembly.
+
+- **Class**. You must use the fully-qualified type name for your event receiver class.
+
+- **Type**. You must specify a value from the **SPEventReceiverType** enumeration that identifies the event your event receiver should handle.
+
+- **Url**. As an alternative to specifying an assembly, class, and type, you can specify a Url of a remote event receiver. If you specify a Url, you do not need to specify an assembly, class, or type; in all other circumstances, these are required. 
+
+- **Name**. You can specify a name for your event receiver binding.
+
+- **Synchronization**. You can specify the synchronization for your event receiver. If you omit this property, the default synchronization is used, based on the type of event.
+
+- **SequenceNumber**. You can specify a sequence number for your event receiver. SharePoint uses the sequence number to determine the order to run event receivers. The default value is 10000, and lower numbers are run before high numbers. 
+
+**Using code to deploy an event receiver**
+
+To bind your event receiver to an event host programmatically, you must first obtain a reference to the event host. You then create a new instance of the **SPEventReceiverDefinition** class by adding a new item to the event host's **EventReceivers** collection property. You then set the properties of the **SPEventReceiverDefintion** object, before finally calling the Update method to persist the changes. 
+
+The following code example shows how to bind an event receiver to an event host programmatically.
+
+```C#
+	using (SPSite site = new SPSite("http://portal.contoso.com"))
+	{
+	    using (SPWeb web = site.OpenWeb())
+	    {
+	        // Obtain a reference to the event host.
+	        SPList list = web.Lists["Suppliers"];
+	        // Create a new instance of the SPEventReceiverDefinition class by using the Add method of the 
+	        // EventReceivers collection of the event host. 
+	        SPEventReceiverDefinition eventRec = list.EventReceivers.Add();
+	        // Optionally, specify a name for the event receiver binding.
+	        eventRec.Name = "Event Receiver For ItemAdded";
+	        // Specify the strong name for the assembly that contains the complied event receiver.
+	        eventRec.Assembly = 
+	          "ReceiverAssembly, Version=1.0.0.0, Culture=Neutral, PublicKeyToken=24a5ef6a3fe2c28c";
+	        // Specify the fully qualified type name for your event receiver class.
+	        eventRec.Class = "ReceiverNamespace.ReceiverClass";
+	        // Specify the event that should be handled.
+	        eventRec.Type = SPEventReceiverType.ItemAdded;
+	        // Specify whether the event should run synchronously or asynchronously. 
+	        eventRec.Synchronization = SPEventReceiverSynchronization.Synchronous;
+	        // Optionally, specify a sequence value for the event receiver.
+	        eventRec.SequenceNumber = 50;
+	        // Call the Update method to persist the changes.
+	        eventRec.Update();
+	    }
+	}
+```
+
+**Using declarative markup to deploy an event receiver**
+
+You can use declarative markup to associate an event receiver with an event source. To use declarative markup, you add a **Receivers element** to the **Elements** element in an element manifest file. 
+
+When you use declarative deployment, SharePoint will bind the event receiver to the event host based on the Feature activation scope, for example by binding it to a site if the Feature has the Web scope. If you are binding to a list, you can identify the list by using the attributes of the Receivers element. 
+
+The following code example shows how to bind an event receiver to an event host declaratively.
+
+```XML
+	<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+	    <!-- Add one Receivers element per event host. -->
+	    <!-- Set the attributes on the Receivers element to identify the event host. -->
+	    <Receivers ListUrl="http://portal.contoso.com/lists/suppliers">
+	        <!-- Add one Receiver element per event you want to handle on this event host. -->
+	        <Receiver>
+	            <!-- Optionally, specify a name for the event receiver binding. -->
+	            <Name>Event Receiver For ItemAdded</Name>
+	            <!-- Specify the  strong name for the assembly that contains the complied event receiver. -->
+	            <Assembly> 
+	                ReceiverAssembly, Version=1.0.0.0, Culture=Neutral, PublicKeyToken=24a5ef6a3fe2c28c
+	            </Assembly>
+	            <!-- Specify the fully qualified type name for your event receiver class. -->
+	            <Class>ReceiverNamespace.ReceiverClass</Class>
+	            <!-- Specify the event that should be handled. -->
+	            <Type>ItemAdded</Type>
+	            <!-- Specify whether the event should run synchronously or asynchronously. -->
+	            <Synchronization>Synchronous</Synchronization>
+	            <!-- Optionally, specify a sequence value for the event receiver. -->
+	            <SequenceNumber>50</SequenceNumber>
+	        </Receiver>
+	    </Receivers>
+	</Elements>
 ```
