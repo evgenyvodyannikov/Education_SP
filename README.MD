@@ -7,4 +7,4 @@
 ## 2. [Working with SharePoint objects](https://github.com/evgenyvodyannikov/Education_SP/tree/master/Module2/README.MD) (describes SharePoint object hierarchy, life cycles, classes and show ho to work with it)
 ## 3. [Working with Lists and Libraries](https://github.com/evgenyvodyannikov/Education_SP/tree/master/Module3/README.MD) (List and Library Class Hierarchy, working with lists and libraries, Querying Data)
 ## 4. [Designing and Managing Features and Solutions](https://github.com/evgenyvodyannikov/Education_SP/tree/master/Module4/README.MD) (Future and Solution Anatomy, Scopes, Dependencies, Upgrades, Administering, Receivers, working with Lists and Content Types)
-## 5. [Working with Server-Side Code](https://github.com/evgenyvodyannikov/Education_SP/tree/master/Module5/README.MD)
+## 5. [Working with Server-Side Code](https://github.com/evgenyvodyannikov/Education_SP/tree/master/Module5/README.MD) (Web Parts life cycles, .webpart file, Event Receivers, Timer Jobs, Work Item Timer Jobs, Configuration Storage, Property Bags)
