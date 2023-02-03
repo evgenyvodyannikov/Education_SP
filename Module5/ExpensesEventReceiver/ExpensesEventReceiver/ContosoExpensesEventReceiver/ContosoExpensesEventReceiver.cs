@@ -14,7 +14,7 @@ namespace ExpensesEventReceiver.ContosoExpensesEventReceiver
         /// <summary>
         /// Добавлен элемент.
         /// </summary>
-        public override void ItemAdded(SPItemEventProperties properties)
+        public override void ItemAdding(SPItemEventProperties properties)
         {
             base.ItemAdded(properties);
         }
@@ -22,7 +22,7 @@ namespace ExpensesEventReceiver.ContosoExpensesEventReceiver
         /// <summary>
         /// Обновлен элемент.
         /// </summary>
-        public override void ItemUpdated(SPItemEventProperties properties)
+        public override void ItemUpdating(SPItemEventProperties properties)
         {
             base.ItemUpdated(properties);
         }
@@ -30,7 +30,7 @@ namespace ExpensesEventReceiver.ContosoExpensesEventReceiver
         /// <summary>
         /// Удален элемент.
         /// </summary>
-        public override void ItemDeleted(SPItemEventProperties properties)
+        public override void ItemDeleting(SPItemEventProperties properties)
         {
             base.ItemDeleted(properties);
         }
