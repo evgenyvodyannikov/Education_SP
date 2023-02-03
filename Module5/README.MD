@@ -15,7 +15,8 @@
 11. [Work Item Timer Jobs](#work-item-timer-jobs)
 12. [Developing a Work Item Timer Job](#developing-a-work-item-timer-job)
 13. [Configuration Storage Options](#configuration-storage-options)
-14 [Using Property Bags](#using-property-bags)
+14. [Using Property Bags](#using-property-bags)
+15. [Manipulating Web.config Files](#manipulating-webconfig-files)
 
 ## **Introduction to Web Parts**
 
@@ -640,3 +641,66 @@ The following code example shows how to use the property bag on a site (SPWeb).
 	    web.Properties.Update();
 	}
 ```
+
+## **Manipulating Web.config Files**
+
+Another option for storing configuration data is the **Web.config** files. You can only store **string** values in the **Web.config** file. However, you could store a serialized representation of an object if you need to store a more complex object rather than a string. 
+
+Configuration files are a common storage location for configuration data; however, you should be aware of the following considerations before using a configuration file to store data for your SharePoint customization:
+
+- You must make changes on all servers in the server farm; this could be time consuming if completed manually, and it could introduce a possibly unacceptable risk. In addition, this risks the farm being in an inconsistent state.
+
+- You must restart the IIS worker process after making a change; this makes this option unsuitable if the data changes frequently.
+
+- You cannot access configuration files from processes that do not run in the IIS worker process. This prevents you from using configuration files for timer jobs, or in sandboxed solutions.
+
+- You must configure each web application separately. This may be an advantage or disadvantage, depending on your requirements, but it introduces risk of the farm being in an inconsistent state. 
+
+Despite the risks involved with configuration files, there are some situations where storing a configuration value in a configuration file is an appropriate choice, such as for database connection strings. 
+
+SharePoint includes the **SPWebConfigModification** class, which you can use to make configuration file changes to the **Web.config** files for either a web application, or a SharePoint web service. 
+
+If you use the **SPWebConfigModification** class to make changes to the Web.config files, SharePoint will ensure that the change is made to all servers within your server farm, thereby dramatically reducing the risk of errors.
+
+To modify the Web.config file for a web application or service application, complete the following steps:
+
+1. Create a new instance of the **SPWebConfigModification** class.
+
+2. Set the properties of the SPWebConfigModification class to define your configuration change.
+
+3. Obtain a reference to the **SPWebApplication** instance that the configuration changes should apply to. 
+
+4. Add your instance of the **SPWebConfigModification** class to the **WebConfigModifications** collection property of the **SPWebApplication** instance.
+
+5. Call the **Update** method of the **SPWebApplication** instance to persist the changes.
+
+6. Repeat steps 3, 4 and 5 if you need to make the change to the Web.config files for multiple web applications. 
+
+7. Obtain a reference to the **SPWebService** that hosts the web applications. 
+Typically, you use the static **ContentService** property to retrieve the appropriate reference.
+
+8. Call the **ApplyWebConfigModifications** method of the SPWebService instance.
+
+The following code example shows how to use code to modify the Web.config file for a web application. 
+
+```C#
+	// Create a new instance of the SPWebConfigModification class.
+	SPWebConfigModification modification = new SPWebConfigModification();
+	// Set properties of the SPWebConfigModification instance.
+	// For example, modification.Path and modification.Value 
+	// Obtain a  reference to the web application for which you need to change the configuration file.
+	SPSite site = new SPSite("http://sharepoint.contoso.com);
+	SPWebApplication webApplication =site.WebApplication; 
+	//Add the SPWebConfigModification instance to the list of modifications for the web application. 
+	webApplication.WebConfigModifications.Add(modification);
+	// Call the web applications Update method to save the changes.
+	webApplication.Update();
+	// Obtain a reference to the content service. 
+	SPWebService service = SPWebService.ContentService;
+	// Call the ApplyWebConfigModifications method to apply the changes to the farm.
+	service.ApplyWebConfigModifications();
+```
+
+After you call the **ApplyWebConfigModifications** methods, SharePoint will schedule a timer job to process your updates. 
+
+You must call the **ApplyWebConfigModifications** method in the context of a user who is an administrator on the web servers. The changes will normally be made quickly; however, there may be a delay before the changes are applied. 
