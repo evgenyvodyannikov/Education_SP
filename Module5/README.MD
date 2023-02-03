@@ -7,6 +7,7 @@
 3. [Visual Web Parts](#visual-web-parts)
 4. [The .webpart File](#the-webpart-file)
 5. [Introduction to Event Receivers](#introduction-to-event-receivers)
+6. [Developing an Event Receiver](#developing-an-event-receiver)
 
 ## **Introduction to Web Parts**
 
@@ -158,3 +159,57 @@ After events are events that end in “**ed**”; for example, **ItemAdded**. Th
 **Remote event receivers**
 
 In addition to deploying event receivers on your SharePoint server, you can also use **remote event receivers**. You can create a remove event receiver by specifying a **URL for a remote event handler**, or by using an app.
+
+## **Developing an Event Receiver**
+
+To develop an event receiver, you simply create a type that derives from a base class, and then override an event method. There are different base classes for event receivers including:
+
+- **SPWebEventReceiver**. Use the SPWebEventReceiver base class to handle site and site collection life cycle events.
+
+- **SPListEventReceiver**. Use the SPListEventReceiver base class to handle list life cycle events, which include events such as a field being added to a list, in addition to a list being created or deleted.
+
+- **SPItemEventReceiver**. Use the SPItemEventReceiver base class to handle item life cycle events.
+
+- **SPEmailEventReceiver**. Use the SPEmailEventReceiver base class to handle an email message being received by the event host.
+
+- **SPWorkflowEventReceiver**. Use the SPWorkflowEventReceiver base class to handle workflow life cycle events.
+
+- **SPSecurityEventReceiver**. Use the SPSecurityEventReceiver base class to handle security events, for example a new group being created, or a user being added to a group.
+
+You must select the appropriate base class based on the event you need to handle. After you select the appropriate base class, you must override base class methods with your event handler implementation.
+
+The following code example shows an example of how to handle an item being added to a list.
+
+```C#
+	public class EventReceiver : SPItemEventReceiver
+	{
+	    public override void ItemAdding(SPItemEventProperties properties)
+	    {
+	        base.ItemAdding(properties);
+	    }
+	}
+```
+
+**Cancelling an event**
+
+When you develop an event receiver for a **before event**, you may use the event receiver to cancel the event. 
+
+Most event handler methods accept a properties parameter. You should use the **Status** property of the properties parameter to cancel the event by setting the Status property to a member of the **SPEventReceiverStatus** enumeration. 
+
+You can choose to cancel an event with or without displaying an error. If you choose to display an error, you should also provide either an error message by setting the **ErrorMessage** property, or the URL of an error page that the user should be redirected to, by setting the **RedirectUrl** property.
+
+The following code example shows how to cancel an event.
+
+```C#
+	public override void ItemAdding(SPItemEventProperties properties)
+	{
+	    // Cancel an event and do not display an error.
+	    properties.Status = SPEventReceiverStatus.CancelNoError;
+	    // Cancel an event and display an error message.
+	    properties.Status = SPEventReceiverStatus.CancelWithError;
+	    properties.ErrorMessage = "Event cancelled.";
+	    // Cancel an event and redirect the user to an error page.
+	    properties.Status = SPEventReceiverStatus.CancelWithRedirectUrl;
+	    properties.RedirectUrl = "CustomErrorPage.aspx";
+	}
+```
