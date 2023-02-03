@@ -16,15 +16,20 @@ namespace ExpensesEventReceiver.ContosoExpensesEventReceiver
         /// </summary>
         public override void ItemAdding(SPItemEventProperties properties)
         {
-            base.ItemAdded(properties);
+            double invoiceValue = double.Parse(properties.AfterProperties["InvoiceTotal"] as string);
+            UpdatePropertyBag(properties.Web, invoiceValue);
         }
+
 
         /// <summary>
         /// Обновлен элемент.
         /// </summary>
         public override void ItemUpdating(SPItemEventProperties properties)
         {
-            base.ItemUpdated(properties);
+            double previousInvoiceValue = (double)properties.ListItem["InvoiceTotal"];
+            double newInvoiceValue = double.Parse(properties.AfterProperties["InvoiceTotal"] as string);
+            double change = newInvoiceValue - previousInvoiceValue;
+            UpdatePropertyBag(properties.Web, change);
         }
 
         /// <summary>
@@ -32,7 +37,8 @@ namespace ExpensesEventReceiver.ContosoExpensesEventReceiver
         /// </summary>
         public override void ItemDeleting(SPItemEventProperties properties)
         {
-            base.ItemDeleted(properties);
+            double invoiceValue = double.Parse(properties.BeforeProperties["InvoiceTotal"] as string);
+            UpdatePropertyBag(properties.Web, -invoiceValue);
         }
 
         private void UpdatePropertyBag(SPWeb web, double change)
