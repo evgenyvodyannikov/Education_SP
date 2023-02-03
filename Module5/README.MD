@@ -6,6 +6,7 @@
 2. [Understanding the Web Part Life Cycle](#understanding-the-web-part-life-cycle)
 3. [Visual Web Parts](#visual-web-parts)
 4. [The .webpart File](#the-webpart-file)
+5. [Introduction to Event Receivers](#introduction-to-event-receivers)
 
 ## **Introduction to Web Parts**
 
@@ -107,3 +108,53 @@ The following code example shows a .webpart file.
 	    </webPart>
 	</webParts>
 ```
+
+## **Introduction to Event Receivers**
+
+When you develop any solution, you will often need to respond to actions performed outside the scope of your solution. 
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/66135471/216551472-01addee4-d745-49c6-b35c-a37b761329ef.png">
+</p>
+
+In traditional Windows Forms application development, a **common example is responding to a user clicking a button**. Developing solutions for SharePoint is no different; you will often want to respond to actions performed outside the scope of your solution. 
+
+Event receivers in SharePoint enable you to respond to these actions. For example, you can develop an event receiver that SharePoint will call each time an item is added to a list. SharePoint enables you to respond to a variety of events raised by SharePoint components, including:
+
+- Site collections
+- Sites
+- Lists
+- Content types
+- Features
+
+The events that you can handle for each of these components, **referred to as event hosts**, differ—generally, they include an event when it is changed or deleted, and when child items are added, changed, or deleted. 
+
+The event **hosts are hierarchical**, and **provide scope** for your event receivers. For example, you can handle an item being added by using a list as an event host. This will restrict your event handler to run only when an item is added to that particular list. 
+
+Alternatively, you can register the same event receiver by using the site collection as the even host, causing the event receiver to run every time an item is added to any list in the site collection. 
+
+**Note:** Feature receivers are a type of event receiver.
+
+**Event handler synchronization**
+
+An event may be handled either **synchronously** or **asynchronously**. This has important implications for server performance, and functional implications. 
+
+**Synchronous events** run in the same thread as the code that raised the event. Frequently, this has a direct impact on SharePoint performance for users, for example, if the event was raised by a user browsing a SharePoint site, a synchronous event will run in the IIS process thread. A major **advantage of a synchronous event is that it can change an event**, for example by cancelling the event. If you use a synchronous event, the event process will always complete before the web request completes.
+
+**Asynchronous events** run in a different thread to the main IIS process thread, and can run in parallel on multiple other threads. This has the advantage that **they do not block the IIS process thread**, and the request returns to the browser as fast as possible. The event handler may continue to run on the server after the web request that triggered the event completes. A significant implication of this is that asynchronous events should not change the event, because the event **may have already occurred**.
+
+**Before and after events**
+
+SharePoint exposes two broad types of events, **before events** and **after events**. 
+
+Before events are events that end in “**ing**”; for example, **ItemAdding**. These events are triggered **before an action** is committed to the database and provide the opportunity for you to cancel the event, or run other necessary code before the change is persisted. 
+
+After events are events that end in “**ed**”; for example, **ItemAdded**. These events are triggered after an action is committed to the database. You cannot cancel an event in an after event (although you could use code to reverse the change). 
+
+**Before events always run synchronously**, this is necessary in case the event receiver makes changes to the event, such as by blocking the event. 
+
+**After events typically run asynchronously**; although this is normally appropriate, you can choose to run an after event synchronously according to your requirements. You specify the event synchronization when you deploy your event receiver. 
+
+**Remote event receivers**
+
+In addition to deploying event receivers on your SharePoint server, you can also use **remote event receivers**. You can create a remove event receiver by specifying a **URL for a remote event handler**, or by using an app.
