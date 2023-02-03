@@ -5,6 +5,7 @@
 1. [Introduction to Web Parts](#introduction-to-web-parts)
 2. [Understanding the Web Part Life Cycle](#understanding-the-web-part-life-cycle)
 3. [Visual Web Parts](#visual-web-parts)
+4. [The .webpart File](#the-webpart-file)
 
 ## **Introduction to Web Parts**
 
@@ -75,3 +76,34 @@ However, there are two major differences.
 - You can choose to add logic to the **Page_Load** method in the control code-behind file to control the Web Part when the custom control loads; typically, you will continue to use the **OnPreRender** method to load data into your control. 
 
 By creating a custom control to define the user interface, you benefit from using the Visual Studio page designer to enable you to easily add controls to the page and lay out the controls according to your needs. This is significantly easier than adding controls and defining layout manually by using the **CreateChildControls** method. 
+
+## **The .webpart File**
+
+Typically, you will deploy a Web Part as a pre-compiled assembly, either as part of a farm solution, or a sandboxed solution. 
+
+You must create a XML Web Part definition file that defines the assembly and type that contain your Web Part code, as well as metadata such as the name, description, and group of the Web Part. 
+
+When you create a Web Part by using Visual Studio, Visual Studio generates this file, and includes it in a Feature automatically; however, it is important that you are aware of the structure and purpose of the Web Part definition file in case you need to customize it. 
+
+When you add a Web Part to SharePoint, SharePoint stores the Web Part in a Web Part Gallery. When a user with the necessary permission edits a page, they can add Web Parts that appear in the Web Part Gallery. The Web Part Gallery actually contains **.webpart** files. When a Web Part is added to the page, SharePoint parses the .webpart file and loads the Web Part from the assembly identified in the file.
+
+The following code example shows a .webpart file.
+```XML
+	<webParts>
+	    <webPart xmlns="http://schemas.microsoft.om/WebPart/v3">
+	        <metaData>
+	            <!-- Add the fully qualifies type name and strong named assembly name -->
+	            <type name="ContosoWebPartNamespace.ContosoWebPart", "WebPartAssembly Strong Name">
+	            <!-- Add an error message to display if the Web Part does not import correctly -->
+	            <importErrorMessage>Error importing Web Part.</importErrorMessage>
+	        </metadata>
+	        <data>
+	            <properties>
+	                <!-- Add properties that define the Web Part metadata -->
+	                <property name="Title" type="string">Contoso Web Part</property>
+	                <property name="Description" type="string">This is the Contoso Web Part</property>
+	            </properties>
+	        </data>
+	    </webPart>
+	</webParts>
+```
