@@ -4,6 +4,7 @@
 
 1. [Introduction to Web Parts](#introduction-to-web-parts)
 2. [Understanding the Web Part Life Cycle](#understanding-the-web-part-life-cycle)
+3. [Visual Web Parts](#visual-web-parts)
 
 ## **Introduction to Web Parts**
 
@@ -58,3 +59,19 @@ If you are writing code to handle a page postback, you may need to handle a cont
 These events are processed after the **CreateChildControls** method, and before the **OnPreRender** method. 
 
 If you populate a control with data in the **CreateChildControls** method, it may overwrite changes that are included in the postback, and any data that you process in your control postback method may be inaccurate. If you need to load data, you should load the data in the **OnPreRender** method. This ensures that you do not overwrite data included in a postback.
+
+## **Visual Web Parts**
+
+Visual Web Parts are very similar to normal Web Parts; they inherit from the WebPart class and expose the same life cycle events. 
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/66135471/216550144-f9382779-44a1-48cc-b5c4-ad7815c9a98d.png">
+</p>
+
+However, there are two major differences. 
+
+- You define the user interface for the Web Part in a **custom control (ascx)** file.
+
+- You can choose to add logic to the **Page_Load** method in the control code-behind file to control the Web Part when the custom control loads; typically, you will continue to use the **OnPreRender** method to load data into your control. 
+
+By creating a custom control to define the user interface, you benefit from using the Visual Studio page designer to enable you to easily add controls to the page and lay out the controls according to your needs. This is significantly easier than adding controls and defining layout manually by using the **CreateChildControls** method. 
