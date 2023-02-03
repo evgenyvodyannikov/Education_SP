@@ -14,6 +14,7 @@
 10. [Deploying a Timer Job](#deploying-a-timer-job)
 11. [Work Item Timer Jobs](#work-item-timer-jobs)
 12. [Developing a Work Item Timer Job](#developing-a-work-item-timer-job)
+13. [Configuration Storage Options](#configuration-storage-options)
 
 ## **Introduction to Web Parts**
 
@@ -567,3 +568,26 @@ To deploy a work item timer job, you use the same procedure as you use to deploy
 After you have deployed a work item timer job, you can add items to the work item queue for your timer job to process. You use the **AddWorkItem** method of an **SPSite** instance to add an item to the queue. 
 
 You must use elevated privileges, or be logged in to SharePoint as a site collection administrator to call the AddWorkItem method. When you call the AddWorkItem method, you should provide the **Guid** that you return in the WorkItemType method as the gWorkItemType parameter.
+
+## **Configuration Storage Options**
+
+All but the very simplest of solutions need to store configuration data and settings. 
+
+For example, you may need to store connection information for a database or web service. Alternatively, you may need to persist properties used by your solution. 
+
+As a developer, you need a mechanism for storing that configuration data. In a Windows application, you could consider storing data in a configuration file, or use the configuration file to store a connection to a database. When you develop SharePoint solutions, you must consider the implications of a multiple server farm; for example, if you store configuration data in a file, that file must be copied to each server in the farm. 
+
+SharePoint provides mechanisms that you can use to store configuration data—make sure that your data is available to all servers that might run your code in the server farm, including:
+
+- SharePoint lists.
+- Property bags.
+- Configuration files.
+- Persisted objects in the configuration database.
+
+You should carefully consider how you will use your data when deciding the most appropriate storage mechanism. For example, your configuration data may change infrequently, such as a connection string for a database, or it may change regularly, such as a counter that increments each time a process is performed. 
+
+Also, the data that you store may be instance-dependent, such as identifying a list on a site, or may be common across all instances of your solution deployed across a web application, such as the URL or a web service used by your solution. 
+
+Another important consideration is whether users of the site should be able to interact with your configuration data. If you store your configuration data in a SharePoint list, users are likely to be able to see that data, and more importantly, edit that data.
+
+In some cases, this may be the desired behavior; however, this will often not be the case. If you store your data by using a format that enables a user to easily edit the data, before you attempt to use the data, you should always check to make sure that the data has not been changed in a way that makes it invalid.
