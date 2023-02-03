@@ -9,6 +9,7 @@
 5. [Introduction to Event Receivers](#introduction-to-event-receivers)
 6. [Developing an Event Receiver](#developing-an-event-receiver)
 7. [Deploying an Event Receiver](#deploying-an-event-receiver)
+8. [Introduction to Timer Jobs](#introduction-to-timer-jobs)
 
 ## **Introduction to Web Parts**
 
@@ -313,3 +314,21 @@ The following code example shows how to bind an event receiver to an event host 
 	    </Receivers>
 	</Elements>
 ```
+
+## **Introduction to Timer Jobs**
+
+Some solutions require you to perform processes, which are either too time consuming or too computationally expensive to run each time a page is requested. 
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/66135471/216572438-e14ede1c-573b-4bd9-81d1-3135bddd99f0.png">
+</p>
+
+SharePoint enables you to develop **timer jobs** that run in a **separate process**, and run on a **scheduled basis**. Timer jobs enable you to develop code that runs either once, or regularly, by using a schedule.
+
+When you define a **schedule**, you can define a time window for the timer job. If you use a **time window**, you can reduce the instantaneous load on your server farm because SharePoint can run the timer job at different times within the time window on different servers in the farm. This enables some servers to remain responsive while others are running the timer job. 
+
+Timer jobs do not run in the IIS worker process; instead, they run in the **OWSTIMER.exe** process. This means they are not subject to the same timeouts that may apply to web requests in the IIS worker process, and can perform long running calculations and processes. 
+
+Also, by default, the **OWSTIMER.exe** process runs under the farm service account. This provides access for code running in a timer job to both the content and configuration databases. 
+
+Furthermore, whereas by default, the ASP .NET code runs by using an impersonated identity of the current user, which is likely to further restrict your code's access to SharePoint and the server, the timer job uses the process identity to run code, which provides you with the most complete access to SharePoint and the server. 
