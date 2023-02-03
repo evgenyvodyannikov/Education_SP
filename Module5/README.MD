@@ -15,6 +15,7 @@
 11. [Work Item Timer Jobs](#work-item-timer-jobs)
 12. [Developing a Work Item Timer Job](#developing-a-work-item-timer-job)
 13. [Configuration Storage Options](#configuration-storage-options)
+14 [Using Property Bags](#using-property-bags)
 
 ## **Introduction to Web Parts**
 
@@ -591,3 +592,51 @@ Also, the data that you store may be instance-dependent, such as identifying a l
 Another important consideration is whether users of the site should be able to interact with your configuration data. If you store your configuration data in a SharePoint list, users are likely to be able to see that data, and more importantly, edit that data.
 
 In some cases, this may be the desired behavior; however, this will often not be the case. If you store your data by using a format that enables a user to easily edit the data, before you attempt to use the data, you should always check to make sure that the data has not been changed in a way that makes it invalid.
+
+## **Using Property Bags**
+
+Several SharePoint components have an associated **property bag** that you can use to store configuration settings and other data. A property bag is implemented as a **hash table**, which stores key and value pairs. 
+
+Data stored in a property bag is stored in the content database (for farm and web application property bags) or configuration database (for site collection and other property bags). 
+
+Examples of SharePoint components that expose property bags include:
+- Farm (SPFarm)
+- Web application (SPWebApplication)
+- Site collection (SPSite)
+- Site (SPWeb)
+- List (SPList)
+
+To **add** a value to a property bag, obtain a reference to the parent item, and then call the Add method on the Properties collection property, passing your key and value as parameters. 
+
+To **retrieve** a value, you can use array notation on the Properties collection, and specify the key as the parameter. 
+
+You can **update** a stored value by using the array notation, and simply assigning a new value. As a security precaution, SharePoint does not permit you to update a value stored in a property bag while processing a page request with the GET verb. 
+
+If you need to perform an update during a page request, you can set the **AllowUnsafeUpdates** property of the parent item to true; however, this is not recommended. 
+
+To **remove** an item, from the property bag, set the item to null. 
+
+After you add or update an item in the property bag, you must always call the Update method on the Properties collection to persist your change to the database.
+
+The following code example shows how to use the property bag on a site (SPWeb).
+
+```C#
+	using (SPWeb web  = SPContext.Current.Site.RootWeb)
+	{
+	    // Always check an item does not already exist before attempting to add an item.
+	    if(web.Properties["Key"] == null)
+	    {
+	        // Add a new item to the property bag. 
+	        web.Properties.Add("Key", "Value");
+	        web.Properties.Update();
+	    }
+	    // Retrieve a value stored in the property bag.
+	    string storedValue = web.Properties["Key"];
+	    // Update an item store in a property bag.
+	    web.Properties["Key"] = "NewValue";
+	    web.Properties.Update();
+	    // Remove an item from the property bag.
+	    web.Properties["Key"] = null;
+	    web.Properties.Update();
+	}
+```
