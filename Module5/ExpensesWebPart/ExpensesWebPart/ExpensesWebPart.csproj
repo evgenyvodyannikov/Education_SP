@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AAEE4AF1-51C6-493F-B80F-E951D0A3B801}</ProjectGuid>
+    <ProjectGuid>{5F02601F-9C7E-41FF-844C-0EBE0FAAC60A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ExpensesEventReceiver</RootNamespace>
-    <AssemblyName>ExpensesEventReceiver</AssemblyName>
+    <RootNamespace>ExpensesWebPart</RootNamespace>
+    <AssemblyName>ExpensesWebPart</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetOfficeVersion>15.0</TargetOfficeVersion>
     <FileAlignment>512</FileAlignment>
@@ -45,25 +45,27 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.SharePoint" />
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContosoExpensesEventReceiver\ContosoExpensesEventReceiver.cs" />
+    <Compile Include="ExpensesInformationWebPart\ExpensesInformationWebPart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ContosoExpensesEventReceiver\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{156278e6-404a-4e51-92b7-65e110d88c25}</SharePointProjectItemId>
+    <None Include="ExpensesInformationWebPart\ExpensesInformationWebPart.webpart" />
+    <None Include="ExpensesInformationWebPart\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{7dcc9cac-038c-4823-9523-4875fba62d9a}</SharePointProjectItemId>
     </None>
-    <None Include="Features\Feature1\Feature1.feature">
-      <FeatureId>{da808476-53c6-4c41-9a3e-d62efd8d0fcf}</FeatureId>
+    <None Include="Features\ExpensesInformationWebPartDeployment\ExpensesInformationWebPartDeployment.feature">
+      <FeatureId>{a5abcc3a-f1d9-4353-a5f3-f726d20689bb}</FeatureId>
     </None>
     <None Include="key.snk" />
     <None Include="Package\Package.package">
-      <PackageId>{13e98352-e92c-4945-af70-2175bc438a1a}</PackageId>
+      <PackageId>{ec629dfa-a36a-402b-ad42-a653695ce49d}</PackageId>
     </None>
     <None Include="Package\Package.Template.xml">
       <DependentUpon>Package.package</DependentUpon>
@@ -71,16 +73,14 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="ContosoExpensesEventReceiver\Elements.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Features\Feature1\Feature1.Template.xml">
-      <DependentUpon>Feature1.feature</DependentUpon>
+    <Content Include="ExpensesInformationWebPart\Elements.xml" />
+    <Content Include="Features\ExpensesInformationWebPartDeployment\ExpensesInformationWebPartDeployment.Template.xml">
+      <DependentUpon>ExpensesInformationWebPartDeployment.feature</DependentUpon>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0'">11.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\SharePointTools\Microsoft.VisualStudio.SharePoint.targets" Condition="'$(VSToolsPath)' != ''" />
