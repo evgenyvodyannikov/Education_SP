@@ -25,6 +25,11 @@ namespace ExpensesWebPart.ExpensesInformationWebPart
                 string expenseTotal = web.Properties[keyName];
                 writer.Write("<p>Estimated departmental expense total is: " + expenseTotal + "</p>");
             }
+            else
+            {
+                writer.Write("<p>Estimated departmental expense was never changed</p>");
+            }
+            
 
         }
     }
