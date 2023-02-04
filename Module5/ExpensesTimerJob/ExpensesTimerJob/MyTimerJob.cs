@@ -15,7 +15,12 @@ namespace ExpensesTimerJob
         {
 
         }
-  
+
+        public MyTimerJob(string name, SPWebApplication webApplication, SPServer server, SPJobLockType lockType)
+            : base(name, webApplication, server, lockType)
+        {
+        }
+
         public override void Execute(Guid targetInstanceId)
         {
             using (SPSite site = new SPSite("http://sharepoint:2013"))
