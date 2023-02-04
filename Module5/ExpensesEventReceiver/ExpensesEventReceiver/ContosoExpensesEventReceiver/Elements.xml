@@ -1,23 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Elements xmlns="http://schemas.microsoft.com/sharepoint/">
-  <Receivers ListTemplateId="100">
+  <Receivers ListUrl="Lists/Contractor%20Agreements">
       <Receiver>
-        <Name>ContosoExpensesEventReceiverItemAdded</Name>
-        <Type>ItemAdded</Type>
+        <Name>ContosoExpensesEventReceiverItemAdding</Name>
+        <Type>ItemAdding</Type>
         <Assembly>$SharePoint.Project.AssemblyFullName$</Assembly>
         <Class>ExpensesEventReceiver.ContosoExpensesEventReceiver.ContosoExpensesEventReceiver</Class>
         <SequenceNumber>10000</SequenceNumber>
       </Receiver>
       <Receiver>
-        <Name>ContosoExpensesEventReceiverItemUpdated</Name>
-        <Type>ItemUpdated</Type>
+        <Name>ContosoExpensesEventReceiverItemUpdating</Name>
+        <Type>ItemUpdating</Type>
         <Assembly>$SharePoint.Project.AssemblyFullName$</Assembly>
         <Class>ExpensesEventReceiver.ContosoExpensesEventReceiver.ContosoExpensesEventReceiver</Class>
         <SequenceNumber>10000</SequenceNumber>
       </Receiver>
       <Receiver>
-        <Name>ContosoExpensesEventReceiverItemDeleted</Name>
-        <Type>ItemDeleted</Type>
+        <Name>ContosoExpensesEventReceiverItemDeleting</Name>
+        <Type>ItemDeleting</Type>
         <Assembly>$SharePoint.Project.AssemblyFullName$</Assembly>
         <Class>ExpensesEventReceiver.ContosoExpensesEventReceiver.ContosoExpensesEventReceiver</Class>
         <SequenceNumber>10000</SequenceNumber>

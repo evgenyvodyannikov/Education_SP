@@ -1,8 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<package dslVersion="1.0.0.0" 
-        Id="13e98352-e92c-4945-af70-2175bc438a1a" 
-        solutionId="13e98352-e92c-4945-af70-2175bc438a1a" 
-        xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel" 
-        name="ExpensesEventReceiver"
-        sharePointProductVersion="15.0">
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="13e98352-e92c-4945-af70-2175bc438a1a" solutionId="13e98352-e92c-4945-af70-2175bc438a1a" resetWebServer="false" sharePointProductVersion="15.0" name="ExpensesEventReceiver" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <features>
+    <featureReference itemId="da808476-53c6-4c41-9a3e-d62efd8d0fcf" />
+  </features>
 </package>
