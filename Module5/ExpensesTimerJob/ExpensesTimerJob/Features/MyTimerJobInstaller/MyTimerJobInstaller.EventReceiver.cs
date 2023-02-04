@@ -19,17 +19,38 @@ namespace ExpensesTimerJob.Features.MyTimerJobInstaller
         const string timerJobName = "MyTimerJob";
         // Раскомментируйте ниже метод для обработки события, возникающего после активации компонента.
 
-        //public override void FeatureActivated(SPFeatureReceiverProperties properties)
-        //{
-        //}
+        public override void FeatureActivated(SPFeatureReceiverProperties properties)
+        {
+            SPWebApplication webApplication = ((SPSite)properties.Feature.Parent).WebApplication;
+            deleteJob(webApplication);
+            MyTimerJob timerJob = new MyTimerJob(timerJobName, webApplication, null, SPJobLockType.Job);
+            SPMinuteSchedule schedule = new SPMinuteSchedule();
+            schedule.BeginSecond = 1;
+            schedule.EndSecond = 5;
+            schedule.Interval = 45;
+            timerJob.Schedule = schedule;
+            timerJob.Update();
 
+        }
 
         // Раскомментируйте ниже метод для обработки события, возникающего перед деактивацией компонента.
 
-        //public override void FeatureDeactivating(SPFeatureReceiverProperties properties)
-        //{
-        //}
+        public override void FeatureDeactivating(SPFeatureReceiverProperties properties)
+        {
+            SPWebApplication webApplication = ((SPSite)properties.Feature.Parent).WebApplication;
+            deleteJob(webApplication);
+        }
 
+        private void deleteJob(SPWebApplication webApplication)
+        {
+            foreach (SPJobDefinition job in webApplication.JobDefinitions)
+            {
+                if (job.Name.Equals(timerJobName))
+                {
+                    job.Delete();
+                }
+            }
+        }
 
         // Раскомментируйте ниже метод для обработки события, возникающего после установки компонента.
 
