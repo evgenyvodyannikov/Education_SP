@@ -86,6 +86,9 @@
     <None Include="Features\ContractorAgreementsList\ContractorAgreementsList.feature">
       <FeatureId>{ddd20bb7-8728-4602-86a5-2dc85c578ec4}</FeatureId>
     </None>
+    <None Include="InvoiceTotal\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{5cfae20b-264b-4ebe-b81a-517d7e9d49bb}</SharePointProjectItemId>
+    </None>
     <None Include="key.snk" />
     <None Include="Package\Package.package">
       <PackageId>{712d41fc-cee1-4821-ac2f-cddd410a7016}</PackageId>
@@ -117,6 +120,7 @@
     <Content Include="Features\ContractorAgreementsList\ContractorAgreementsList.Template.xml">
       <DependentUpon>ContractorAgreementsList.feature</DependentUpon>
     </Content>
+    <Content Include="InvoiceTotal\Elements.xml" />
     <Content Include="SecurityCleared\Elements.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

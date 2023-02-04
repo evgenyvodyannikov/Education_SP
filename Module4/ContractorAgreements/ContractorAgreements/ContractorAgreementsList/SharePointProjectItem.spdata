@@ -8,4 +8,7 @@
     <ProjectItemFile Source="Repair.aspx" Target="ContractorAgreementsList\" Type="ElementFile" />
     <ProjectItemFile Source="Upload.aspx" Target="ContractorAgreementsList\" Type="ElementFile" />
   </Files>
+  <ExtensionData>
+    <ExtensionDataItem Key="Microsoft.VisualStudio.SharePoint.ListSettings.ListFieldsContentTypeID" Value="0x01010020ed5fba40844ee1a9fe490117bf47c9" />
+  </ExtensionData>
 </ProjectItem>

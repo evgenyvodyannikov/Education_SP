@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">  
+  <Field
+       ID="{8156e4d2-5cf7-4871-a537-d55694906416}"
+       Name="InvoiceTotal"
+       DisplayName="Invoice Total"
+       Type="Number"
+       Required="TRUE"
+       Group="Custom Site Columns">
+  </Field>
+</Elements>
