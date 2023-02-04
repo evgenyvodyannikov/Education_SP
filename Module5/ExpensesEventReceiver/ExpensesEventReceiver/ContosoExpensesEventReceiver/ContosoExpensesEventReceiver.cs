@@ -16,7 +16,8 @@ namespace ExpensesEventReceiver.ContosoExpensesEventReceiver
         /// </summary>
         public override void ItemAdding(SPItemEventProperties properties)
         {
-            double invoiceValue = double.Parse(properties.AfterProperties["InvoiceTotal"] as string);
+            double invoiceValue = 0;
+            double.TryParse(properties.AfterProperties["InvoiceTotal"].ToString(), out invoiceValue);
             UpdatePropertyBag(properties.Web, invoiceValue);
         }
 
@@ -27,7 +28,8 @@ namespace ExpensesEventReceiver.ContosoExpensesEventReceiver
         public override void ItemUpdating(SPItemEventProperties properties)
         {
             double previousInvoiceValue = (double)properties.ListItem["InvoiceTotal"];
-            double newInvoiceValue = double.Parse(properties.AfterProperties["InvoiceTotal"] as string);
+            double newInvoiceValue = 0;
+            double.TryParse(properties.AfterProperties["InvoiceTotal"].ToString(), out newInvoiceValue);
             double change = newInvoiceValue - previousInvoiceValue;
             UpdatePropertyBag(properties.Web, change);
         }
@@ -37,7 +39,9 @@ namespace ExpensesEventReceiver.ContosoExpensesEventReceiver
         /// </summary>
         public override void ItemDeleting(SPItemEventProperties properties)
         {
-            double invoiceValue = double.Parse(properties.BeforeProperties["InvoiceTotal"] as string);
+            // ERROR: if use "as string" get Null
+            double invoiceValue = 0;
+            double.TryParse(properties.BeforeProperties["InvoiceTotal"].ToString(), out invoiceValue);
             UpdatePropertyBag(properties.Web, -invoiceValue);
         }
 
