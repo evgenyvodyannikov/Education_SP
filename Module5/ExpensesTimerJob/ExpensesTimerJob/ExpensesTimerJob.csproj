@@ -51,9 +51,16 @@
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MyTimerJob.cs" />
+    <Compile Include="Features\MyTimerJobInstaller\MyTimerJobInstaller.EventReceiver.cs">
+      <DependentUpon>MyTimerJobInstaller.feature</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Features\MyTimerJobInstaller\MyTimerJobInstaller.feature">
+      <FeatureId>{7d64d88c-df39-4ea7-8804-fbf942ec3e8d}</FeatureId>
+    </None>
     <None Include="key.snk" />
     <None Include="Package\Package.package">
       <PackageId>{54667cea-e8de-4fc3-8e6b-5af38d471e57}</PackageId>
@@ -62,8 +69,11 @@
       <DependentUpon>Package.package</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Features\" />
+    <Content Include="Features\MyTimerJobInstaller\MyTimerJobInstaller.Template.xml">
+      <DependentUpon>MyTimerJobInstaller.feature</DependentUpon>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

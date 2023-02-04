@@ -8,10 +8,10 @@ using Microsoft.SharePoint;
 
 namespace ExpensesTimerJob
 {
-    public class ContosoExpensesOverviewTimerJob : SPJobDefinition
+    public class MyTimerJob : SPJobDefinition
     {
 
-        public ContosoExpensesOverviewTimerJob()
+        public MyTimerJob()
         {
 
         }
