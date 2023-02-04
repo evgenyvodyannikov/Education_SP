@@ -27,7 +27,7 @@ namespace ExpensesTimerJob.Features.MyTimerJobInstaller
             SPMinuteSchedule schedule = new SPMinuteSchedule();
             schedule.BeginSecond = 1;
             schedule.EndSecond = 5;
-            schedule.Interval = 45;
+            schedule.Interval = 1;
             timerJob.Schedule = schedule;
             timerJob.Update();
 
