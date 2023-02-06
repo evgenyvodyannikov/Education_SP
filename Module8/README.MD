@@ -16,6 +16,7 @@
 12. [Overview of the REST API](#overview-of-the-rest-api)
 13. [SharePoint REST API URLs](#sharepoint-rest-api-urls)
 14. [Reading Data](#reading-data)
+15. [Creating and Updating Data](#creating-and-updating-data)
 
 ## **Overview of the Managed CSOM**
 
@@ -778,4 +779,114 @@ In the following example, the **_spPageContextInfo.webServerRelativeUrl** proper
 	      }
 	   });
 	});
+```
+
+## **Creating and Updating Data**
+
+When you want to create a new item, update an existing item, or delete an item through the REST API, you specify the location of the item by using URLs just as you do when you read information from an item. 
+
+However, you must use different HTTP verbs:
+
+- POST. You can use POST when you want to create a new item.
+
+- PUT. You can use PUT when you edit an existing item. If you use PUT, you must specify all the properties of the item—both those properties that have changed and those properties that have remained the same.
+
+- PATCH. You can use PATCH when you edit an existing item. If you use PATCH, you can specify only those properties that have changed.
+
+- MERGE. You can use MERGE when you edit an existing item. MERGE is similar to PATCH, but PATCH is used more frequently by convention.
+
+- DELETE. You can use DELETE when remove an item.
+
+To issue REST calls with these verbs from client-side code, you cannot use the jQuery getJSON() function, because this function only sends the GET verb. Instead, you must use the **ajax()** function.
+
+All data modification operations require a **form digest**. A form digest is a hash of page content that proves the request comes from the original page sent from the server. 
+
+This increases security by preventing any request not associated with a page sent from SharePoint. To send the form digest with your REST request, get the contents of the page element with ID "**__REQUESTDIGEST**" and send it in the **X-RequestDigest** header.
+
+The following example shows how to create a **SuggestionsList** object with methods that create, update, and delete suggestions. You can call these methods, for example, when users click buttons on the page.
+
+```JavaScript
+	"use strict";
+	var Contoso = window.Contoso || {};
+	Contoso.SuggestionsList = function () {
+	   create = function (subject, feedback) {
+	      // To create an item, formulate a URL to the parent list.
+	      var listUrl = _spPageContextInfo.webServerRelativeUrl +
+	          "/_api/web/lists/getByTitle('Suggestions')/items";
+	      // Store the form digest.
+	      var formDigest = $('#__REQUESTDIGEST').val();
+	      $.ajax({
+	         url: listUrl,
+	         type: "POST",
+	         data: JSON.stringify({
+	            '__metadata': { 'type': 'SP.Data.SuggestionsListItem' },
+	            'Subject': subject,
+	            'Feedback': feedback
+	         }),
+	         headers: {
+	            "accept": "application/json;odata=verbose",
+	            "X-RequestDigest": formDigest
+	         },
+	         success: function () {
+	            alert("Successfully created the suggestion");
+	         },
+	         error: function (err) {
+	            alert("Could not create the suggestion");
+	         }
+	      });
+	   },
+	   update = function (id, subject, feedback) {
+	      // To update an item, formulate a URL to the item itself.
+	      var listUrl = _spPageContextInfo.webServerRelativeUrl +
+	          "/_api/web/lists/getByTitle('Suggestions')/getItemByStringId('" + id + "')";
+	      // Store the form digest.
+	      var formDigest = $('#__REQUESTDIGEST').val();
+	      $.ajax({
+	         url: listUrl,
+	         type: "POST",
+	         data: JSON.stringify({
+	            '__metadata': { 'type': 'SP.Data.SuggestionsListItem' },
+	            'Subject': subject,
+	            'Feedback': feedback
+	         }),
+	         headers: {
+	            "accept": "application/json;odata=verbose",
+	            "X-RequestDigest": formDigest,
+	            "IF-MATCH": "*",
+	            "X-Http-Method": "PATCH"
+	         },
+	         success: function () {
+	            alert("Successfully updated the suggestion");
+	         },
+	         error: function (err) {
+	            alert("Could not update the suggestion");
+	         }
+	   },
+	   delete = function (id) {
+	      // To delete an item, formulate a URL to the item itself.
+	      var listUrl = _spPageContextInfo.webServerRelativeUrl +
+	          "/_api/web/lists/getByTitle('Suggestions')/getItemByStringId('" + id + "')";
+	      // Store the form digest.
+	      var formDigest = $('#__REQUESTDIGEST').val();
+	      $.ajax({
+	         url: listUrl,
+	         type: "DELETE",
+	         headers: {
+	            "accept": "application/json;odata=verbose",
+	            "X-RequestDigest": formDigest,
+	            "IF-MATCH": "*"
+	         },
+	         success: function () {
+	            alert("Successfully updated the suggestion");
+	         },
+	         error: function (err) {
+	            alert("Could not update the suggestion");
+	         }
+	   }
+	   return {
+	      createSuggestion: create,
+	      updateSuggestion: update,
+	      deleteSugestion: delete
+	   }
+	} ();
 ```
