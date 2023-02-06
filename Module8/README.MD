@@ -4,6 +4,7 @@
 
 1. [Overview of the Managed CSOM](#overview-of-the-managed-csom)
 2. [Using Client Context, Loading Objects, Executing Queries](#using-client-context-loading-objects-executing-queries)
+3. [Reading SharePoint Data](#reading-sharepoint-data)
 
 ## **Overview of the Managed CSOM**
 
@@ -71,3 +72,60 @@ Notice the following features of the preceding code example:
 - **Load()**. Because the Manage CSOM uses batched queries and the sevice proxy, you must use the Load() method to set up the object in the client context object for retrieval from the server. In the preceding example, the site collection is loaded in this way. You can set up a batch of requests by loading multiple objects before you execute a single query to retrieve them. If you want to specify the properties of the object that the query will return, pass lambda expressions to the Load() method. In the preceding example, lambda expressions are used to request the Title and ServerRelativeUrl properties.
 
 - **ExecuteQuery()**. Use this method to execute the batch of queries.
+
+## **Reading SharePoint Data**
+
+When you are working with SharePoint data, you must frequently begin by finding out what lists are present in a site and what items are in those lists. 
+
+You can display this information in a table of data or populate the fields in an editor form. The Manage CSOM provides a range of functions that make reading data simple, for example:
+
+- **ClientContext.Web.Lists**. This property of the SharePoint site returns a collection of all the lists and document libraries in the site.
+
+- **ClientContext.Web.Lists.GetByTitle()**. This method on a collection of lists returns a specific list that matches the title passed.
+
+- **List.GetItems()**. This method on a list returns a collection of items. If you use the method with no parameters, all the items in the list are returned. Alternatively, you can specify a CAML query to filter and order the information returned.
+
+This example shows how use the **Web.Lists** property, the **Lists.GetByTitle()** method, and the **List.GetItems()** method from the Managed CSOM. The call to **GetItems()** uses a CAML query to order the results alphabetically. 
+
+```C#
+	public string investigateContent () {
+	   // Get the app web URL.
+	   string appWebUrl = Page.Request["SPAppWebUrl"];
+	   // Set up the client context.
+	   using (ClientContext context = new ClientContext(appWebUrl))
+	   {
+	      // Start by loading the site.
+	      currentWeb = context.Web;
+	      context.Load(currentWeb);
+	      // Now we have the SharePoint site, load the lists in the site.
+	      ListCollection allLists = currentWeb.Lists;
+	      context.Load(allLists);
+	      // Set up a CAML query to load items in the Suggestions list.
+	      string query = "<View><Query><OrderBy><FieldRef Name='Title' /></OrderBy></Query>" +
+	         "<ViewFields><FieldRef Name='ID' />< FieldRef Name='Title' /></ViewFields></View>";
+	      CamlQuery camlQuery = new CamlQuery();
+	      camlQuery.ViewXML = query;
+	      // Load the suggestions list.
+	      List suggestionsList = allLists.GetByTitle("Suggestions");
+	      context.Load(suggestionsList);
+	      // Get the items in the suggestions list by using the CAML query.
+	      ListItemCollection items = suggestionsList.GetItems(camlQuery);
+	      context.Load(items);
+	      // Now we have batched all the requests, we can execute the query.
+	      context.ExecuteQuery();
+	      // Tell the user about the lists.
+	      string message = "The lists are as follows: ";
+	      foreach (List currentList in allLists) 
+	      {
+	         message += currentList.Title + " ";
+	      }
+	      // Tell the user about the items in the suggestions list.
+	      message += "The suggestions are as follows: ";
+	      foreach (ListItem currentItem in items)
+	      {
+	         message += currentItem.Title + " ";
+	      }
+	      return message;
+	   }
+	}
+```
