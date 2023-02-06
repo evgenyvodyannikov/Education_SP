@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <!-- Родительский тип контента: Item (0x01) -->
+  <ContentType ID="0x0100EC269C464795457E9D25FE827DFCEE9A" Name="Vote" Group="Другие типы контента" Description="Мой тип контента" Inherits="TRUE" Version="0">
+    <FieldRefs>
+      <FieldRef ID="{4c0203ce-82b1-49b1-8ec4-f8a2acdb1818}" DisplayName="Positive?" Required="TRUE" Name="Positive" />
+      <FieldRef ID="{ef100e62-c394-4b4d-9e65-76b037eaf102}" DisplayName="Suggestion Lookup" Required="TRUE" Name="SuggestionLookup" />
+    </FieldRefs>
+  </ContentType>
+</Elements>
