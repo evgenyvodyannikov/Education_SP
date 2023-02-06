@@ -311,7 +311,7 @@ Visual Studio includes the following `<script>` tags in app projects. These link
 
 **Linking to the JavaScript CSOM**
 
-```JavaScript
+```HTML
 	<script type="text/javascript" src="/_layouts/15/sp.runtime.js"></script>
 	<script type="text/javascript" src="/_layouts/15/sp.js"></script>
 ```
@@ -322,7 +322,7 @@ Visual Studio includes the following `<script>` tags in app projects to link to 
 
 **Linking to jQuery**
 
-```JavaScript
+```HTML
 	<script type="text/javascript" src="../Scripts/jquery-1.7.1.min.js"></script>
 ```
 
