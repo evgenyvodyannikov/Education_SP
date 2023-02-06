@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">  
+  <Field
+       ID="{45d3c60f-0f30-4928-89bc-8f95cdcade37}"
+       Name="ReasonForTrip"
+       DisplayName="Reason For Trip"
+       Type="Note"
+       Required="TRUE"
+       Group="Custom Site Columns">
+  </Field>
+</Elements>

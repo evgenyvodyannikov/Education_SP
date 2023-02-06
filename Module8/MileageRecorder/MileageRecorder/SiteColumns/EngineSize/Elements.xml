@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">  
+  <Field
+       ID="{97f06167-e1f6-4cbb-9fce-e93bd5b852c9}"
+       Name="EngineSize"
+       DisplayName="Engine Size"
+       Type="Integer"
+       Required="TRUE"
+       Group="Custom Site Columns">
+  </Field>
+</Elements>

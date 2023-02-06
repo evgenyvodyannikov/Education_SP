@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">  
+  <Field
+       ID="{6e7f93be-afe5-4258-bdc2-3c32b920dc60}"
+       Name="Amount"
+       DisplayName="Amount"
+       Type="Currency"
+       Required="TRUE"
+       Group="Custom Site Columns">
+  </Field>
+</Elements>

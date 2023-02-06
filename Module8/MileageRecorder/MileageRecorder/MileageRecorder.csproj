@@ -50,6 +50,11 @@
     <Content Include="Package\Package.Template.xml">
       <DependentUpon>Package.package</DependentUpon>
     </Content>
+    <Content Include="SiteColumns\Amount\Elements.xml" />
+    <Content Include="SiteColumns\Destination\Elements.xml" />
+    <Content Include="SiteColumns\EngineSize\Elements.xml" />
+    <Content Include="SiteColumns\Miles\Elements.xml" />
+    <Content Include="SiteColumns\ReasonForTrip\Elements.xml" />
   </ItemGroup>
   <ItemGroup>
     <AppManifestFile Include="AppManifest.xml">
@@ -74,10 +79,23 @@
     <None Include="Package\Package.package">
       <PackageId>{45bf26b2-77e3-4ec1-91ed-d45ab920e106}</PackageId>
     </None>
+    <None Include="SiteColumns\Amount\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{9f2382c3-6e06-4c81-badd-f9e316412688}</SharePointProjectItemId>
+    </None>
+    <None Include="SiteColumns\Destination\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{154aef3b-4b52-458e-b012-7875847c5f34}</SharePointProjectItemId>
+    </None>
+    <None Include="SiteColumns\EngineSize\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{3a477d62-2f42-4c00-bc58-1946fa8020ef}</SharePointProjectItemId>
+    </None>
+    <None Include="SiteColumns\Miles\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{e74f9e20-101c-45dd-87a7-9b8ae03f7763}</SharePointProjectItemId>
+    </None>
+    <None Include="SiteColumns\ReasonForTrip\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{d47b1b64-4a1c-46e2-b273-aefec8c9fbf9}</SharePointProjectItemId>
+    </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SiteColumns\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0'">11.0</VisualStudioVersion>
