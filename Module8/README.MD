@@ -14,6 +14,7 @@
 10. [Changing SharePoint Data](#changing-sharepoint-data)
 11. [Handling Server-Side Errors](#handling-server-side-errors-1)
 12. [Overview of the REST API](#overview-of-the-rest-api)
+13. [SharePoint REST API URLs](#sharepoint-rest-api-urls)
 
 ## **Overview of the Managed CSOM**
 
@@ -686,3 +687,51 @@ The following code show how to use the jQuery **getJSON()** function to obtain i
 	   )
 	});
 ```
+
+## **SharePoint REST API URLs**
+
+Before you begin programming against the SharePoint REST API, it is essential to understand **how REST API URLs are constructed**. W
+
+ith this understanding, you can easily formulate the URLs to call any REST API method and pass parameters. 
+
+The following examples work with a SharePoint site at the following URL:
+
+`http://intranet.contoso.com/`
+
+Therefore, all REST API operations must start with the following URL, which is the location of the Client.svc service:
+
+`http://intranet.contoso.com/_api/`
+
+**Common SharePoint objects**
+
+The following table shows the URLs you must use to access SharePoint site collections, sites, lists, and other objects.
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/66135471/217003849-f8679d4d-86e1-4c9b-a56c-492774e0ddfe.png">
+</p>
+
+**Controlling the objects returned**
+
+Many of the URLs listed in the previous table return collections of objects. When you have large content databases, lists can contain thousands of items and sites can contain many lists. 
+
+Therefore, it is essential to be able to control the collection of objects that a REST API call returns. 
+
+You can do this by using OData query operators. The operators you can use include the following:
+
+- **$select**. Use the $select operator to specify the fields that the query will return. If you do not use the $select operator, all the fields are returned expect any fields that are likely to be very large, such as attached files.
+
+- **$order**. Use the $order operator to specify one or more fields by which to order the results.
+
+- **$filter**. Use the $filter operator to set conditions. Only items that satisfy the conditions will be returned. For example, you could use the $filter operator to return only items whose Title starts with an "A".
+
+- **$top**. Use the $top operator to specify a number of objects to return. 
+
+- **$skip**. Use the $skip operator to specify a number of objects to omit from the results. **$top** and **$skip** are used to implement paging. For example, to show the second page of results, when there are ten results on each page, you would specify **$top=10** and **$skip=10**.
+
+The following table shows some REST API URLs that use the OData operators to control the objects returned:
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/66135471/217004599-5112a392-e1c2-4744-b773-31bbd5b9e614.png">
+</p>
+
+**Note:** Try exploring your SharePoint REST API by typing URLs similar to those in the preceding tables into the Internet Explorer address bar. Substitute the URL of your own SharePoint site. By examining the AtomPub XML returned in each case, you can become proficient in formulating REST API URLs. These skills will be helpful when you write JavaScript code that call the REST API.
