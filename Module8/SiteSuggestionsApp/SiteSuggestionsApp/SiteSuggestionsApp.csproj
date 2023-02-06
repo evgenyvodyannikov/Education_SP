@@ -48,6 +48,10 @@
     <Content Include="Suggestions\Schema.xml" />
     <Content Include="Suggestions\SuggestionsInstance\Elements.xml" />
     <Content Include="Suggestion\Elements.xml" />
+    <Content Include="Votes\Elements.xml" />
+    <Content Include="Votes\Schema.xml" />
+    <Content Include="Votes\VotesInstance\Elements.xml" />
+    <Content Include="Vote\Elements.xml" />
     <None Include="Feedback\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{95daaa94-2d66-4bf7-b4dc-2b406e2af2da}</SharePointProjectItemId>
     </None>
@@ -71,6 +75,15 @@
     </None>
     <None Include="Suggestion\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{803879bf-dd59-4af1-80a8-f27c40598c3f}</SharePointProjectItemId>
+    </None>
+    <None Include="Votes\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{2d91130b-61fe-412a-beb1-60cffb57c385}</SharePointProjectItemId>
+    </None>
+    <None Include="Votes\VotesInstance\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{6dc76fab-c462-49bb-85e5-77d27a40d697}</SharePointProjectItemId>
+    </None>
+    <None Include="Vote\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{c7e74a3f-d7d0-4a71-a89c-5d94e7d43ac6}</SharePointProjectItemId>
     </None>
   </ItemGroup>
   <ItemGroup>
