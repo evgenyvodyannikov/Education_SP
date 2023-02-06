@@ -15,6 +15,7 @@
 11. [Handling Server-Side Errors](#handling-server-side-errors-1)
 12. [Overview of the REST API](#overview-of-the-rest-api)
 13. [SharePoint REST API URLs](#sharepoint-rest-api-urls)
+14. [Reading Data](#reading-data)
 
 ## **Overview of the Managed CSOM**
 
@@ -735,3 +736,46 @@ The following table shows some REST API URLs that use the OData operators to con
 </p>
 
 **Note:** Try exploring your SharePoint REST API by typing URLs similar to those in the preceding tables into the Internet Explorer address bar. Substitute the URL of your own SharePoint site. By examining the AtomPub XML returned in each case, you can become proficient in formulating REST API URLs. These skills will be helpful when you write JavaScript code that call the REST API.
+
+## **Reading Data**
+
+If you are writing any client-side code that reads data from SharePoint, you must call the REST API from JavaScript and use the HTTP GET verb. 
+
+For example, you can issue such calls when you write a SharePoint hosted app, which can only execute client-side code. 
+
+Three things can help you to formulate and issue such requests:
+
+- The **_spPageContextInfo.webServerRelativeUrl** property. It is bad practice to hard-code the URL of your SharePoint site into JavaScript files because, when you deploy an app or when uses install it from a catalog, the site URL changes. Instead, you look up the server-relative URL for the current site. The **_spPageContextInfo.webServerRelativeUrl** property enables you to look up this value.
+
+- The jQuery **$.getJSON()** function. jQuery includes two functions that help you to formulate and issue REST requests. The **getJSON()** function is simple and quick to use. 
+
+- The jQuery **$.ajax()** function. The ajax() function is more complex than the getJSON() function, but you have more control over the request.
+
+In the following example, the **_spPageContextInfo.webServerRelativeUrl** property is used **to formulate two REST API URLs**. The first URL is used with the **getJSON()** function to find out about the current website. The second URL is used with the **ajax()** function to find out about the current user.
+
+```JavaScript
+	$.(document).ready( function() {
+	   // Formulate the URL to get the current website.
+	   var websiteRequestURL = _spPageContextInfo.webServerRelativeUrl + "/_api/web"
+	   // Formulate the URL to get the current user.
+	   var userRequestURL = _spPageContextInfo.webServerRelativeUrl + "/_api/web/currentuser"
+	   // Use getJSON() to find out about the current website.
+	   $.getJSON(websiteRequestURL, function (data) {
+	      alert("The current web site has the title " + data.d.Title);
+	   });
+	   // Use ajax() to find out about the current user.
+	   $.ajax({
+	      url: userRequestURL,
+	      type: "GET",
+	      headers: {
+	         "accept": "application/json;odata=verbose"
+	      },
+	      success: function (data) {
+	         alert("The current user has the name " + data.d.Title);
+	      },
+	      error: function (err) {
+	         alert("There was an error obtaining the user name");
+	      }
+	   });
+	});
+```
