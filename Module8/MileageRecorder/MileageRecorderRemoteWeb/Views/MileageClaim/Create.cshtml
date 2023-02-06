@@ -1,0 +1,59 @@
+﻿@model MileageRecorderRemoteWeb.Models.MileageClaim
+
+@{
+    ViewBag.Title = "Make a New Claim";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("Create", "MileageClaim", FormMethod.Post))
+{
+    @Html.ValidationSummary(true)
+
+    <div>
+        <span class="editor-label">
+            @Html.LabelFor(model => model.Destination)
+        </span>
+        <span class="editor-field">
+            @Html.EditorFor(model => model.Destination)
+            @Html.ValidationMessageFor(model => model.Destination)
+        </span>
+    </div>
+    
+    <div>
+        <span class="editor-label">
+            @Html.LabelFor(model => model.ReasonForTrip)
+        </span>
+        <span class="editor-field">
+            @Html.EditorFor(model => model.ReasonForTrip)
+            @Html.ValidationMessageFor(model => model.ReasonForTrip)
+        </span>
+    </div>
+
+    <div>
+        <span class="editor-label">
+            @Html.LabelFor(model => model.Miles)
+        </span>
+        <span class="editor-field">
+            @Html.EditorFor(model => model.Miles)
+            @Html.ValidationMessageFor(model => model.Miles)
+        </span>
+    </div>
+
+    <div>
+        <span class="editor-label">
+            @Html.LabelFor(model => model.EngineSize)
+        </span>
+        <span class="editor-field">
+            @Html.EditorFor(model => model.EngineSize)
+            @Html.ValidationMessageFor(model => model.EngineSize)
+        </span>
+    </div>
+    
+    <div>
+        <input type="submit" value="Create" />
+        @Html.ActionLink("Return to home page", "Index", "Home")
+    </div>
+    
+}
+

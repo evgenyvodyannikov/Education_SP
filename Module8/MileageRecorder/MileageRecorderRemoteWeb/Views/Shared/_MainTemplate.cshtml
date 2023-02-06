@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link type="text/css" rel="stylesheet" href="~/Content/ContosoStyles.css" />
+</head>
+<body>
+    <h1>Mileage Recorder App</h1>
+
+    <div id="topmenu">
+        <div class="topmenulink">
+            @Html.ActionLink("Make a Claim", "Create", "MileageClaim")
+        </div>
+        <div class="topmenulink">
+            <a href="@Session["SPHostUrl"]">Back to SharePoint</a>
+        </div>
+    </div>
+
+    <div>
+        @RenderBody()
+    </div>
+</body>
+</html>

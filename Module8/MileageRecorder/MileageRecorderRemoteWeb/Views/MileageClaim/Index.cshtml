@@ -1,0 +1,47 @@
+﻿@model IEnumerable<MileageRecorderRemoteWeb.Models.MileageClaim>
+
+<h2>Mileage Claims:</h2>
+
+<table>
+    <thead>
+        <tr>
+            <td>
+                Destination
+            </td>
+            <td>
+                Reason for Trip
+            </td>
+            <td>
+                Miles
+            </td>
+            <td>
+                Engine Size
+            </td>
+            <td>
+                Amount
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model)
+{
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.Destination)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.ReasonForTrip)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Miles)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.EngineSize)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Amount)
+            </td>
+        </tr>
+}
+    </tbody>    
+</table>

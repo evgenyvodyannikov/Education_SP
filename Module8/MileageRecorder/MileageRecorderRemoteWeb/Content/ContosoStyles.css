@@ -1,0 +1,72 @@
+﻿body {
+    background: #7f9aae;
+    background-image: url('BackgroundGradient.jpg');
+    background-repeat: repeat-x;
+    font-family: segoe ui, verdana, arial, sans-serif;
+    font-weight: 300;
+    color: #FBFBFB;
+    
+}
+
+thead {
+    background: #cccccc;
+    color: #0c0b0b;
+    font-weight: 400;
+}
+
+.clear-floats {
+    clear: both;
+}
+
+#topmenu {
+    background-color: #808080;
+    height: 45px;
+    border-radius: 10px;
+}
+
+.topmenulink {
+    float: left;
+    background-color: #cccccc;
+    width: 200px;
+    height: 35px;
+    text-align: center;
+    line-height: 2em;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.display-label {
+    display: inline-block;
+    width: 150px;
+    margin: 2px;
+}
+
+.display-field {
+    margin: 2px;
+    width: 350px;
+}
+
+.editor-label {
+    display: inline-block;
+    width: 250px;
+    margin: 2px;
+    vertical-align: top;
+}
+
+.editor-field {
+    display: inline-block;
+    width: 800px;
+    margin: 2px;
+}
+
+.text-box {
+    width: 400px;
+}
+
+.multi-line {
+    height: 100px;
+}
+
+.field-validation-error {
+    color: #b72323;
+}

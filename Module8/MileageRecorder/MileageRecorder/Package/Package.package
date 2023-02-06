@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="3340296a-f803-4c1c-87dc-9d27719aa595" solutionId="3340296a-f803-4c1c-87dc-9d27719aa595" resetWebServer="false" sharePointProductVersion="15.0" name="MileageRecorder" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <features>
+    <featureReference itemId="13428b03-ac8c-4005-98cc-df880812c689" />
+  </features>
+</package>
