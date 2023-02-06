@@ -7,6 +7,7 @@
 3. [Reading SharePoint Data](#reading-sharepoint-data)
 4. [Changing SharePoint Data](#changing-sharepoint-data)
 5. [Handling Server-Side Errors](#handling-server-side-errors)
+6. [Overview of the CSOM for JavaScript](#overview-of-the-csom-for-javascript)
 
 ## **Overview of the Managed CSOM**
 
@@ -267,3 +268,77 @@ The following code shows how to create an object that uses an exception handling
 	   }
     }
 ```
+
+## **Overview of the CSOM for JavaScript**
+
+In earlier versions of SharePoint, most custom code ran within SharePoint server-side processes and therefore was able to call classes and methods in the server-side object model. 
+
+In SharePoint 2010, a new client-side object model (CSOM) was introduced, which enabled developers to call core SharePoint functionality from browsers, Silverlight applications, and other clients. 
+
+The CSOM executed requests by sending them to a Windows Communication Foundation (WCF) endpoint. In SharePoint 2013, because the new app model emphasizes client-side code, the CSOM has been greatly expanded: you can now use it to access both SharePoint core functionality and enterprise search, business connectivity services, managed metadata, social networking, enterprise content management, web content management, record management, and so on.
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/66135471/216982731-eb496b1e-4893-4e5b-b252-a44240531431.png">
+</p>
+
+**Components of the CSOM**
+
+The classes and functions that make up the JavaScript CSOM are stored in two files: **sp.js** and **sp.runtime.js**. You can find these files in the SharePoint LAYOUTS folder. 
+
+In SharePoint 2013, the functions in these JavaScript files call a WCF service named **Client.svc** that runs on all SharePoint web front-end servers. This service is found in the SharePoint ISAPI folder. The Client.svc service is also available in any SharePoint site by using the alias /_api. 
+
+For example, if your site URL is:
+
+http://intranet.contoso.com
+
+then the Client.svc service can be found at:
+
+http://intranet.contoso.com/**_api**
+
+The Client.svc service uses the server-side object model to communicate with the SharePoint content database. 
+
+Although you can use the JavaScript CSOM without any other script libraries, Visual Studio includes the jQuery library in all app projects by default because it eases development of server-side code. 
+
+For example, by using the **$(document).ready()** jQuery function, you can ensure that no CSOM functions run before the Document Object Model (DOM) is fully loaded.
+
+**Linking to script libraries**
+
+In a page within a SharePoint app, use `<script>` tags to link to all the JavaScript libraries you need. You can either include these files in the app or link to their network locations. 
+
+Visual Studio includes the following `<script>` tags in app projects. These link to **sp.js** and **sp.runtime.js** stored on the SharePoint server.
+
+**Linking to the JavaScript CSOM**
+
+```JavaScript
+	<script type="text/javascript" src="/_layouts/15/sp.runtime.js"></script>
+	<script type="text/javascript" src="/_layouts/15/sp.js"></script>
+```
+
+Alternatively, you can copy the sp.runtime.js and sp.js files into the /Scripts folder in your app and modify the link to that folder. However, in most cases, because the app must connect to SharePoint to access content, it is logical to download the CSOM from SharePoint as well.
+
+Visual Studio includes the following `<script>` tags in app projects to link to jQuery.
+
+**Linking to jQuery**
+
+```JavaScript
+	<script type="text/javascript" src="../Scripts/jquery-1.7.1.min.js"></script>
+```
+
+Notice that jQuery is included in the app Scripts folder by default. You might change this link in the following circumstances:
+
+- You want to use a later version of jQuery. If you want to use a more up-to-date version of jQuery, obtain the script library from http://jquery.com and add it to the Scripts folder in your app. You must update the version number in the `<script>` tag. 
+
+- You want to use jQuery from a Content Delivery Network (CDN). A CDN is a set of high-performance servers distributed around the world. When you request a file from a CDN, a server physically close to your location responds. This can accelerate the performance of your application, but it requires an Internet connection. If you link to jQuery in a CDN, you can remove the jQuery file from your app's Scripts folder. Two possible CDNs that you can use for jQuery are:
+   - http://code.jquery.com. This CDN is managed by the jQuery Foundation.
+
+   - http://ajax.aspnetcdn.com/ajax/jQuery. This CDM is managed by Microsoft.
+
+In addition to links to script libraries, remember that you must link to your own JavaScript files, such as the **app.js** file that apps use by default.
+
+**Using the CSOM proxy**
+
+When you make one or more requests to SharePoint by using the JavaScript CSOM, you work with a JavaScript object that acts as a proxy for the **Client.svc** WCF service. 
+
+These requests are grouped into a batch and sent in a single operation to the WCF service in the form of XML. The Client.svc works with the service object model to execute the request against the SharePoint content database. 
+
+When there is data to return, such as a list of items in a list, the data is sent in the JavaScript Object Notation (JSON). You can work with this form of data very easily in JavaScript to present it to users. For example, it is easy to loop through collections. 
