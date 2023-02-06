@@ -11,6 +11,7 @@
 7. [Using the Client Context Object](#using-the-client-context-object)
 8. [Loading Objects and Running Queries](#loading-objects-and-running-queries)
 9. [Reading SharePoint Data](#reading-sharepoint-data)
+10. [Changing SharePoint Data](#changing-sharepoint-data)
 
 ## **Overview of the Managed CSOM**
 
@@ -513,3 +514,76 @@ This example shows how use the **get_lists()** method, the **get_lists().getByTi
 ```
 
 In the preceding example, notice that an enumerator object is used to loop through the lists and the items. 
+
+## **Changing SharePoint Data**
+
+When you create new items, update existing items, or delete items in a SharePoint list by using the JavaScript CSOM, you must still use a client context object, and load and execute a query just as you would for methods that read data. 
+
+Use the following approaches to edit SharePoint items:
+
+- To create a new list. Get the lists collection for the site, and then call the **add()** method on that lists collection. You must create a new **ListCreationInformation** object and pass it to the add() method. You can use the ListCreationInformation object to set properties such as a title for the list.
+
+- To create a new item in a list. Get a specific list, and then call the **additem()** method on that list. You must create a new **ListItemCreationInformation** object and pass it to the additem() method. You can set properties on the item by calling the item.set_item() method.
+
+- To update an existing item in a list. Get a single item in a list by using the **getItemById()** method on the list. After you have the item, use the **set_item()** method to update its fields, and then call update() to save changes before you call **context.executeQueryAsync()**.
+
+- To delete an existing item in a list. Get a single item in a list by using the **getItemById()** method on the list. After you have the item, call **deleteObject()** before you call **context.executeQueryAsync()**.
+
+The following example defines an object in the Contoso namespace with methods for creating, updating and deleting items in a list named Suggestions. You could call these methods, for example, when a user clicks a submit input control.
+
+```JavaScript
+	"use strict";
+	var Contoso = window.Contoso || {}
+	// This is an object to store the items in the Suggestions list.
+	Contoso.Suggestions;
+	Contoso.SuggestionsList = function () {
+	   createSuggestion =  function (subject, feedback) {
+	      // Get the client context and suggestions list.
+	      var context = new SP.ClientContext.get_current();
+	      var list = context.get_web().get_lists().getByTitle("Suggestions");
+	      context.load(list);
+	      // Create the new item and set fields.
+	      var listItemCreationInfo = new SP.ListItemCreationInformation();
+	      var newItem = list.addItem(listItemCreationInfo);
+	      newItem.set_item("Subject", subject);
+	      newItem.set_item("Feedback", feedback);
+	      // Remember to call update before executing the query.
+	      newItem.update();
+	      context.executeQueryAsync(onSuccess, onError);
+	   },
+	   updateSuggestion = function (id, subject, feedback) {
+	      // Get the client context and suggestions list.
+	      var context = new SP.ClientContext.get_current();
+	      var list = context.get_web().get_lists().getByTitle("Suggestions");
+	      context.load(list);
+	      var itemToUpdate = list.getItemById(id);
+	      itemToUpdate.set_item("Subject", subject);
+	      itemToUpdate.set_item("Feedback", feedback);
+	      // Remember to call update before executing the query.
+	      newItem.update();
+	      context.executeQueryAsync(onSuccess, onError);
+	   },
+	   removeItem = function (id) {
+	      // Get the client context and suggestions list.
+	      var context = new SP.ClientContext.get_current();
+	      var list = context.get_web().get_lists().getByTitle("Suggestions");
+	      context.load(list);
+	      // Get the item from its ID.
+	      var itemToDelete = list.getItemById(id);
+	      // Delete it before executing the query.
+	      itemToDelete.deleteObject();
+	      context.executeQueryAsync(onSuccess, onError);
+	   },
+	   onSuccess = function () {
+	      alert("The operation completed successfully);
+	   },
+	   onError = function (sender, args) {
+	      alert("The operation caused an unexpected error);
+	   };
+	   return {
+	      create: createSuggestion,
+	      update: updateSuggestion,
+	      delete: removeSuggestion
+	   };
+	} ();
+```
