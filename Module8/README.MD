@@ -5,6 +5,7 @@
 1. [Overview of the Managed CSOM](#overview-of-the-managed-csom)
 2. [Using Client Context, Loading Objects, Executing Queries](#using-client-context-loading-objects-executing-queries)
 3. [Reading SharePoint Data](#reading-sharepoint-data)
+4. [Changing SharePoint Data](#changing-sharepoint-data)
 
 ## **Overview of the Managed CSOM**
 
@@ -126,6 +127,97 @@ This example shows how use the **Web.Lists** property, the **Lists.GetByTitle()*
 	         message += currentItem.Title + " ";
 	      }
 	      return message;
+	   }
+	}
+```
+
+## **Changing SharePoint Data**
+
+The Managed CSOM includes a range of classes and methods that you can call to **create**, **update**, and **delete** items in SharePoint lists. 
+
+These include the following:
+
+- **ListCollection.Add()**. This method creates a new list in the Lists collection for a SharePoint site.
+
+- **ListCreationInformation**. This class enables you to set the properties of a new list. You must create a ListCreationInformation object and set its properties, and then pass the ListCreationInformation object to the **ListCollection.Add()** method.
+
+- **List.AddItem()**. This method creates a new item in a SharePoint list.
+
+- **ListItemCreationInformation**. This class enables you to set the properties of a new list item. Use the class as you use ListCreationInformation for new lists.
+
+- **ListItem.Update()**. This method enables you to update list items. When you set properties of an existing list item, you must call the Update() method to save your changes. 
+
+- **ListItem.DeleteObject()**. This method remove an item from the list.
+
+The following code shows an example class with methods you can call to create a new list, create a new item in the Suggestions list, update an existing item, and delete an item.
+
+```C#
+	public class SharePointEditor 
+	{
+	   string appWebUrl;
+	   public SharePointEditor() 
+	   {
+	      appWebUrl = Page.Request["SPAppWebUrl"];
+	   }
+	   public void CreateList (string name, string description) 
+	   {
+	      using (ClientContext context = new ClientContext(appWebUrl)
+	      {
+	         // Start by creating a new list creation information object.
+	         ListCreationInformation listInfo = new ListCreationInformation();
+	         listInfo.Title = name;
+	         listInfo.Description = description;
+	         listInfo.TemplateType = (int)ListTemplateType.GenericList;
+	         // Create the new list item and execute the query.
+	         List newList = context.Web.Lists.Add(listInfo);
+	         context.ExecuteQuery();
+	      }
+	   }
+	   public void CreateItem (string title) 
+	   {
+	      using (ClientContext context = new ClientContext(appWebUrl) 
+	      {
+	         // Get the suggestions list.
+	         List suggestionsList = context.Web.Lists.GetByTitle("Suggestions");
+	         context.Load(suggestionsList);
+	         // Create the List Item Creation Info object.
+	         ListItemCreationInformation itemInfo = new ListItemCreationInformation();
+	         // Create the new item and set its properties.
+	         ListItem newItem = suggestionsList.AddItem(itemInfo);
+	         newItem["Title"] = title;
+	         // You must call the Update method before you execute the query.
+	         newItem.Update();
+	         context.ExecuteQuery();
+	      }
+	   }
+	   public void UpdateItem (int id, string title) 
+	   {
+	      using (ClientContext context = new ClientContext(appWebUrl) 
+	      {
+	         // Get the suggestions list.
+	         List suggestionsList = context.Web.Lists.GetByTitle("Suggestions");
+	         context.Load(suggestionsList);
+	         // Get the item and set its properties.
+	         ListItem item = suggestionsList.GetItemById(id);
+	         item["Title"] = title;
+	         // You must call the Update method before you execute the query.
+	         item.Update();
+	         context.ExecuteQuery();
+	      }
+	   }
+	   public void DeleteItem (int id) 
+	   {
+	      using (ClientContext context = new ClientContext(appWebUrl) 
+	      {
+	         // Get the suggestions list.
+	         List suggestionsList = context.Web.Lists.GetByTitle("Suggestions");
+	         context.Load(suggestionsList);
+	         // Get the item and delete it.
+	         ListItem item = suggestionsList.GetItemById(id);
+	         item.DeleteObject();
+	         // Remember to execute the query.
+	         context.ExecuteQuery();
+	      }
 	   }
 	}
 ```
