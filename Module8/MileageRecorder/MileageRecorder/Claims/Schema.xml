@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<List xmlns:ows="Microsoft SharePoint" Title="Claims" FolderCreation="FALSE" Direction="$Resources:Direction;" Url="Lists/Claims" BaseType="0" xmlns="http://schemas.microsoft.com/sharepoint/" EnableContentTypes="TRUE">
+  <MetaData>
+    <ContentTypes>
+      
+      
+    <ContentType ID="0x0100fa936ac3e8334017b3125d6d9f1f7567" Name="ListFieldsContentType"><FieldRefs><FieldRef ID="{4020e619-9b99-4ebe-9c6e-0b8e8cddf21c}" Name="Miles" /><FieldRef ID="{6e7f93be-afe5-4258-bdc2-3c32b920dc60}" Name="Amount" /><FieldRef ID="{306b3ff7-cf50-41f5-bdef-fb2eb37fcd84}" Name="Destination" /><FieldRef ID="{97f06167-e1f6-4cbb-9fce-e93bd5b852c9}" Name="EngineSize" /><FieldRef ID="{45d3c60f-0f30-4928-89bc-8f95cdcade37}" Name="ReasonForTrip" /></FieldRefs></ContentType><ContentType ID="0x0100A18118F37BF9422786552AEF88D116CE" Name="MileageClaim" Group="Другие типы контента" Description="This content type defines a Mileage Claim for the Mileage Recorder app" Inherits="TRUE" Version="0"><FieldRefs><FieldRef ID="{4020e619-9b99-4ebe-9c6e-0b8e8cddf21c}" DisplayName="Miles" Required="TRUE" Name="Miles" /><FieldRef ID="{6e7f93be-afe5-4258-bdc2-3c32b920dc60}" DisplayName="Amount" Required="TRUE" Name="Amount" /><FieldRef ID="{306b3ff7-cf50-41f5-bdef-fb2eb37fcd84}" DisplayName="Destination" Required="TRUE" Name="Destination" /><FieldRef ID="{97f06167-e1f6-4cbb-9fce-e93bd5b852c9}" DisplayName="Engine Size" Required="TRUE" Name="EngineSize" /><FieldRef ID="{45d3c60f-0f30-4928-89bc-8f95cdcade37}" DisplayName="Reason For Trip" Required="TRUE" Name="ReasonForTrip" /></FieldRefs></ContentType></ContentTypes>
+    <Fields>
+      
+    <Field ID="{4020e619-9b99-4ebe-9c6e-0b8e8cddf21c}" Name="Miles" DisplayName="Miles" Type="Integer" Required="TRUE" Group="Custom Site Columns"></Field><Field ID="{6e7f93be-afe5-4258-bdc2-3c32b920dc60}" Name="Amount" DisplayName="Amount" Type="Currency" Required="TRUE" Group="Custom Site Columns"></Field><Field ID="{306b3ff7-cf50-41f5-bdef-fb2eb37fcd84}" Name="Destination" DisplayName="Destination" Type="Text" Required="TRUE" Group="Custom Site Columns"></Field><Field ID="{97f06167-e1f6-4cbb-9fce-e93bd5b852c9}" Name="EngineSize" DisplayName="Engine Size" Type="Integer" Required="TRUE" Group="Custom Site Columns"></Field><Field ID="{45d3c60f-0f30-4928-89bc-8f95cdcade37}" Name="ReasonForTrip" DisplayName="Reason For Trip" Type="Note" Required="TRUE" Group="Custom Site Columns"></Field></Fields>
+    <Views>
+      
+      
+    <View BaseViewID="0" Type="HTML" MobileView="TRUE" TabularView="FALSE">
+        <Toolbar Type="Standard" />
+        <XslLink Default="TRUE">main.xsl</XslLink>
+        <RowLimit Paged="TRUE">30</RowLimit>
+        <ViewFields>
+          
+        <FieldRef Name="LinkTitleNoMenu"></FieldRef></ViewFields>
+        <Query>
+          <OrderBy>
+            
+          <FieldRef Name="Modified" Ascending="FALSE"></FieldRef></OrderBy>
+        </Query>
+        <ParameterBindings>
+          <ParameterBinding Name="AddNewAnnouncement" Location="Resource(wss,addnewitem)" />
+          <ParameterBinding Name="NoAnnouncements" Location="Resource(wss,noXinviewofY_LIST)" />
+          <ParameterBinding Name="NoAnnouncementsHowTo" Location="Resource(wss,noXinviewofY_ONET_HOME)" />
+        </ParameterBindings>
+      </View><View BaseViewID="1" Type="HTML" WebPartZoneID="Main" DisplayName="$Resources:core,objectiv_schema_mwsidcamlidC24;" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" SetupPath="pages\viewpage.aspx" ImageUrl="/_layouts/15/images/generic.png?rev=23" Url="AllItems.aspx">
+        <Toolbar Type="Standard" />
+        <XslLink Default="TRUE">main.xsl</XslLink>
+        <JSLink>clienttemplates.js</JSLink>
+        <RowLimit Paged="TRUE">30</RowLimit>
+        <ViewFields>
+          
+        <FieldRef Name="LinkTitle"></FieldRef><FieldRef Name="Miles" /><FieldRef Name="Amount" /><FieldRef Name="Destination" /><FieldRef Name="EngineSize" /><FieldRef Name="ReasonForTrip" /></ViewFields>
+        <Query>
+          <OrderBy>
+            
+          <FieldRef Name="ID"></FieldRef></OrderBy>
+        </Query>
+        <ParameterBindings>
+          <ParameterBinding Name="NoAnnouncements" Location="Resource(wss,noXinviewofY_LIST)" />
+          <ParameterBinding Name="NoAnnouncementsHowTo" Location="Resource(wss,noXinviewofY_DEFAULT)" />
+        </ParameterBindings>
+      </View></Views>
+    <Forms>
+      <Form Type="DisplayForm" Url="DispForm.aspx" SetupPath="pages\form.aspx" WebPartZoneID="Main" />
+      <Form Type="EditForm" Url="EditForm.aspx" SetupPath="pages\form.aspx" WebPartZoneID="Main" />
+      <Form Type="NewForm" Url="NewForm.aspx" SetupPath="pages\form.aspx" WebPartZoneID="Main" />
+    </Forms>
+  </MetaData>
+</List>
