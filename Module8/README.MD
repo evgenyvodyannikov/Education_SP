@@ -3,6 +3,7 @@
 ## **Topics**:
 
 1. [Overview of the Managed CSOM](#overview-of-the-managed-csom)
+2. [Using Client Context, Loading Objects, Executing Queries](#using-client-context-loading-objects-executing-queries)
 
 ## **Overview of the Managed CSOM**
 
@@ -41,3 +42,32 @@ Just like the JavaScript CSOM, the Manage CSOM sends requests to the Client.svc 
 The Managed CSOM uses batched requests, just like the JavaScript CSOM does. Your managed code can make one or more requests by working with the CSOM proxy object.
 
 When you call the **ExecuteQuery()** method, all these batched requests are sent to the **Client.svc** service in a single operation. The Client.svc works with the service object model to execute the request against the SharePoint content database. Data is returned in the JSON format
+
+## **Using Client Context, Loading Objects, Executing Queries**
+
+Just like with the **JavaScript CSOM**, when you use the **Managed CSOM**, you must start by creating a **client context** object. 
+
+The context object represents the user's current location within SharePoint and you can use it to gain access to the current site collection, site, and other objects.
+
+The following code demonstrates how to create a context object by using the Managed CSOM in C# code. The context object is used to access the site collection and return its URL.
+
+```C#
+	public string getSiteCollectionUrl () {
+	   string appWebUrl = Page.Request["SPAppWebUrl"];
+	   using (ClientContext context = new ClientContext(appWebUrl));
+	   {
+	      Site siteCollection = context.Site;
+	      context.Load(siteCollection, s=>s.Title, s=>s.ServerRelativeUrl);
+	      context.ExecuteQuery();
+	      return siteCollection.Url;
+	   }
+	}
+```
+
+Notice the following features of the preceding code example:
+
+- **appWebUrl**. To use the client context object, you must pass a string URL to the SharePoint site. In a cloud-hosted app, a URL for the app web is always found in the **SPAppWebUrl** request parameter. You can use this to supply the necessary URL to the client context.
+
+- **Load()**. Because the Manage CSOM uses batched queries and the sevice proxy, you must use the Load() method to set up the object in the client context object for retrieval from the server. In the preceding example, the site collection is loaded in this way. You can set up a batch of requests by loading multiple objects before you execute a single query to retrieve them. If you want to specify the properties of the object that the query will return, pass lambda expressions to the Load() method. In the preceding example, lambda expressions are used to request the Title and ServerRelativeUrl properties.
+
+- **ExecuteQuery()**. Use this method to execute the batch of queries.
