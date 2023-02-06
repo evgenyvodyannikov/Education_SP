@@ -97,6 +97,35 @@ Contoso.SuggestionsApp = function () {
         alert('Failed to get user name. Error:' + args.get_message());
     };
 
+    var recordVote = function (positive) {
+        
+        var votesListURL = _spPageContextInfo.webServerRelativeUrl + "/_api/web/lists/getByTitle('Votes')/items";
+        //Get form digest
+        var formDigest = $('#__REQUESTDIGEST').val();
+
+        $.ajax({
+            url: votesListURL,
+            type: "POST",
+            data: JSON.stringify({
+                '__metadata': { 'type': 'SP.Data.VotesListItem' },
+                'Positive': positive,
+                'SuggestionLookupId': currentSuggestion.get_item('ID')
+            }),
+            headers: {
+                'accept': 'application/json;odata=verbose',
+                'content-type': 'application/json;odata=verbose',
+                'X-RequestDigest': formDigest
+            },
+            success: function () {
+                alert("Thank you for your vote");
+            },
+            error: function (err) {
+                alert(JSON.stringify(err));
+            }
+        });
+    };
+    
+
     return {
         create_suggestion: createSuggestion,
         count_votes: voteCount,
