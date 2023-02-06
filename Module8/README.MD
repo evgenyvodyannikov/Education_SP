@@ -9,6 +9,7 @@
 5. [Handling Server-Side Errors](#handling-server-side-errors)
 6. [Overview of the CSOM for JavaScript](#overview-of-the-csom-for-javascript)
 7. [Using the Client Context Object](#using-the-client-context-object)
+8. [Loading Objects and Running Queries](#loading-objects-and-running-queries)
 
 ## **Overview of the Managed CSOM**
 
@@ -392,3 +393,45 @@ These include:
 - **get_web().get_currentUser()**. This method, which you must access through the current SharePoint site, returns the identity of the user that made the request. You can use the user to access profile properties or permissions. 
 
 - **get_web().get_siteGroups()**. This method returns any SharePoint groups that have been defined for the current site.
+
+## **Loading Objects and Running Queries**
+
+The JavaScript library uses a proxy class to interact with the SharePoint Client.svc service and execute batches of queries. 
+This architecture means that you must take two steps to perform a data operation in SharePoint:
+	
+1. Load an object. When you load an object, you set it up in the client context object for retrieval from the server. You can load multiple objects to batch them together for retrieval in a single XML query. You can use two methods to load objects:
+
+   - **Load()**. This method specifies an object or collection to retrieve, such as a SharePoint site or the items in a list. In addition to the object to retrieve, you can specify the properties of the object to retrieve. Do this by passing the names of the properties as string parameters to the Load() method. If you do not specify any property names, all the properties of the object are loaded.
+
+   - **LoadQuery()**. This method specifies information to retrieve by defining a Language Integrated Query (LINQ) request.
+
+2. Execute the operation. When you call the **executeQueryAsync()** method, the batched XML requests are sent to the **Client.svc** service. Because this is an asynchronous operation, the browser does not halt while it waits for a response, and you must define callback functions that run when a response is received from the server. 
+
+The following code shows how to load an object into the client context and how to execute the operation asynchronously and display the results.
+
+```JavaScript
+	"use strict";
+	var Contoso = window.Contoso || {}
+	Contoso.SiteCollection = function () {
+	   var siteCollection,
+	         context,
+	         getSiteCollection = function () {
+	            context = new SP.ClientContext.get_current();
+	            siteCollection = context.get_site();
+	            context.load(siteCollection, "Title", "ServerRelativeUrl");
+	            context.executeQueryAsync(onSuccess, onFailure);
+	         },
+	         onSuccess = function () {
+	            alert("Site Collection URL: " + siteCollection.get_url());
+	         },
+	         onFailure = function(sender, args) {
+	            alert("Could not obtain the site collection URL");
+	         }
+	   return {
+	      execute: getSiteCollection
+	   }
+	}();
+	$(document).ready(function () {
+	   Contoso.SiteCollection.execute();
+	});
+```
