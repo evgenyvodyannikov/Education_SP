@@ -125,7 +125,32 @@ Contoso.SuggestionsApp = function () {
         });
     };
     
+    var voteCount = function () {
+        
+        var netVotes = 0;
+        var votesListURL = _spPageContextInfo.webServerRelativeUrl + "/_api/web/lists/getByTitle('Votes')/items";
 
+        $.ajax({
+            url: votesListURL + "?$filter=SuggestionLookup eq " + currentSuggestion.get_item('ID'),
+            type: "GET",
+            headers: { "accept": "application/json;odata=verbose" },
+            success: function (data) {
+                $.each(data.d.results, function (i, result) {
+                    if (result.Positive) {
+                        netVotes++;
+                    } else {
+                        netVotes--;
+                    }
+                });
+                $('#votes-count').html(netVotes);
+            },
+            error: function (err) {
+                alert(JSON.stringify(err));
+            }
+        });
+    };
+
+    //comparison to asp functions?
     return {
         create_suggestion: createSuggestion,
         count_votes: voteCount,
