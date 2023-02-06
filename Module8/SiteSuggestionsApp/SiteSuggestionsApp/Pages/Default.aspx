@@ -63,8 +63,8 @@
            <span class="item-display-label">Subject:</span>
            <span id="item-display-subject" class="item-display-field"></span>
            <span class="item-voting-controls">
-               <a>Like</a>
-               <a>Dislike</a>
+              <a onclick="Contoso.SuggestionsApp.record_vote(true);">Like</a>
+              <a onclick="Contoso.SuggestionsApp.record_vote(false);">Dislike</a>
            </span>
        </div>
        <div class="item-display-line">
