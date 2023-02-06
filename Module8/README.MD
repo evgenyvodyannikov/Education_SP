@@ -12,6 +12,7 @@
 8. [Loading Objects and Running Queries](#loading-objects-and-running-queries)
 9. [Reading SharePoint Data](#reading-sharepoint-data)
 10. [Changing SharePoint Data](#changing-sharepoint-data)
+11. [Handling Server-Side Errors](#handling-server-side-errors-1)
 
 ## **Overview of the Managed CSOM**
 
@@ -586,4 +587,62 @@ The following example defines an object in the Contoso namespace with methods fo
 	      delete: removeSuggestion
 	   };
 	} ();
+```
+
+## **Handling Server-Side Errors**
+
+In JavaScript, it is easy to handle errors that arise on the client by using the **try/catch/finally** construction. 
+
+When you run a query on the server, you specify the name of two functions in the call to **executeQueryAsync**: The first function is called if the query succeeds, and the second function is called if the query fails. This failure function is a good place to handle problems that arise on the server. 
+
+However, the **failure callback function** is only called when the server responds to the client. The failure callback function executes on the client and has limited access to server information. 
+
+Remember that, when you use the CSOM, you can batch many queries into a single call to the **Client.svc** service. If an operation causes an error, the whole batch fails and you have no way to ensure that subsequent operations complete. 
+
+You also cannot instruct the server how to respond to errors on the client.
+To solve these issues, CSOM includes a mechanism with which you can send error-handling instructions to the server along with your batched query. 
+
+The mechanism is implemented by the **ExceptionHandlingScope** object. This object enables you to define a **try/catch/finally** construction that applies while the query executes on the server.
+
+The following code shows how to create an object that uses an exception handling scope to implement try/catch/finally code on the server.
+
+```JavaScript
+	"using strict";
+	var Contoso = window.Contoso || {}
+	Contoso.ErrorScope = function() {
+	   var site,
+	         scope = function() {
+	            var context = new SP.ClientContext.get_current();
+	            // Create and start the exception handling scope.
+	            var e = new SP.ExceptionHandlingScope(context);
+	            var s = e.startScope();
+	            // Define the try block.
+	            var t = e.startTry();
+	            // Place code that may generate exceptions here.
+	            t.dispose(); // This call to dispose marks the end of the try block.
+	            // Define the catch block.
+	            var c = e.startCatch();
+	            // Place code that handles exceptions here.
+	            c.dispose(); //This call to dispose marks the end of the catch block
+	            // Define the finally block.
+	            var f = e.startFinally();
+	            // Place code that should execute regardless of errors here.
+	            f.dispose(); // This call to dispose marks the end of the finally block.
+	            // You must also dispose of the exception handling scope before you execute the query.
+	            s.dispose();
+	            context.executeQueryAsync(onSuccess, onFailure);
+	         },
+	         onSuccess = function () {
+	            alert("Query was successful");
+	         },
+	         onFailure = function () {
+	            alert("Query failed");
+	         }
+	   return {
+	      execute: scope
+	   }   
+	} ();
+	$(document).ready(function () {
+	   Contoso.ErrorScope.execute();
+	});
 ```
