@@ -8,6 +8,7 @@
 4. [Changing SharePoint Data](#changing-sharepoint-data)
 5. [Handling Server-Side Errors](#handling-server-side-errors)
 6. [Overview of the CSOM for JavaScript](#overview-of-the-csom-for-javascript)
+7. [Using the Client Context Object](#using-the-client-context-object)
 
 ## **Overview of the Managed CSOM**
 
@@ -342,3 +343,52 @@ When you make one or more requests to SharePoint by using the JavaScript CSOM, y
 These requests are grouped into a batch and sent in a single operation to the WCF service in the form of XML. The Client.svc works with the service object model to execute the request against the SharePoint content database. 
 
 When there is data to return, such as a list of items in a list, the data is sent in the JavaScript Object Notation (JSON). You can work with this form of data very easily in JavaScript to present it to users. For example, it is easy to loop through collections. 
+
+## **Using the Client Context Object**
+
+When you access SharePoint through the JavaScript object model, you must start by creating a client **context object**, much as you would when your write server-side SharePoint code. 
+
+The context object represents the user's current location within SharePoint, and you can use it to gain access to the current site collection, site, and other objects. 
+
+The following code demonstrates how to create a context object by using the JavaScript CSOM. The context object is used to access the site collection and return its URL.
+
+```JavaScript
+	"use strict";
+	var Contoso = window.Contoso || {}
+	Contoso.SiteCollection = function () {
+	   var siteCollection,
+	         context,
+	         getSiteCollection = function () {
+	            context = new SP.ClientContext.get_current();
+	            siteCollection = context.get_site();
+	            context.load(siteCollection);
+	            context.executeQueryAsync(onSuccess, onFailure);
+	         },
+	         onSuccess = function () {
+	            alert("Site Collection URL: " + siteCollection.get_url());
+	         },
+	         onFailure = function(sender, args) {
+	            alert("Could not obtain the site collection URL");
+	         }
+	   return {
+	      execute: getSiteCollection
+	   }
+	}();
+	$(document).ready(function () {
+	   Contoso.SiteCollection.execute();
+	});
+```
+
+In the preceding code, notice that the query is executed **asynchronously** and the data returned is processed in the separate **onSuccess()** callback function. 
+
+This pattern ensures that long-running queries do not halt a process and freeze the browser.
+
+There are a range of other methods, called in the same way as you call **get_site()** in the preceding example, that enable you to access other information from the client context object. 
+
+These include:
+
+- **get_web()**. This method returns the current SharePoint site (**SPWeb**). This may be the top-level site in a site collection, or a subsite. In a SharePoint-hosted app, the current web is always the app web.
+
+- **get_web().get_currentUser()**. This method, which you must access through the current SharePoint site, returns the identity of the user that made the request. You can use the user to access profile properties or permissions. 
+
+- **get_web().get_siteGroups()**. This method returns any SharePoint groups that have been defined for the current site.
