@@ -6,6 +6,7 @@
 2. [Using Client Context, Loading Objects, Executing Queries](#using-client-context-loading-objects-executing-queries)
 3. [Reading SharePoint Data](#reading-sharepoint-data)
 4. [Changing SharePoint Data](#changing-sharepoint-data)
+5. [Handling Server-Side Errors](#handling-server-side-errors)
 
 ## **Overview of the Managed CSOM**
 
@@ -220,4 +221,49 @@ The following code shows an example class with methods you can call to create a 
 	      }
 	   }
 	}
+```
+
+## **Handling Server-Side Errors**
+
+In the Managed CSOM, server-side errors can be handled in the same way as in the JavaScript CSOM: by using an **ExeceptionHandlingScope** object and calling **StartTry()**, **StartCatch()**, and **StartFinally()** methods. 
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/66135471/216972007-292e37d2-6d9f-4b56-8ef8-4eb9f11d8843.png">
+</p>
+
+However, C# supports **using() { } code blocks**, which you can use to ensure that the scope and its try, catch, and finally objects are disposed correctly before you call **ExecuteQuery()**.
+
+The following code shows how to create an object that uses an exception handling scope to implement try/catch/finally code on the server.
+
+```C#
+	public class ErrorScope ()
+	{
+	   public void scope () {
+	      // Get the App Web URL so that you can get the client context.
+	      string appWebUrl = Page.Request["SPAppWebUrl"];
+	      using (ClientContext context = new ClientContext(appWebUrl))
+	      {
+	         // Create and start the exception handling scope.
+	         ExceptionHandlingScope xScope = new ExceptionHandlingScope(context);
+	         using (xScope.StartScope())
+	         {
+	            // Define the try block.
+	            using (xScope.StartTry())
+	            {
+	               // Place code that may generate exceptions here.
+	            }
+	            // Define the catch block.
+	            using (xScope.StartCatch())
+	            {
+	               // Place code that handles exceptions here.
+	            }
+	            using (xScope.StartFinally())
+	            {
+	               // Place code that should execute regardless of errors here.
+	            }
+	         }
+	      }
+	      context.ExecuteQuery();
+	   }
+    }
 ```
