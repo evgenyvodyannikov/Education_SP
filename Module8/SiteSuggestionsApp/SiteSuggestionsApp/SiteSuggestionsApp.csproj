@@ -42,6 +42,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Feedback\Elements.xml" />
+    <Content Include="Positive\Elements.xml" />
+    <Content Include="SuggestionLookup\Elements.xml" />
     <Content Include="Suggestions\Elements.xml" />
     <Content Include="Suggestions\Schema.xml" />
     <Content Include="Suggestions\SuggestionsInstance\Elements.xml" />
@@ -55,6 +57,12 @@
     </None>
     <Content Include="Pages\Elements.xml" />
     <Content Include="Pages\Default.aspx" />
+    <None Include="Positive\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{bf65eec8-4dec-4f29-8712-0ce9dc5c5d0f}</SharePointProjectItemId>
+    </None>
+    <None Include="SuggestionLookup\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{40a5be8c-650d-4c00-91e7-e935a15407da}</SharePointProjectItemId>
+    </None>
     <None Include="Suggestions\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{d1425e01-9270-4aac-ae56-0609ed39f282}</SharePointProjectItemId>
     </None>
