@@ -54,7 +54,7 @@ Contoso.SuggestionsApp = function () {
         $('#item-display').fadeOut('fast', function () {
             $('#item-display-subject').html(currentSuggestion.get_item('Subject'));
             $('#item-display-feedback').html(currentSuggestion.get_item('Feedback'));
-            
+            voteCount();
             $('#item-display').fadeIn('fast');
         });
     };
