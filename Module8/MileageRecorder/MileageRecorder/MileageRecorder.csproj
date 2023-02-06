@@ -44,6 +44,9 @@
     <Content Include="AppIcon.png">
       <OpcRelationship>manifest-icon</OpcRelationship>
     </Content>
+    <Content Include="Claims\ClaimsInstance\Elements.xml" />
+    <Content Include="Claims\Elements.xml" />
+    <Content Include="Claims\Schema.xml" />
     <Content Include="Features\Feature1\Feature1.Template.xml">
       <DependentUpon>Feature1.feature</DependentUpon>
     </Content>
@@ -51,7 +54,9 @@
     <Content Include="Package\Package.Template.xml">
       <DependentUpon>Package.package</DependentUpon>
     </Content>
-    <Content Include="SiteColumns\Amount\Elements.xml" />
+    <Content Include="SiteColumns\Amount\Elements.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="SiteColumns\Destination\Elements.xml" />
     <Content Include="SiteColumns\EngineSize\Elements.xml" />
     <Content Include="SiteColumns\Miles\Elements.xml" />
@@ -74,6 +79,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Claims\ClaimsInstance\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{62c8ac86-ce79-4e65-ae12-b4c59e6bdce5}</SharePointProjectItemId>
+    </None>
+    <None Include="Claims\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{b6aed55e-0d75-4aa8-b7ef-2cfe9c93c7d6}</SharePointProjectItemId>
+    </None>
     <None Include="Features\Feature1\Feature1.feature">
       <FeatureId>{13428b03-ac8c-4005-98cc-df880812c689}</FeatureId>
     </None>
