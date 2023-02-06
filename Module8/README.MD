@@ -10,6 +10,7 @@
 6. [Overview of the CSOM for JavaScript](#overview-of-the-csom-for-javascript)
 7. [Using the Client Context Object](#using-the-client-context-object)
 8. [Loading Objects and Running Queries](#loading-objects-and-running-queries)
+9. [Reading SharePoint Data](#reading-sharepoint-data)
 
 ## **Overview of the Managed CSOM**
 
@@ -435,3 +436,80 @@ The following code shows how to load an object into the client context and how t
 	   Contoso.SiteCollection.execute();
 	});
 ```
+
+## **Reading SharePoint Data**
+
+The JavaScript CSOM makes it easy to obtain the lists and libraries in a SharePoint site, the items in a list, and a specific item in a list. 
+
+These methods enable you to display data to the user, for example by using jQuery to update a web page element. You can also use these methods when you want to display current values for the user to edit. 
+
+You can use the following methods to read data from SharePoint:
+
+- **get_lists()**. This method is available from a SharePoint site object and returns all the lists in the site.
+
+- **get_lists().getByTitle()**: You can use the getByTitle method on any collection of lists to obtain a list with a specific title.
+
+- **getItems()**. You can use the getItems method on any list to return all the items in the list. Alternatively, by passing a Collaborative Application Markup Language (CAML) query to getItems, you can filter and order the items returned.
+
+- **getItemById()**. If you already have the ID of the relevant item, you can use getItemByID to return the item.
+
+This example shows how use the **get_lists()** method, the **get_lists().getByTitle()** method, and the **getItems()** method from the JavaScript CSOM. The call to getItems() uses a CAML query to order the results alphabetically. 
+
+```JavaScript
+	"use strict";
+	var Contoso = window.Contoso || {}
+	Contoso.ReadData = function () {
+	   var site,
+	         allLists,
+	         suggestionsList,
+	         items,
+	         context,
+	         getData = function () {
+	            context = new SP.ClientContext.get_current();
+	            site = context.get_web();
+	            context.load(site);
+	            // Now we have the SharePoint site, load the lists in the site.
+	            allLists = site.get_lists();
+	            context.load(allLists);
+	            // Set up a CAML query to load items in the Suggestions list.
+	            var query = "<View><Query><OrderBy><FieldRef Name='Title' /></OrderBy></Query>" +
+	               "<ViewFields><FieldRef Name='ID' />< FieldRef Name='Title' /></ViewFields></View>";
+	            var camlQuery = new SP.CamlQuery();
+	            var camlQuery.set_viewXml(query);
+	            // Load the suggestions list.
+	            suggestionsList = site.get_lists().getByTitle("Suggestions");
+	            context.load(suggestionsList);
+	            // Get the items in the suggestions list by using the CAML query.
+	            items = suggestionsList.getItems(camlQuery);
+	            context.load(items);
+	            context.executeQueryAsync(onSuccess, onFailure);
+	         },
+	         onSuccess = function () {
+	            // Tell the user about the lists.
+	            var message = "The lists are as follows: ";
+	            var listEnumerator = allLists.getEnumerator();
+	            while (listEnumerator.moveNext()) {
+	               message += listEnumerator.get_current().get_title() +  " ";
+	            }
+	            alert(message);
+	            // Tell the user about the items in the suggestions list.
+	            message = "The suggestions are as follows: ";
+	            var itemEnumerator = items.getEnumerator();
+	            while (itemEnumerator.moveNext()) {
+	               message += itemEnumerator.get_current().get_item('Title') +  " ";
+	            }
+	            alert(message);
+	         },
+	         onFailure = function(sender, args) {
+	            alert("Could not obtain the data in the current site");
+	         };
+	   return {
+	      execute: getData
+	   };
+	}();
+	$(document).ready(function () {
+	   Contoso.ReadData.execute();
+	});
+```
+
+In the preceding example, notice that an enumerator object is used to loop through the lists and the items. 
