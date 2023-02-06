@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <!-- Родительский тип контента: Item (0x01) -->
+  <ContentType ID="0x0100A18118F37BF9422786552AEF88D116CE" Name="MileageClaim" Group="Другие типы контента" Description="This content type defines a Mileage Claim for the Mileage Recorder app" Inherits="TRUE" Version="0">
+    <FieldRefs>
+      <FieldRef ID="{4020e619-9b99-4ebe-9c6e-0b8e8cddf21c}" DisplayName="Miles" Required="TRUE" Name="Miles" />
+      <FieldRef ID="{6e7f93be-afe5-4258-bdc2-3c32b920dc60}" DisplayName="Amount" Required="TRUE" Name="Amount" />
+      <FieldRef ID="{306b3ff7-cf50-41f5-bdef-fb2eb37fcd84}" DisplayName="Destination" Required="TRUE" Name="Destination" />
+      <FieldRef ID="{97f06167-e1f6-4cbb-9fce-e93bd5b852c9}" DisplayName="Engine Size" Required="TRUE" Name="EngineSize" />
+      <FieldRef ID="{45d3c60f-0f30-4928-89bc-8f95cdcade37}" DisplayName="Reason For Trip" Required="TRUE" Name="ReasonForTrip" />
+    </FieldRefs>
+  </ContentType>
+</Elements>

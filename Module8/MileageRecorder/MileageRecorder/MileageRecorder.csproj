@@ -47,6 +47,7 @@
     <Content Include="Features\Feature1\Feature1.Template.xml">
       <DependentUpon>Feature1.feature</DependentUpon>
     </Content>
+    <Content Include="MileageClaim\Elements.xml" />
     <Content Include="Package\Package.Template.xml">
       <DependentUpon>Package.package</DependentUpon>
     </Content>
@@ -75,6 +76,9 @@
   <ItemGroup>
     <None Include="Features\Feature1\Feature1.feature">
       <FeatureId>{13428b03-ac8c-4005-98cc-df880812c689}</FeatureId>
+    </None>
+    <None Include="MileageClaim\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{29167947-0e68-427c-9e64-542d58de35f9}</SharePointProjectItemId>
     </None>
     <None Include="Package\Package.package">
       <PackageId>{45bf26b2-77e3-4ec1-91ed-d45ab920e106}</PackageId>
