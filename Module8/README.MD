@@ -13,6 +13,7 @@
 9. [Reading SharePoint Data](#reading-sharepoint-data)
 10. [Changing SharePoint Data](#changing-sharepoint-data)
 11. [Handling Server-Side Errors](#handling-server-side-errors-1)
+12. [Overview of the REST API](#overview-of-the-rest-api)
 
 ## **Overview of the Managed CSOM**
 
@@ -644,5 +645,44 @@ The following code shows how to create an object that uses an exception handling
 	} ();
 	$(document).ready(function () {
 	   Contoso.ErrorScope.execute();
+	});
+```
+
+## **Overview of the REST API**
+
+The JavaScript CSOM that you saw in the previous lesson is a set of JavaScript functions that sends calls to the **Client.svc** Windows Communication Foundation (WCF) service. 
+
+This web service can also be used directly by formulating and sending your own calls instead of relying on the CSOM library. 
+
+It is easy to create and send such calls because the Client.svc library is a RESTful web service. R
+
+ESTful web services have the following characteristics:
+
+- **Logical URLs**. The REST service itself has a URL. By specifying a URI within the service's URL, you can define the object or collection of objects to work with. For example, in SharePoint, the Client.svc is available in the **/_api** subfolder of any site. To select a list named "Discussion," you could use the URI **/_api/web/lists/getbytitle('Discussion')**.
+
+- **Support for HTTP verbs**. To specify the operation you want to perform in a RESTful service, you use HTTP verbs. For example, to read information, you use the GET verb. To remove an item, you use the DELETE verb. By using a combination of a URL with an HTTP verb, you specify the object or objects to select and the operation to perform on those objects.
+
+- **Support for OData**. RESTful services use the Open Data Protocol (OData) to create queries for data. For example, you can use an OData operator such as **$select** in a URL to filter the collection of objects that your operation will act on. The OData protocol also specifies that RESTful services should return data in the Atom Publishing Protocol (**AtomPub**) or JavaScript Object Notation (**JSON**) formats.
+
+One advantage of RESTful services is that you can easily explore them with a web browser. This is because a RESTful service uses the HTTP protocol, with user-friendly URLs that you can easily enter manually, and returns XML data that the browser can display. 
+
+This is extremely helpful during development because you can use a web browser such as Internet Explorer to query data and examine the structure of the response. 
+
+For example, you can obtain the properties of a SharePoint website by entering the following URL in the Internet Explorer address bar:
+
+**http://intranet.contoso.com/_api/web**
+
+Another advantage for JavaScript developers is that the jQuery library has helpful functions that you can use to formulate REST calls quickly. Because you can request JSON data, it is also very easy to process the results.
+
+The following code show how to use the jQuery **getJSON()** function to obtain information about the current SharePoint site from the REST API.
+
+```JavaScript
+	$(document).ready( function () {
+	   $.getJSON(
+	      "http://intranet.contoso.com/_api/web",
+	      function (data) {
+	         alert('The SharePoint site is called: ' + data.d.Title);
+	      }
+	   )
 	});
 ```
