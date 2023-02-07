@@ -13,6 +13,7 @@
 9. [Adding Content Types to Lists](#adding-content-types-to-lists)
 10. [Managing Document Templates](#managing-document-templates)
 11. [Configuring Workflow Associations](#configuring-workflow-associations)
+12. [Associating Event Receivers with Content Types](#associating-event-receivers-with-content-types)
 
 ## **Understanding Taxonomy in SharePoint**
 
@@ -688,5 +689,92 @@ The following code example shows how to associate a workflow with a content type
 	}
 	var onAddAssociationFail = function () {
 	   // Alert the user that the list content type was not added successfully.
+	}
+```
+
+## **Associating Event Receivers with Content Types**
+
+You can enhance the functionality of content types by associating event receivers with site content types and list content types. To be compatible with a content type, the event receiver class must derive from **SPItemEventReceiver**. 
+
+You can use the event receiver class to handle the full range of item events for your content type, including **ItemAdding** and **ItemAdded**, **ItemDeleting** and **ItemDeleted**, **ItemCheckingIn** and **ItemCheckedIn**, and many more. 
+
+The main advantage of associating an event receiver with a content type, rather than a list, is **flexibility**. 
+
+Suppose you need to perform some computation every time a user adds an item of content type Invoice, such as running a currency conversion or calculating a tax rate. You could use an item event receiver to complete these tasks. You could add the event receiver to your Invoices list, but what would happen if you store invoices in more than one location? 
+
+Every time you add the Invoice content type to a list, you would also need to proactively add the event receiver to the list. By associating the event receiver with the Invoice content type, you ensure that the event receiver functionality is active wherever the Invoice content type is used.
+
+**Note:** You cannot currently associate a remote event receiver with a content type, because the client-side **SP.ContentType** class does not have an EventReceivers collection.
+
+**Adding event receivers declaratively**
+
+You can associate an event receiver with a content type as part of the declarative content type definition. The ContentType element can include a child element of type XmlDocuments, which can in turn contain child elements of type XmlDocument. 
+
+You can use the XmlDocument element to add custom or supplementary information to your content type definition. For example, you can specify the form templates you want to use with your content type by adding a FormTemplates element within an XmlDocument element. In this case, you can add event receivers to your content type by adding a Receivers element within an XmlDocument element.
+
+The following code example shows how to register an event receiver as part of a content type definition:
+
+```XML
+	<ContentType ID="0x0101005AF7FDFCE5FD4C359A7AE34DFB008661"  Name="Invoice" Group="Contoso Content Types" Description="Invoices sent to Contoso clients." Inherits="TRUE" Version="0">
+	   <FieldRefs>
+	      <FieldRef ID="{…}" Name="ClientName" Required="TRUE" />
+	      <FieldRef ID="{…}" Name="PaymentDueDate" Required="TRUE" />
+	      <FieldRef ID="{…}" Name="Amount" Required="TRUE" />
+	   </FieldRefs>
+	   <DocumentTemplate TargetName="SiteAssets/ContosoInvoice.dotx" />
+	   <XmlDocuments>
+	      <XmlDocument NamespaceURI="http://schemas.microsoft.com/sharepoint/events">
+	         <Receivers xmlns:spe=" http://schemas.microsoft.com/sharepoint/events">
+	            <Receiver>
+	               <Name>InvoiceReceiver</Name>
+	               <Type>ItemAdding</Type>
+	               <SequenceNumber>10050</SequenceNumber>
+	               <Assembly>ContosoEvents, Version=1.0.0.0, Culture=neutral, PublicKeyToken=…</Assembly>
+	               <Class>ContosoEvents.InvoiceEventReceiver</Class>
+	               <Data></Data>
+	               <Filter></Filter>
+	            </Receiver>
+	         </Receivers>
+	      </XmlDocument>
+	   </XmlDocuments>
+	</ContentType>
+```
+
+When you add event receiver definitions declaratively, the relevant properties of each event receiver are represented by child elements of the Receiver element. For example:
+
+- Use the **Name** element to specify a name that uniquely identifies your event receiver.
+
+- Use the **Type** element to specify which type of event receiver you are defining (for example, ItemAdding or ItemUpdated).
+
+- Use the **SequenceNumber** element to specify the order in which your event receivers should execute. Lower numbers are executed before higher numbers. To avoid conflicts with built-in event receivers, you should use an integer value of 10,000 or greater.
+
+- Use the **Assembly** element to specify the strong name of the assembly that contains your event receiver class.
+- Use the **Class** element to specify the fully-qualified name of your event receiver class.
+
+**Note** that you cannot use a declarative approach to add an event receiver definition to an existing content type. If you want to add or remove event receiver definitions from existing content types, you must use the server-side object model.
+
+**Adding event receivers programmatically**
+
+You can use the server-side object model to add or remove event receivers from existing site or list content types. The **SPContentType** class includes an **EventReceivers** property, which is a collection of **SPEventReceiverDefinition** objects. To associate an event receiver with a content type, you add a **new item to the EventReceivers collection**.
+
+The following code example shows how to register an event receiver with a site content type programmatically:
+
+```C#
+	// Get the Invoice content type.
+	var invoiceCT = web.ContentTypes["Invoice"];
+	if (invoiceCT != null)
+	{   
+	   // Add a new event receiver definition to the collection.
+	   SPEventReceiverDefinition erd = invoiceCT.EventReceivers.Add();
+	   // Specify the properties of the event receiver.
+	   erd.Assembly = "<Assembly strong name>";
+	   erd.Class = "<Fully-qualified class name>";
+	   erd.Type = SPEventReceiverType.ItemAdding;
+	   erd.Name = "ItemAdding Event Receiver";
+	   erd.Synchronization = SPEventReceiverSynchronization.Synchronous;
+	   erd.SequenceNumber = 10050;
+	   erd.Update();
+	   // Update the content type and its children.
+	   invoiceCT.Update(true);
 	}
 ```
