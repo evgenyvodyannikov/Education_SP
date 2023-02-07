@@ -12,6 +12,7 @@
 8. [Working with Content Types in Code](#working-with-content-types-in-code)
 9. [Adding Content Types to Lists](#adding-content-types-to-lists)
 10. [Managing Document Templates](#managing-document-templates)
+11. [Configuring Workflow Associations](#configuring-workflow-associations)
 
 ## **Understanding Taxonomy in SharePoint**
 
@@ -604,12 +605,88 @@ You can use the same approach to manage document templates with client-side code
 	   invoiceCT.set_documentTemplate("SiteAssets/Invoice.dotx");
 	   invoiceCT.update(true);
 	   context.executeQueryAsync(onUpdateTemplateSuccess, onUpdateTemplateFail);
-	   
+
 	}
 	var onUpdateTemplateSuccess = function () {
 	   // List content type added successfully. Display a confirmation as required.
 	}
 	var onUpdateTemplateFail = function () {
+	   // Alert the user that the list content type was not added successfully.
+	}
+```
+
+## **Configuring Workflow Associations**
+
+Content types are a tool for modeling business content. Workflows are a tool for modeling business processes. 
+
+As such, it makes sense to be able to associate workflows with content types. Rather than adding workflows to individual lists, **adding a workflow to the content type** ensures that the workflow is available and active wherever the content type is added.
+
+You can associate workflows with content types by using the SharePoint object model (there is no declarative approach). 
+
+Both the workflow template and the content type must be deployed to the SharePoint site before you create the workflow association. 
+
+The high-level process for associating a workflow with a content type is as follows:
+
+1. Retrieve the workflow template from the SharePoint web.
+
+2. Create a new workflow association object, by specifying the workflow template, providing a name for the workflow instance, and specifying the task list and the history list that you want to use.
+
+3. Retrieve the content type from the SharePoint web.
+
+4. Add the workflow association to the content type.
+
+The following code example shows how to associate a workflow with a content type by using the server-side object model:
+
+```C#
+	var web = SPContext.Current.Web;
+	// Get the workflow template.
+	SPWorkflowTemplate template = web.WorkflowTemplates.GetTemplateByName("InvoiceWorkflow", 
+	   web.Locale);
+	// Create a new workflow association.
+	SPWorkflowAssociation association = SPWorkflowAssociation.CreateWebContentTypeAssociation(template, "Process Invoice", "Invoice Tasks", "Process Invoice History");
+	// Get the site content type.
+	var contentType = web.AvailableContentTypes["Invoice"];
+	// Add the workflow association to the content type.
+	if(contentType.WorkflowAssociations.GetAssocationByName("Process Invoice", web.Locale) == null)
+	{
+	   contentType.WorkflowAssociations.Add(association);
+	   contentType.UpdateWorkflowAssociationsOnChildren(false, true, true, false);
+	}
+```
+
+**Note:** The **SPWorkflowAssociation.CreateWebContentTypeAssociation** method requires you to specify the name of a tasks list and a workflow history list. If these lists do not already exist, SharePoint will create them when the workflow instance is used for the first time.
+
+Associating a workflow with a content type in client-side code is slightly different. Rather than adding a workflow association to the content type, you construct an object of type **WorkflowAssociationCreationInformation** and pass this object to the add method of the workflow association collection.
+
+The following code example shows how to associate a workflow with a content type by using the JavaScript object model:
+
+```JavaScript
+	var addWorkflowAssociation = function () {
+	   var context = new SP.ClientContext.get_current();
+	   var web = context.get_web();
+	   // Get a reference to the workflow template.
+	   var templates = web.get_workflowTemplates();
+	   var template = templates.getByName("InvoiceWorkflow");
+	   // Create a WorkflowAssociationCreationInformation object.
+	   var info = new SP.Workflow.WorkflowAssociationCreationInformation();
+	   info.set_template(template);
+	   info.set_name("Process Invoice");
+	   info.set_contentTypeAssociationTaskList("Invoice Tasks");
+	   info.set_contentTypeAssociationHistoryList("Invoice History");   
+	   // Get a reference to the site content type.   
+	   var contentTypes = web.get_availableContentTypes();
+	   var invoiceCT = contentTypes.getById("0x0101005AF7FDFCE5FD4C359A7AE34DFB008661");
+	   // Add the association to the site content type.
+	   var associations = invoiceCT.get_workflowAssociations();
+	   associations.add(info);
+	   invoiceCT.update(true);
+	   // Submit the query.
+	   context.executeQueryAsync(onAddAssociationSuccess, onAddAssociationFail);
+	}
+	var onAddAssociationSuccess = function () {
+	   // List content type added successfully. Display a confirmation as required.
+	}
+	var onAddAssociationFail = function () {
 	   // Alert the user that the list content type was not added successfully.
 	}
 ```
