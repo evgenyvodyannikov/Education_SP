@@ -11,3 +11,7 @@
 ## 6. Managing Identity and Permissions
 ## 7. Introdution Apps for SharePoint
 ## 8. [Client-Side Sharepoint Development](https://github.com/evgenyvodyannikov/Education_SP/tree/master/Module8/README.MD) (CSOM, Client Context, Handling Server-Side Errors, REST API)
+## 9. Developing Remote-hosted Apps for SharePoint 2013
+## 10. Publishing and Distributing Apps
+## 11. Automating Business Processes
+## 12. [Managing Taxonomy](https://github.com/evgenyvodyannikov/Education_SP/tree/master/Module12/README.MD)
