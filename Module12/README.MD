@@ -11,6 +11,7 @@
 7. [Understanding Content Type IDs](#understanding-content-type-ids)
 8. [Working with Content Types in Code](#working-with-content-types-in-code)
 9. [Adding Content Types to Lists](#adding-content-types-to-lists)
+10. [Managing Document Templates](#managing-document-templates)
 
 ## **Understanding Taxonomy in SharePoint**
 
@@ -568,6 +569,47 @@ The following code example shows how to add a list content type by using the Jav
 	   // List content type added successfully. Display a confirmation as required.
 	}
 	var onAddListContentTypeFail = function () {
+	   // Alert the user that the list content type was not added successfully.
+	}
+```
+
+## **Managing Document Templates**
+
+In many scenarios, organizations may find it useful to associate document templates with content types. 
+
+For example, if you are creating an invoice, you would be very unlikely to start with a blank document. Instead, you are likely to use an invoice template with formatting and boilerplate text, together with placeholders for amounts, dates, and descriptions. If you associate a template with the Invoice content type, SharePoint will launch the template every time a user creates a new Invoice item from a document library menu. 
+
+In the previous lesson, you saw how you can add a DocumentTemplate child element to a declarative content type definition. Although the declarative approach is useful when you are creating a new content type, it does not allow you to change the document template associated with an existing content type. Fortunately, document templates are easy to manage using either server-side or client-side code.
+
+The following code example shows how to set or update the document template for a site content type in server-side code:
+
+```C#
+	var web = SPContext.Current.Web;
+	var invoiceCT = web.AvailableContentTypes["Invoice"];
+	invoiceCT.DocumentTemplate = "SiteAssets/Invoice.dotx";
+	invoiceCT.Update(true);
+```
+
+In this example, note that we pass an argument value of **true to the Update** method. This specifies that the updates should be cascaded to children of the content type. In practice, this means that **any instances of the content type** in lists are also **updated** to use the new document template.
+
+You can use the same approach to manage document templates with client-side code. The following code example shows how to set or update the document template for a site content type by using the JavaScript object model:
+
+```JavaScript
+	var updateDocumentTemplate = function () {
+
+	   var context = new SP.ClientContext.get_current();
+	   var web = context.get_web();
+	   var contentTypes = web.get_availableContentTypes();
+	   var invoiceCT = contentTypes.getById("0x0101005AF7FDFCE5FD4C359A7AE34DFB008661");
+	   invoiceCT.set_documentTemplate("SiteAssets/Invoice.dotx");
+	   invoiceCT.update(true);
+	   context.executeQueryAsync(onUpdateTemplateSuccess, onUpdateTemplateFail);
+	   
+	}
+	var onUpdateTemplateSuccess = function () {
+	   // List content type added successfully. Display a confirmation as required.
+	}
+	var onUpdateTemplateFail = function () {
 	   // Alert the user that the list content type was not added successfully.
 	}
 ```
