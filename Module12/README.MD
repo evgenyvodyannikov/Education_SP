@@ -10,6 +10,7 @@
 6. [Creating Content Types Declaratively](#creating-content-types-declaratively)
 7. [Understanding Content Type IDs](#understanding-content-type-ids)
 8. [Working with Content Types in Code](#working-with-content-types-in-code)
+9. [Adding Content Types to Lists](#adding-content-types-to-lists)
 
 ## **Understanding Taxonomy in SharePoint**
 
@@ -494,5 +495,79 @@ The following example shows how to create a content type by using the JavaScript
 	}
 	var onAddContentTypeFail = function () {
 	   // Alert the user that the new content type was not created successfully.
+	}
+```
+
+## **Adding Content Types to Lists**
+
+To use a content type, you must add it to a list or library. Users with sufficient permissions can add content types to lists through the user interface. 
+
+If you need to automate the process, you can use both declarative and programmatic approaches to add content types to lists. The association between a specific content type and a specific list is known as a **content type binding**.
+
+**Creating content type bindings declaratively**
+
+You can add a content type to a list declaratively by adding a ContentTypeBinding element to an element manifest, and then deploying the element manifest within a Web-scoped or Site-scoped Feature. The ContentTypeBinding element simply requires you to specify the ID of the content type and the site-relative URL of the list.
+
+The following code example shows how to define a content type binding declaratively:
+
+```XML
+	<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+	   <ContentTypeBinding
+	      ContentTypeId="0x0101005AF7FDFCE5FD4C359A7AE34DFB008661"
+	      ListUrl="Invoices"
+	      RootWebOnly="FALSE"
+	   />
+	</Elements>
+```
+
+**Creating content type bindings programmatically**
+
+To create a content type binding programmatically, you essentially need to retrieve a content type from the site’s collection of content types and add it to the list's collection of content types. You also need to ensure that content types are enabled on the list before you attempt to add to the collection.
+
+The following code example shows how to add a list content type in server-side code:
+
+```C#
+	var web = SPContext.Current.Web;
+	// Get the list.
+	var list = web.GetList("Invoices");
+	// Get the site content type.
+	var contentType = web.AvailableContentTypes["Invoice"];
+	// Enable content types on the list.
+	list.ContentTypesEnabled = true;
+	// Add the content type to the list.
+	list.ContentTypes.Add(contentType);
+	// Persist the changes to the database.
+	list.Update();
+```
+
+You can use a similar pattern to add list content types in client-side code. 
+
+The following code example shows how to add a list content type by using the JavaScript object model:
+
+```JavaScript
+	var addListContentType = function () {
+	   var context = new SP.ClientContext.get_current();
+	   var web = context.get_web();
+	   // Get a reference to the site content type.   
+	   var contentTypes = web.get_availableContentTypes();
+	   var invoiceCT = contentTypes.getById("0x0101005AF7FDFCE5FD4C359A7AE34DFB008661");
+	   // Get a reference to the list.
+	   var lists = web.get_lists();
+	   var list = lists.getByTitle("Invoices");
+	   // Enable content types on the list.
+	   list.set_contentTypesEnabled(true);
+	   // Add the content type to the list.
+	   var listContentTypes = list.get_contentTypes();
+	   listContentTypes.addExistingContentType(invoiceCT);
+	   // Persist the changes to the database.
+	   list.update();
+	   // Submit the query.
+	   context.executeQueryAsync(onAddListContentTypeSuccess, onAddListContentTypeFail);
+	}
+	var onAddListContentTypeSuccess = function () {
+	   // List content type added successfully. Display a confirmation as required.
+	}
+	var onAddListContentTypeFail = function () {
+	   // Alert the user that the list content type was not added successfully.
 	}
 ```
