@@ -9,6 +9,7 @@
 5. [Working with Lookup Fields](#working-with-lookup-fields)
 6. [Creating Content Types Declaratively](#creating-content-types-declaratively)
 7. [Understanding Content Type IDs](#understanding-content-type-ids)
+8. [Working with Content Types in Code](#working-with-content-types-in-code)
 
 ## **Understanding Taxonomy in SharePoint**
 
@@ -393,3 +394,105 @@ Finally, you append a GUID:
 `0x0101005AF7FDFCE5FD4C359A7AE34DFB00866100BB4707E674E049D48B2BB38FE625C4B2`
 
 You can use this approach to build as many levels of content type inheritance as you require.
+
+## **Working with Content Types in Code**
+
+In addition to creating content types declaratively in CAML, you can create and edit content types programmatically using server-side or client-side code. 
+
+Choosing the declarative approach or the programmatic approach to creating content types is largely a matter of personal preference: some developers prefer the declarative approach for **readability**, whereas other developers consider the programmatic approach **more flexible** and **more robust**. 
+
+In most cases, the programmatic approach is the only option if you need to edit existing content types.
+
+**Creating content types by using server-side code**
+
+To create a new content type using server-side code, you create an object of type **SPContentType**. 
+
+To create a new SPContentType instance, you must provide three pieces of information:
+
+- Either the ID of the **parent content type**, or an **SPContentType** instance that represents the parent content type.
+
+- The **content type collection** to which you want to add the new content type. Both the SPWeb class and the SPList class expose a content type collection through the ContentTypes property.
+
+- The name of the new content type.
+
+In the server-side object model, field references are represented by the **SPFieldLink** class. You must create an SPFieldLink instance for every field that you want to add to the content type. 
+
+You then add the SPFieldLink instances to the FieldLinks collection of the content type.
+
+The following example shows how to create a content type in server-side code:
+
+```C#
+	var web = SPContext.Current.Site.RootWeb;
+	var fields = web.fields;
+	// Get the ID of the parent content type.
+	var parentId = SPBuiltInContentTypeId.Document;
+	// Create the Invoice content type.
+	var ctInvoice = new SPContentType(parentId, web.ContentTypes, "Invoice");
+	// Create field links.
+	var fldClientName = fields.GetField("ClientName");
+	var fldPaymentDueDate = fields.GetField("PaymentDueDate");
+	var fldAmount = fields.GetField("Amount");
+	var fldLinkClientName = new SPFieldLink(fldClientName);
+	var fldLinkPaymentDueDate = new SPFieldLink(fldPaymentDueDate);
+	var fldLinkAmount = new SPFieldLink(fldAmount);
+	// Add the field links to the content type.
+	ctInvoice.FieldLinks.Add(fldLinkClientName);
+	ctInvoice.FieldLinks.Add(fldLinkPaymentDueDate);
+	ctInvoice.FieldLinks.Add(fldLinkAmount);
+	// Persist the changes to the content database.
+	ctInvoice.Update();
+	// Add the content type to the collection.
+	web.ContentTypes.Add(ctInvoice);
+	web.Dispose();
+```
+
+**Creating content types by using client-side code**
+
+Creating content types in client-side code requires a slightly different approach. To create a content type, you must first create a **ContentTypeCreationInformation** object. Similarly, to create a field link, you must first create a **FieldLinkCreationInformation** object.
+
+The following example shows how to create a content type by using the JavaScript object model:
+
+```JavaScript
+	var context;
+	var web;
+	var fields;
+	var contentTypes;
+	var addContentType = function () {
+	   context = new SP.ClientContext.get_current();
+	   web = context.get_web();
+	   fields = web.get_availableFields();
+	   contentTypes = web.get_contentTypes();
+	   // Get a reference to the parent content type.
+	   var parent = contentTypes.getById("0x0101");
+	   // Create an SP.ContentTypeCreationInformation object.
+	   var ctInfo = new SP.ContentTypeCreationInformation();
+	   ctInfo.set_parentContentType(parent);
+	   ctInfo.set_name("Invoice");
+	   ctInfo.set_group("Contoso Content Types");
+	   // Create the Invoice content type.
+	   var ctInvoice = contentTypes.add(ctInfo);
+	   // Add field links to the content type.
+	   var fieldLinks = ctInvoice.get_fieldLinks();
+	   var fldClientName = fields.getByInternalNameOrTitle("ClientName");
+	   var fldLinkInfoClientName = new SP.FieldLinkCreationInformation();
+	   fldLinkInfoClientName.set_field(fldClientName);
+	   fieldLinks.add(fldLinkInfoClientName);
+	   var fldPaymentDueDate = fields. getByInternalNameOrTitle ("PaymentDueDate");
+	   var fldLinkInfoPaymentDueDate = new SP.FieldLinkCreationInformation();
+	   fldLinkInfoPaymentDueDate.set_field(fldPaymentDueDate);
+	   fieldLinks.add(fldLinkInfoPaymentDueDate);
+	   var fldAmount = fields. getByInternalNameOrTitle ("Amount");
+	   var fldLinkInfoAmount = new SP.FieldLinkCreationInformation();
+	   fldLinkInfoAmount.set_field(fldAmount);
+	   fieldLinks.add(fldLinkInfoAmount);
+	   // Persist the changes to the content type.
+	   ctInvoice.update();
+	   context.executeQueryAsync(onAddContentTypeSuccess, onAddContentTypeFail);
+	}
+	var onAddContentTypeSuccess = function () {
+	   // Content type added successfully. Display a confirmation as required.
+	}
+	var onAddContentTypeFail = function () {
+	   // Alert the user that the new content type was not created successfully.
+	}
+```
