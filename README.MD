@@ -10,4 +10,4 @@
 ## 5. [Working with Server-Side Code](https://github.com/evgenyvodyannikov/Education_SP/tree/master/Module5/README.MD) (Web Parts life cycles, .webpart file, Event Receivers, Timer Jobs, Work Item Timer Jobs, Configuration Storage, Property Bags)
 ## 6. Managing Identity and Permissions
 ## 7. Introdution Apps for SharePoint
-## 8. [Client-Side Sharepoint Development](https://github.com/evgenyvodyannikov/Education_SP/tree/master/Module8/README.MD)
+## 8. [Client-Side Sharepoint Development](https://github.com/evgenyvodyannikov/Education_SP/tree/master/Module8/README.MD) (CSOM, Client Context, Handling Server-Side Errors, REST API)
