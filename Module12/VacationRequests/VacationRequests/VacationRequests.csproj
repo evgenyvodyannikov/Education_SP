@@ -57,6 +57,9 @@
     <None Include="ContosoDepartment\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{e8843e5f-acaa-4b52-9682-b74c17999876}</SharePointProjectItemId>
     </None>
+    <None Include="Employee\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{baaf3f66-a4f7-47f6-bd53-c3c9925bdc73}</SharePointProjectItemId>
+    </None>
     <None Include="Features\Feature1\Feature1.feature">
       <FeatureId>{18092b3f-29c8-406c-9a17-c280c45d67b0}</FeatureId>
     </None>
@@ -73,15 +76,20 @@
     <None Include="VacationRequestStatus\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{e43407ee-6f49-4537-bda4-c1da6bbfe3ac}</SharePointProjectItemId>
     </None>
+    <None Include="VacationRequest\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{cbe8716a-513c-4a55-af93-b8ce4a1367ac}</SharePointProjectItemId>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <Content Include="ContosoDepartment\Elements.xml" />
+    <Content Include="Employee\Elements.xml" />
     <Content Include="Features\Feature1\Feature1.Template.xml">
       <DependentUpon>Feature1.feature</DependentUpon>
     </Content>
     <Content Include="LineManager\Elements.xml" />
     <Content Include="VacationRequestStatus\Elements.xml" />
+    <Content Include="VacationRequest\Elements.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

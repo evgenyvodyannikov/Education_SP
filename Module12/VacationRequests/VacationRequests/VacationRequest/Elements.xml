@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <!-- Родительский тип контента: Item (0x01) -->
+  <ContentType ID="0x01003C392D222A9A42A28932B119265AB167" Name="Vacation Request" Group="Contoso Content Types" Description="Request a new vacation booking" Inherits="TRUE" Version="0">
+    <FieldRefs>
+      <FieldRef ID="{25ffcdde-02aa-4d6a-adc0-dff2162bce76}" DisplayName="Employee" Required="TRUE" Name="Employee" />
+      <FieldRef ID="{9f8b6016-ae5c-45d5-9afd-d14b84f28ca1}" DisplayName="Contoso Department" Required="TRUE" Name="ContosoDepartment" />
+      <FieldRef ID="{5e40921c-ee95-4425-b9be-a9dcf8bd1ca6}" DisplayName="Line Manager" Required="TRUE" Name="LineManager" />
+      <FieldRef ID="{64cd368d-2f95-4bfc-a1f9-8d4324ecb007}" DisplayName="$Resources:core,Start_Date;" Required="TRUE" Name="StartDate" Format="DateOnly" />
+      <FieldRef ID="{8A121252-85A9-443d-8217-A1B57020FADF}" DisplayName="$Resources:core,End_Date;" Required="TRUE" Name="_EndDate" Format="DateTime" />
+      <FieldRef ID="{75471402-4e39-45ca-9546-a706ce28b9e4}" DisplayName="Vacation Request Status" Required="TRUE" Name="VacationRequestStatus" />
+    </FieldRefs>
+  </ContentType>
+</Elements>
