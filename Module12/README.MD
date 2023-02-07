@@ -6,6 +6,7 @@
 2. [Creating Site Columns Declaratively](#creating-site-columns-declaratively)
 3. [Creating Site Columns Programmatically](#creating-site-columns-programmatically)
 4. [Retrieving and Editing Site Columns](#retrieving-and-editing-site-columns)
+5. [Working with Lookup Fields](#working-with-lookup-fields)
 
 ## **Understanding Taxonomy in SharePoint**
 
@@ -239,3 +240,47 @@ The following code example shows how to retrieve and edit a site column by using
 	   // Alert the user that the new field was not created successfully.
 	}
 ```
+
+## **Working with Lookup Fields**
+
+SharePoint enables you to create relationships between lists through the use of lookup fields. 
+
+A lookup field works in a similar way to a choice field, in that the user can select a value from a list of choices. 
+
+However, in a **lookup field**, the **choices are actually list items from another list** within the same site collection. 
+
+This enables architects and developers to create data models that behave like relationship databases, where the lookup field in a SharePoint list is analogous to the foreign key in a database table. Lookup fields also enable you to create sophisticated queries using join statements in LINQ to SharePoint or CAML.
+
+Suppose you use one SharePoint list to track major programs of work, and another SharePoint list to track individual project statuses. 
+
+Each program contains multiple projects, and each project is associated with a program. You can relate the two lists by adding a Program lookup field to the Projects list. When a user adds a new project to the Projects list, he or she can select the program name in the Program lookup field. 
+
+If you need to query project or program data, you can then use join statements to retrieve related field values from both lists.
+
+The following code example shows how to define a lookup field in CAML:
+
+```XML
+	<Field ID="{7fce20b8-9b48-4672-b4c2-011241766c0d}"
+	               Name="ProgramsLookup"
+	               DisplayName="Programs"
+	               Type="Lookup"
+	               List="Lists\Programs"
+	               ShowField="ProgramName"
+	               Overwrite="true"
+	               Group="Contoso Columns">
+	   </Field>
+```
+
+When you define a lookup field in CAML, the Lists attribute indicates which list the lookup field should retrieve data from. 
+
+The **ShowField** attribute indicates which field from the list should be displayed when the lookup field is added to a list. 
+
+In this example, if a user adds the **ProgramsLookup** field to a list, he or she will be able to select from a list of **programs represented by the ProgramName** value. 
+
+You can also include projected fields, which enable you to display additional fields from the related list in the view that includes the lookup field.
+
+SharePoint enables you to enforce list relationships by specifying deletion rules. There are two types of deletion rule:
+
+- Cascade delete rule. When you delete a list item, this rule deletes all list items in related lists that reference the primary list item through a lookup field.
+
+- Restrict delete rule. This rule prevents you from deleting a list item if it is referenced by items in a related list through a lookup field.
