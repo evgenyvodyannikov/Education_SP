@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package dslVersion="1.0.0.0" 
+        Id="72b4b1b1-36f6-4342-9116-d98bb6f0fbd8" 
+        solutionId="72b4b1b1-36f6-4342-9116-d98bb6f0fbd8" 
+        xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel" 
+        name="VacationRequests"
+        sharePointProductVersion="15.0">
+</package>
