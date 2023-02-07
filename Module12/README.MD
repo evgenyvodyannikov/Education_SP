@@ -8,6 +8,7 @@
 4. [Retrieving and Editing Site Columns](#retrieving-and-editing-site-columns)
 5. [Working with Lookup Fields](#working-with-lookup-fields)
 6. [Creating Content Types Declaratively](#creating-content-types-declaratively)
+7. [Understanding Content Type IDs](#understanding-content-type-ids)
 
 ## **Understanding Taxonomy in SharePoint**
 
@@ -341,3 +342,54 @@ Like site columns, content types are deployed in **Web-scoped** or **Site-scoped
 To make a content type available to every web in a site collection, you should use a site-scoped feature. In this case, the content types are deployed to the root web in the site collection.
 
 You can use both apps and solutions to deploy content types. If you include a declarative content type in an app, the content type is provisioned on the app web.
+
+## **Understanding Content Type IDs**
+
+All content types belong in an inheritance hierarchy, and ultimately inherit from one of the built-in base content types. 
+
+However, the ContentType element does not explicitly specify the parent of the content type. Instead, inheritance is specified through the content type ID.
+
+Every content type ID begins with the ID of a base content type. The following table shows the ID values of some common base content types:
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/66135471/217255389-17dfd230-9edc-4de0-b5c0-b5127621b8bf.png">
+</p>
+
+You can use the following rules to build a content type ID:
+
+1. Start with the ID of the parent content type.
+
+2. Append 00, which you can think of as a spacer.
+
+3. Append an uppercase GUID, without any hyphens, spaces, or braces.
+
+For example, suppose you want to create a content type named Invoice that inherits from Document. You start with the ID of the Document content type:
+
+`0x0101`
+
+Next, you append a double zero:
+
+`0x010100`
+
+Finally, you append a GUID:
+
+`0x0101005AF7FDFCE5FD4C359A7AE34DFB008661`
+
+When you deploy this content type, SharePoint will deduce the parentage from your content type ID. In this case, your content type will inherit from the Document content type. 
+
+If you have set the Inherits attribute to TRUE, your content type will include all the fields that are present in the Document content type.
+
+Suppose you now want to create a more specialized type of Invoice content type named Northwind Traders Invoice. 
+
+The **Northwind Traders Invoice** content type should inherit from the **Invoice** content type. You can use the same approach to build the new content type ID. You start with the ID of the Invoice content type:
+
+`0x0101005AF7FDFCE5FD4C359A7AE34DFB008661`
+
+Next, you append a double zero:
+
+`0x0101005AF7FDFCE5FD4C359A7AE34DFB00866100`
+Finally, you append a GUID:
+
+`0x0101005AF7FDFCE5FD4C359A7AE34DFB00866100BB4707E674E049D48B2BB38FE625C4B2`
+
+You can use this approach to build as many levels of content type inheritance as you require.
