@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">  
+  <Field
+       ID="{75471402-4e39-45ca-9546-a706ce28b9e4}"
+       Name="VacationRequestStatus"
+       DisplayName="Vacation Request Status"
+       Type="Choice"
+       Required="TRUE"
+       Group="Contoso Columns">
+       <CHOICES>
+          <CHOICE>Pending</CHOICE>
+          <CHOICE>Approved</CHOICE>
+          <CHOICE>Rejected</CHOICE>
+          <CHOICE>Booked</CHOICE>
+       </CHOICES>
+      <Default>Pending</Default>
+  </Field>
+</Elements>

@@ -54,16 +54,34 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ContosoDepartment\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{e8843e5f-acaa-4b52-9682-b74c17999876}</SharePointProjectItemId>
+    </None>
+    <None Include="Features\Feature1\Feature1.feature">
+      <FeatureId>{18092b3f-29c8-406c-9a17-c280c45d67b0}</FeatureId>
+    </None>
     <None Include="key.snk" />
+    <None Include="LineManager\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{76a4bc09-0108-4862-bd97-4f27f6d54a5b}</SharePointProjectItemId>
+    </None>
     <None Include="Package\Package.package">
       <PackageId>{72b4b1b1-36f6-4342-9116-d98bb6f0fbd8}</PackageId>
     </None>
     <None Include="Package\Package.Template.xml">
       <DependentUpon>Package.package</DependentUpon>
     </None>
+    <None Include="VacationRequestStatus\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{e43407ee-6f49-4537-bda4-c1da6bbfe3ac}</SharePointProjectItemId>
+    </None>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Features\" />
+    <Content Include="ContosoDepartment\Elements.xml" />
+    <Content Include="Features\Feature1\Feature1.Template.xml">
+      <DependentUpon>Feature1.feature</DependentUpon>
+    </Content>
+    <Content Include="LineManager\Elements.xml" />
+    <Content Include="VacationRequestStatus\Elements.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
