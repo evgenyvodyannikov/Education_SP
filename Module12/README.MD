@@ -7,6 +7,7 @@
 3. [Creating Site Columns Programmatically](#creating-site-columns-programmatically)
 4. [Retrieving and Editing Site Columns](#retrieving-and-editing-site-columns)
 5. [Working with Lookup Fields](#working-with-lookup-fields)
+6. [Creating Content Types Declaratively](#creating-content-types-declaratively)
 
 ## **Understanding Taxonomy in SharePoint**
 
@@ -284,3 +285,59 @@ SharePoint enables you to enforce list relationships by specifying deletion rule
 - Cascade delete rule. When you delete a list item, this rule deletes all list items in related lists that reference the primary list item through a lookup field.
 
 - Restrict delete rule. This rule prevents you from deleting a list item if it is referenced by items in a related list through a lookup field.
+
+## **Creating Content Types Declaratively**
+
+Content types are designed to define and encapsulate all the metadata, business processes, and UI requirements for a particular type of content. 
+
+Content types should classify information by business purpose, rather than by file type. For example, you might create content types to represent invoices, or vacation requests, or expense claims. 
+
+You can use content types to define:
+
+- The metadata (fields) you require to manage the item.
+
+- The document template for the item.
+
+- The Display, Edit, and New forms that are used to manage the item.
+
+**Creating content types**
+
+You can define content types declaratively by using the ContentType element in CAML. The ContentType element enables you to define all the key aspects of the content type properties and behaviors.
+
+The following example shows how to define a content type in CAML:
+
+```XML
+	<ContentType 
+		ID="0x010100742830D3B25349C7A83DF4AEF639BFD5"
+		Name="Contract"
+		Group="Contoso Content Types"
+		Description="A contract to supply goods or services"
+		Inherits="TRUE"
+		Version="0">
+	   <FieldRefs>
+	      <RemoveFieldRef ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}" Name="Title" />
+	      <FieldRef ID="{ff77d8e3-c172-43e6-b729-d3e6492e6334}" Name="CustomerName" Required="TRUE" />
+	      <FieldRef ID="{fd125d1e-ad63-436e-9f1f-efce7ef00967}" Name="StartDate" Required="TRUE" />
+	      <FieldRef ID="{b2db5ee2-e09e-4864-b00f-3f652187c843}" Name="FinalEffectiveDate" Required="TRUE" />
+	      <FieldRef ID="{8da52b24-493d-4475-a812-875ba2c0faf4}" Name="Owner" Required="TRUE" />
+	      <FieldRef ID="{cc4fd24e-f357-45e7-bb4c-a7567aae6347}" Name="Department" Required="TRUE" />
+	   </FieldRefs>
+	   <DocumentTemplate TargetName="ContosoContract.dotx" />
+	</ContentType>
+```
+
+In the example, the Inherits attribute indicates whether the content type should inherit fields from its parent. 
+
+Content type inheritance is specified by the content type ID value, which is described in more detail in the next topic. 
+
+After specifying that the content type should inherit fields from its parent, you can use RemoveFieldRef child elements to remove any inherited fields that you do not require.
+
+To add new fields to the content type, you use the **FieldRef** element. You can reference fields that already exist on the target site, or fields that are defined within the same feature as the content type.
+
+**Deploying content types**
+
+Like site columns, content types are deployed in **Web-scoped** or **Site-scoped** Features. 
+
+To make a content type available to every web in a site collection, you should use a site-scoped feature. In this case, the content types are deployed to the root web in the site collection.
+
+You can use both apps and solutions to deploy content types. If you include a declarative content type in an app, the content type is provisioned on the app web.
