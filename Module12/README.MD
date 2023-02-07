@@ -4,6 +4,7 @@
 
 1. [Understanding Taxonomy in SharePoint](#understanding-taxonomy-in-sharepoint)
 2. [Creating Site Columns Declaratively](#creating-site-columns-declaratively)
+3. [Creating Site Columns Programmatically](#creating-site-columns-programmatically)
 
 ## **Understanding Taxonomy in SharePoint**
 
@@ -84,3 +85,98 @@ The following code example shows an element manifest that defines several site c
 As you can see from the example, the Field element includes attributes that are common to all field types, such as **ID**, **Name**, **DisplayName**, **Type**, **Required**, and **Group**. 
 
 However, a Field element can also include attributes and elements that are specific to certain field types. For example, if you create a choice field, you define the available choices in a CHOICES child element.
+
+## **Creating Site Columns Programmatically**
+
+In some circumstances, you may want to create site columns programmatically, rather than declaratively. 
+
+To some extent, this is a matter of personal preference: some developers prefer writing code to building CAML. The programmatic approach is also useful if you need to add columns dynamically, such as in feature receiver code.
+
+If you are developing an app, the programmatic approach to creating site columns is useful if you want to add a site column to the host web. 
+
+Declarative components such as site columns on content types within an app are deployed to the app web, so writing code is the only option if you want to provision artifacts to an alternative location.
+
+Creating site columns by using server-side code
+To create a site column programmatically, you must add a new field to the Fields collection of a SharePoint web.
+
+Depending on your requirements, you can do this in various ways. If you are working with the server-side object model, you can:
+
+- Call the **SPFieldCollection.Add** method, and specify the display name and the field type as arguments. 
+
+- Call the **SPFieldCollection.Add** method, and provide an **SPField** instance as an argument. 
+
+- Call the **SPFieldCollection.AddFieldAsXml** method, and provide a CAML-based Field element as a string argument.
+
+The approach you use will likely depend on the complexity of your field requirements. If you want to create a field that requires little additional configuration, it is easier to call the Add method and specify a display name and a field type. 
+
+If you want to change some of the field properties, it is easier to create an SPField instance before you call the Add method. 
+
+Finally, if you want to customize the field extensively, you may find it easier to define the field in CAML and call the AddFieldAsXml method.
+
+If you create a new **SPField** instance, you must specify the collection to which you want to add the new field as an argument to the constructor. 
+
+Fields typically include two constructors: one to instantiate a field that already exists within the collection, and one to create a field that does not already exist within the collection. The difference is that the constructor that creates a new instance additionally requires you to specify the type name of the new field.
+
+The following code example shows how to add fields in server-side code:
+
+```C#
+	var site = SPContext.Current.Site;
+	var web = site.RootWeb;
+	// Get the SPFieldCollection for the root web.
+	var fields = web.Fields;
+	// Add a new date field.
+	var fieldExpiryDate = new SPFieldDateTime(fields, SPFieldType.DateTime.ToString(), "Expiry Date");
+	fieldExpiryDate.StaticName = "ExpiryDate";
+	fieldExpiryDate.DisplayFormat = SPDateTimeFieldFormatType.DateOnly;
+	fieldExpiryDate.Group = "Contoso Columns";
+	fieldExpiryDate.Required = true;
+	fieldExpiryDate.Update();
+	fields.Add(fieldExpiryDate);
+	// Add a new choice field.
+	var fieldProductionType = new SPFieldChoice(fields, SPFieldType.Choice.ToString(), "Production Type");
+	fieldProductionType.StaticName = "ProductionType";
+	fieldProductionType.Choices.Add("Research");
+	fieldProductionType.Choices.Add("Prototype");
+	fieldProductionType.Choices.Add("Trial");
+	fieldProductionType.Choices.Add("Release");
+	fieldProductionType.Group = "Contoso Columns";
+	fieldProductionType.Required = true;
+	fieldProductionType.Update();
+	fields.Add(fieldProductionType);
+	web.Dispose();
+```
+
+Creating site columns by using client-side code
+The SharePoint client object models enable you to work with fields in much the same way as the server-side object model. One key difference is that you can only create a new field by using the **AddFieldAsXml** method of the field collection class.
+
+**Note:** The JavaScript object model and the managed client object model both include **FieldCollection.Add** methods. However, these are intended for adding existing fields to a new collection—for example, to add site columns to the fields collection of a list—rather than for creating new fields.
+
+The following code example shows how to add fields by using the JavaScript object model:
+
+```JavaScript
+	var context;
+	var web;
+	var fields;
+	var addFields = function () {
+	   context = new SP.ClientContext.get_current();
+	   web = context.get_web();
+	   fields = web.get_fields();
+
+	   var fieldSchema = `
+	   <Field Type="DateTime"
+	   Name="ExpiryDate"
+	   DisplayName="Expiry Date"
+	   Format="DateOnly"
+	   Required="TRUE"
+	   Group="Contoso Columns"/>`;
+
+	   fields.addFieldAsXml(fieldSchema, false, SP.AddFieldOptions.addFieldCheckDisplayName);
+	   context.executeQueryAsync(onAddFieldsSuccess, onAddFieldsFail);
+	}
+	var onAddFieldsSuccess = function () {
+	   // Field added successfully. Display a confirmation as required.
+	}
+	var onAddFieldsFail = function () {
+	   // Alert the user that the new field was not created successfully.
+	}
+```
