@@ -5,6 +5,7 @@
 1. [Understanding Taxonomy in SharePoint](#understanding-taxonomy-in-sharepoint)
 2. [Creating Site Columns Declaratively](#creating-site-columns-declaratively)
 3. [Creating Site Columns Programmatically](#creating-site-columns-programmatically)
+4. [Retrieving and Editing Site Columns](#retrieving-and-editing-site-columns)
 
 ## **Understanding Taxonomy in SharePoint**
 
@@ -177,6 +178,64 @@ The following code example shows how to add fields by using the JavaScript objec
 	   // Field added successfully. Display a confirmation as required.
 	}
 	var onAddFieldsFail = function () {
+	   // Alert the user that the new field was not created successfully.
+	}
+```
+
+## **Retrieving and Editing Site Columns**
+
+In some scenarios, you may want to edit site columns programmatically. 
+
+For example, you might want to provide a more informative description, or amend a list of choices, or change the way your columns are grouped. 
+
+You can use the following high-level process to retrieve and edit a site column:
+
+1. Retrieve the column from a field collection and cast it to an appropriate type.
+
+2. Update the properties of the field.
+
+3. Call the Update method on the field to persist your changes to the content database.
+
+The following code example shows how to retrieve and edit a site column in server-side code:
+
+```C#
+	var site = SPContext.Current.Site;
+	var web = site.RootWeb;
+	// Get the SPFieldCollection for the root web.
+	var fields = web.Fields;
+	// Retrieve the Production Type field and make changes.
+	var fieldProductionType = fields["Production Type"] as SPFieldChoice;
+	fieldProductionType.Choices.Clear();
+	fieldProductionType.Choices.Add("Phase 1 Trial");
+	fieldProductionType.Choices.Add("Phase 2 Trial");
+	fieldProductionType.Choices.Add("Phase 3 Trial");
+	fieldProductionType.Choices.Add("Production");
+	// Call the Update method.
+	// Specify false to prevent changes from being cascaded to list columns.
+	fieldProductionType.Update(false);
+```
+
+The process for updating site columns in client-side code is broadly similar to the server-side code process. The major difference is that you also need to manage the client context.
+
+The following code example shows how to retrieve and edit a site column by using the JavaScript object model:
+
+```JavaScript
+	var context;
+	var web;
+	var fields;
+	var updateField = function () {
+	   context = new SP.ClientContext.get_current();
+	   web = context.get_web();
+	   fields = web.get_fields();
+	   var fieldExpiryDate = context.castTo(fields.getInternalNameOrTitle("ProductionType"), SP.FieldChoice);
+	   var choices  = Array("Phase 1 Trial", "Phase 2 Trial", "Phase 3 Trial", "Production")
+	   fieldExpiryDate.set_choices(choices);
+	   context.ExecuteQueryAsync(onUpdateFieldSuccess, onUpdateFieldFail);
+	}
+	var onUpdateFieldSuccess = function () {
+	   // Field updated successfully. Display a confirmation as required.
+	}
+	var onUpdateFieldFail = function () {
 	   // Alert the user that the new field was not created successfully.
 	}
 ```
