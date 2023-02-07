@@ -60,7 +60,7 @@
     <None Include="Employee\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{baaf3f66-a4f7-47f6-bd53-c3c9925bdc73}</SharePointProjectItemId>
     </None>
-    <None Include="Features\Feature1\Feature1.feature">
+    <None Include="Features\VacationRequests\VacationRequests.feature">
       <FeatureId>{18092b3f-29c8-406c-9a17-c280c45d67b0}</FeatureId>
     </None>
     <None Include="key.snk" />
@@ -90,8 +90,8 @@
   <ItemGroup>
     <Content Include="ContosoDepartment\Elements.xml" />
     <Content Include="Employee\Elements.xml" />
-    <Content Include="Features\Feature1\Feature1.Template.xml">
-      <DependentUpon>Feature1.feature</DependentUpon>
+    <Content Include="Features\VacationRequests\VacationRequests.Template.xml">
+      <DependentUpon>VacationRequests.feature</DependentUpon>
     </Content>
     <Content Include="LineManager\Elements.xml" />
     <Content Include="VacationRequestStatus\Elements.xml" />
