@@ -85,6 +85,12 @@
     <None Include="VacationRequest\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{cbe8716a-513c-4a55-af93-b8ce4a1367ac}</SharePointProjectItemId>
     </None>
+    <None Include="VacationTracker\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{ca841dbe-c890-481e-a7b9-0c435fb6c294}</SharePointProjectItemId>
+    </None>
+    <None Include="VacationTracker\VacationTrackerInstance\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{f8442515-a690-453a-9e32-6c14009090fc}</SharePointProjectItemId>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -99,6 +105,9 @@
     <Content Include="VacationRequests\Schema.xml" />
     <Content Include="VacationRequests\VacationRequestsInstance\Elements.xml" />
     <Content Include="VacationRequest\Elements.xml" />
+    <Content Include="VacationTracker\Elements.xml" />
+    <Content Include="VacationTracker\Schema.xml" />
+    <Content Include="VacationTracker\VacationTrackerInstance\Elements.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
