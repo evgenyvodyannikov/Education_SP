@@ -65,7 +65,58 @@ namespace VacationRequestsEventReceiver
 
         public override void ItemUpdated(SPItemEventProperties properties)
         {
-            base.ItemUpdated(properties);
+            var status = properties.AfterProperties["VacationRequestStatus"].ToString();
+            // No action required unless the status has been set to "Approved".
+            if (!status.Equals("Approved"))
+                return;
+
+            using (var web = properties.OpenWeb())
+            {
+                // Get the duration of the vacation in days.
+                var item = properties.ListItem;
+                string strStartDate = item["StartDate"].ToString();
+                string strEndDate = item["_EndDate"].ToString();
+                var startDate = DateTime.Parse(strStartDate).Date;
+                var endDate = DateTime.Parse(strEndDate).Date;
+                TimeSpan span = endDate - startDate;
+                int vacationLength = span.Days;
+
+                // Get the SPUser instance for the employee.
+                var employeeFieldVal = new SPFieldUserValue(web, properties.AfterProperties["Employee"].ToString());
+                var employee = employeeFieldVal.User;
+
+                // Get the list item for the employee from the Vacation Tracker list.
+                var listVT = web.GetList("Lists/VacationTracker");
+                var query = new SPQuery();
+                query.Query = String.Format(@"
+		        <Where>
+		            <Eq>
+		                 <FieldRef Name=""Employee"" LookupId=""TRUE""></FieldRef>
+		                 <Value Type=""Integer"">{0}</Value>
+		            </Eq>
+		        </Where>", employee.ID);
+
+                var trackerItems = listVT.GetItems(query);
+                SPListItem trackerItem;
+                if (trackerItems.Count > 0)
+                {
+                    trackerItem = trackerItems[0];
+                }
+                else return;
+
+                // Update the remaining holiday entitlement in the Vacation Tracker list.
+                int daysRemaining;
+                int.TryParse(trackerItem["Days Remaining"].ToString(), out daysRemaining);
+                int balance = daysRemaining - vacationLength;
+                trackerItem["Days Remaining"] = balance;
+                trackerItem.Update();
+
+                // Update the vacation request status to "Booked".
+                item["Vacation Request Status"] = "Booked";
+                item.Update();
+            }
+
+
         }
     }
 }
