@@ -1,8 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<package dslVersion="1.0.0.0" 
-        Id="556382a1-d2a7-46d2-9535-aecb6b5f3f7c" 
-        solutionId="556382a1-d2a7-46d2-9535-aecb6b5f3f7c" 
-        xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel" 
-        name="VacationRequestsEventReceiver"
-        sharePointProductVersion="15.0">
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="556382a1-d2a7-46d2-9535-aecb6b5f3f7c" solutionId="556382a1-d2a7-46d2-9535-aecb6b5f3f7c" resetWebServer="false" sharePointProductVersion="15.0" name="VacationRequestsEventReceiver" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <features>
+    <featureReference itemId="a9457a62-9f8a-4e61-9864-056419bfabe6" />
+  </features>
 </package>

@@ -51,10 +51,16 @@
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Features\VacationEntitlementChecker\VacationEntitlementChecker.EventReceiver.cs">
+      <DependentUpon>VacationEntitlementChecker.feature</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VacationRequestEventReceiver.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Features\VacationEntitlementChecker\VacationEntitlementChecker.feature">
+      <FeatureId>{a9457a62-9f8a-4e61-9864-056419bfabe6}</FeatureId>
+    </None>
     <None Include="key.snk" />
     <None Include="Package\Package.package">
       <PackageId>{556382a1-d2a7-46d2-9535-aecb6b5f3f7c}</PackageId>
@@ -63,8 +69,11 @@
       <DependentUpon>Package.package</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Features\" />
+    <Content Include="Features\VacationEntitlementChecker\VacationEntitlementChecker.Template.xml">
+      <DependentUpon>VacationEntitlementChecker.feature</DependentUpon>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

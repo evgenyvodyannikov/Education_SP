@@ -58,7 +58,7 @@ namespace VacationRequestsEventReceiver.Features.VacationEntitlementChecker
                         }
 
                         SPEventReceiverDefinition erd = vacationRequestCT.EventReceivers.Add();
-                        erd.Assembly = "VacationRequestsEventReceiver, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b8b5cfca861bb4cc";
+                        erd.Assembly = "VacationRequestsEventReceiver, Version=1.0.0.0, Culture=neutral, PublicKeyToken=68acf554a60d51f5";
                         erd.Class = "VacationRequestsEventReceiver.VacationRequestEventReceiver";
                         erd.Type = SPEventReceiverType.ItemAdding;
                         erd.Name = itemAddingName;
@@ -97,7 +97,7 @@ namespace VacationRequestsEventReceiver.Features.VacationEntitlementChecker
                         }
 
                         SPEventReceiverDefinition erd = vacationRequestCT.EventReceivers.Add();
-                        erd.Assembly = "VacationRequestsEventReceiver, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b8b5cfca861bb4cc";
+                        erd.Assembly = "VacationRequestsEventReceiver, Version=1.0.0.0, Culture=neutral, PublicKeyToken=68acf554a60d51f5";
                         erd.Class = "VacationRequestsEventReceiver.VacationRequestEventReceiver";
                         erd.Type = SPEventReceiverType.ItemUpdated;
                         erd.Name = itemUpdatedName;
