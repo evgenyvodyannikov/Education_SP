@@ -1,0 +1,3 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<feature deploymentPath="$SharePoint.Project.FileNameWithoutExtension$_$SharePoint.Feature.FileNameWithoutExtension$" title="VacationRequestsEventReceiver Feature1" dslVersion="1.0.0.0" Id="5ad9e94b-6dc2-4ecc-a2c4-15e11808d13a" featureId="5ad9e94b-6dc2-4ecc-a2c4-15e11808d13a" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/FeatureModel">
+</feature>
