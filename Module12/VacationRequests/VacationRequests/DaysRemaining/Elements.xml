@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">  
+  <Field
+       ID="{f413d5cd-0363-46ac-b4eb-ae6faec4d43d}"
+       Name="DaysRemaining"
+       DisplayName="Days Remaining"
+       Type="Integer"
+       Required="TRUE"
+       Group="Contoso Columns">
+  </Field>
+</Elements>

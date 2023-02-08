@@ -57,8 +57,14 @@
     <None Include="ContosoDepartment\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{e8843e5f-acaa-4b52-9682-b74c17999876}</SharePointProjectItemId>
     </None>
+    <None Include="DaysRemaining\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{0c9a9a01-ef5b-4522-8306-22260a971e74}</SharePointProjectItemId>
+    </None>
     <None Include="Employee\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{baaf3f66-a4f7-47f6-bd53-c3c9925bdc73}</SharePointProjectItemId>
+    </None>
+    <None Include="Features\VacationTracker\VacationTracker.feature">
+      <FeatureId>{b4de329a-5ab6-4b6c-8a79-82d5552e5554}</FeatureId>
     </None>
     <None Include="Features\VacationRequests\VacationRequests.feature">
       <FeatureId>{18092b3f-29c8-406c-9a17-c280c45d67b0}</FeatureId>
@@ -95,7 +101,11 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="ContosoDepartment\Elements.xml" />
+    <Content Include="DaysRemaining\Elements.xml" />
     <Content Include="Employee\Elements.xml" />
+    <Content Include="Features\VacationTracker\VacationTracker.Template.xml">
+      <DependentUpon>VacationTracker.feature</DependentUpon>
+    </Content>
     <Content Include="Features\VacationRequests\VacationRequests.Template.xml">
       <DependentUpon>VacationRequests.feature</DependentUpon>
     </Content>

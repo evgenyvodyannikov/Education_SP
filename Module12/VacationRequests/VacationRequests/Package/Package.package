@@ -2,5 +2,6 @@
 <package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="72b4b1b1-36f6-4342-9116-d98bb6f0fbd8" solutionId="72b4b1b1-36f6-4342-9116-d98bb6f0fbd8" resetWebServer="false" sharePointProductVersion="15.0" name="VacationRequests" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
   <features>
     <featureReference itemId="18092b3f-29c8-406c-9a17-c280c45d67b0" />
+    <featureReference itemId="b4de329a-5ab6-4b6c-8a79-82d5552e5554" />
   </features>
 </package>
