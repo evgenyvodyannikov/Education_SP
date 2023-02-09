@@ -15,6 +15,7 @@
 11. [Provisioning Sites](#provisioning-sites)
 12. [Host-named Site Collections](#host-named-site-collections)
 13. [Backing-up Site Collections](#backing-up-site-collections)
+14. [Managing the Site Life Cycle](#managing-the-site-life-cycle)
 
 ## **Introduction to List Definitions**
 
@@ -475,5 +476,50 @@ The following code example shows how to backup and restore a site collection.
 	    siteCollection.Backup(site.Url, @"C:\Backups\SiteBackup.backup", false);
 	    // Restore the site collection (overwrite the existing site collection).
 	    siteCollection.Restore(site.Url, @"C:\Backups\SiteBackup.backup", true);
+	}
+```
+
+## **Managing the Site Life Cycle**
+
+A site raises a number of events that you can handle during the site's life cycle. You can handle these events to customize the site, or the site's life cycle.
+
+For example, you might set security permissions when a site is created, or you might save a backup before a site or site collection is deleted. 
+
+Events you can handle include:
+
+- **WebAdding**. Occurs when a new site is being created.
+
+- **WebProvisioned**. Occurs after a new site has been created.
+
+- **WebMoving**. Occurs before a site moves.
+
+- **WebMoved**. Occurs after a site moves.
+
+- **WebDeleting**. Occurs before a site is deleted.
+
+- **WebDeleted**. Occurs after a site is deleted.
+
+- **SiteDeleted**. Occurs after a site collection is deleted.
+
+**Inactive sites and site deletion**
+
+In addition to handling life cycle events, you may want to also alter the site life cycle. A common requirement is to delete site collections that are inactive. 
+
+To identify inactive site collections, you can use the **LastContentModifiedDate** property of the SPSite class. This property returns a DateTime object in UTC format identifying the last time content on the site collection was modified. 
+
+You can compare this against the current date to establish how long has passed since the last change, and use your logic to determine whether the site collection is inactive. 
+
+If you decide that you want to delete a site or site collection, both the **SPWeb** and **SPSite** classes expose a **Delete** method. If you call the Delete method, you should still **dispose** the object reference after you delete the object. If you call the Delete method on a site that is the root site of the site collection, the Delete method will throw an exception. You must delete the site collection to delete the root site.
+
+The following code example shows how to check whether a site collection is inactive, and if it is inactive, delete the site collection. 
+
+```C#
+	using(SPSite site = new SPSite("http://inactive.contoso.com"))
+	{
+	    int daysSinceLastChange = (DateTime.UtcNow - site.LastContentModifiedDate).Days;
+	    if(daysSinceLastChange > 60)
+	    {
+	        site.Delete();
+	    }
 	}
 ```
