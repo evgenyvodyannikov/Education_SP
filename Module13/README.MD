@@ -6,6 +6,7 @@
 2. [Developing List Definitions](#developing-list-definitions)
 3. [The Visual Studio List Designer](#the-visual-studio-list-designer)
 4. [Provisioning Lists](#provisioning-lists)
+5. [Introduction to Site Definitions and Web Templates](#introduction-to-site-definitions-and-web-templates)
 
 ## **Introduction to List Definitions**
 
@@ -127,3 +128,21 @@ The following code example shows how to create a list instance by using code.
 	    web.Update();
 	}
 ```
+
+## **Introduction to Site Definitions and Web Templates**
+
+Site definitions provide the most powerful mechanism for developing custom sites. With a custom site definition, you can customize the pages, lists, and Features included in a site, and then deploy multiple copies within your organization. In addition, you can include content in a site definition. 
+
+Site definitions do not have any dependencies on other site definitions and define the entire contents of a site at the point of creation. 
+
+You can fully customize a site definition; however, you must either create a site definition by using declarative markup, or by using code. This can make developing a site definition too time consuming for some projects. 
+
+Another issue with site definitions is that you must deploy them to the file system on the web server. This means that they cannot be used in sandboxed solutions, or with SharePoint Online; however, they are cached by the IIS worker process, which results in better performance compared to alternatives. 
+
+Web templates provide an alternative to a site definition, and are simpler to develop. You create a web template by saving an existing site as a template. You can save a site as a web template programmatically, or by using the SharePoint UI. 
+
+A significant difference when using a web template is that a web template does not define everything that is required to recreate a site; instead, it stores only differences between a base site definition and the site when it was saved. To create a web template, you can use the **SaveAsTemplate** method of the **SPWeb** class. 
+
+If you create a site by using a web template, you must have the corresponding site definition installed in your SharePoint farm. If the original site definition is missing, you cannot use the web template. Another difference is how web templates are stored and cached. 
+
+Site definitions are stored on the file system, and are cached by the IIS worker process; whereas, web templates are stored in the content database. When you use a web template, it must be retrieved from the database. This is less efficient than a site definition. 
