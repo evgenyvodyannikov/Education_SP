@@ -8,6 +8,7 @@
 4. [Provisioning Lists](#provisioning-lists)
 5. [Introduction to Site Definitions and Web Templates](#introduction-to-site-definitions-and-web-templates)
 6. [Developing a Site Definition Declaratively](#developing-a-site-definition-declaratively)
+7. [Deploying Site Definitions](#deploying-site-definitions)
 
 ## **Introduction to List Definitions**
 
@@ -233,3 +234,17 @@ The following code example shows the main components of an Onet.xml file.
 **Assemblies**
 
 In addition to files in the SiteTemplates folder, and the Webtemp*.xml file, you may need to include assemblies that include compiled code required by your site definition. If you need to include any compiled code, you should deploy the assemblies to the global assembly cache. A common reason to include an assembly with a site definition is to include a class to customize the provisioning process for a site definition.
+
+## **Deploying Site Definitions**
+
+You must deploy site definitions to the file system on your SharePoint servers. You must deploy the files on every server; you should use a SharePoint farm solution to make sure your site definition is deployed to every server correctly. 
+
+A site definition should be considered in three parts for deployment: the Webtemp*.xml file, any assemblies, and then everything else (which will include the Onet.xml file). The following list describes how you should deploy each of these three parts:
+
+- Webtemp*.xml file. You must add the Webtemp*.xml file to the 15\TEMPLATE\LCID\XML folder. You must replace LCID with the locale ID for your locale. For U.S. English, this is 1033. You should add the files as an additional file, and never alter or overwrite any of the standard Webtemp*.xml files. You can add any text after webtemp to make your file name unique. 
+
+- Assemblies. You should deploy your signed compiled assemblies to the global assembly cache.
+
+- Everything else. You should add your other files to a folder in the 15\TEMPLATES\SiteTemplates folder. The name of the folder must match the value of the Name attribute of the Template element in the Webtemp*.xml file. You can include any files needed (such as ".aspx" page files) in this folder. You should add your onet.xml file in an XML subfolder. 
+
+**Note:** When you add a site definition to a solution in Visual Studio, Visual Studio adds a Feature to the project—you do not need to include this Feature if you are only developing a site definition, so you can remove this from the project. Visual Studio also compiles an assembly whenever you build the project. If you have not added any code files to your solution (and so the assembly is empty), you can prevent Visual Studio from including the assembly in the SharePoint solution by changing the Include Assembly in Package project property. 
