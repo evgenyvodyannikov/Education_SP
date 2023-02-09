@@ -15,3 +15,4 @@
 ## 10. Publishing and Distributing Apps
 ## 11. Automating Business Processes
 ## 12. [Managing Taxonomy](https://github.com/evgenyvodyannikov/Education_SP/tree/master/Module12/README.MD)
+## 13. [Managing Custom Components and Site Life Cycles](https://github.com/evgenyvodyannikov/Education_SP/tree/master/Module13/README.MD)
