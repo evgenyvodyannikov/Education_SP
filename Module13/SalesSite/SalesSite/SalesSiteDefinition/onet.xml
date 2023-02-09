@@ -15,6 +15,7 @@
       <SiteFeatures>
       </SiteFeatures>
       <WebFeatures>
+        <Feature Name="Sales Leads List" ID="90480f75-ea3e-4c36-9817-2e8612728428" />
       </WebFeatures>
       <Modules>
         <Module Name="DefaultBlank" />
