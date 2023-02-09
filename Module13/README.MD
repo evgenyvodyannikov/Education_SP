@@ -5,6 +5,7 @@
 1. [Introduction to List Definitions](#introduction-to-list-definitions)
 2. [Developing List Definitions](#developing-list-definitions)
 3. [The Visual Studio List Designer](#the-visual-studio-list-designer)
+4. [Provisioning Lists](#provisioning-lists)
 
 ## **Introduction to List Definitions**
 
@@ -84,3 +85,45 @@ After you add a list definition to your solution, you can use the list designer 
 - Specify the default list tile, URL, and description, as well as whether the list should be visible on the Quick Launch menu, and whether the list definition should be visible in the browser. 
 
 Visual Studio will automatically update the Schema.xml, manifest file, and Feature with the changes you make. This significantly reduces development time and means that you only need to edit the XML files if you need to make more advanced customizations, for example to configure custom forms.
+
+## **Provisioning Lists**
+
+In addition to deploying lists by using the SharePoint interface, you can also deploy list instances by using either a **Feature** or the **SharePoint object model**. 
+
+If you choose to add a new list instance by using a Feature, you must create an Elements.xml file that contains a ListInstance element. You should provide a title, description, URL, and template type. 
+
+The value for the TemplateType attribute should be the value of the Type attribute of the ListTemplate element in the list definition deployment Feature. 
+
+Standard list definitions provided out-of-the-box with SharePoint are installed by using Features. You can find the ID of built-in lists by viewing the XML relevant Manifest.xml file. If you use Visual Studio to create a list instance Feature, you can select from a list of installed list definitions (including custom list definitions) that will populate the TemplateType field automatically. 
+
+The following code example shows how to create a list instance by using a Feature.
+
+```XML
+	<Elements xmlns="“"http://schemas.microsoft.com/sharepoint/"”">
+	    <ListInstance Title="Products" TemplateType="10001"
+	        Description="A list to store product information."
+	        Url="Lists/Products">
+	    </ListInstance>
+	</Elements>
+```
+
+Alternatively, you can add a new list by writing code. To add a new list, you use the Add method on the Lists collection property of the **SPWeb** class. When you write code to add a list, for custom list definition, use an instance of the **SPListTemplate** class to identify the list definition, or for out-of-the-box template, you can use the **SPListTemplateType** enumeration to select a list definition. 
+
+The following code example shows how to create a list instance by using code.
+
+```C#
+	using(SPWeb web = site.RootWeb)
+	{
+	    // Obtain a reference to the list definition by using the ListTemplates collection, and by specifying the 
+	    // template name.
+	    SPListTemplate template = web.ListsTemplates[“ProductListTemplate”];
+	    // Create a new instance of the list definition.
+	    Guid productsList = web.Lists.Add(“Products”, “A list to store product information.”, template);
+	    // Create a new instance of the Announcements list definition by using the SPListTemplateType 
+	    // enumeration to identify the list definition.
+	    Guid announcementsList = web.Lists.Add(“Announcements”,  “A list to store announcements.”, 
+	        SPListTemplateType.Announcements);
+	    // Call the Update method on the SPWeb instance.
+	    web.Update();
+	}
+```
