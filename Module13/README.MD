@@ -1,4 +1,4 @@
-# Module 12 - Managing Custom Components and Site Life Cycles
+# Module 13 - Managing Custom Components and Site Life Cycles
 
 ## **Topics**:
 
@@ -9,6 +9,7 @@
 5. [Introduction to Site Definitions and Web Templates](#introduction-to-site-definitions-and-web-templates)
 6. [Developing a Site Definition Declaratively](#developing-a-site-definition-declaratively)
 7. [Deploying Site Definitions](#deploying-site-definitions)
+8. [Using Code to Provision a Custom Site](#using-code-to-provision-a-custom-site)
 
 ## **Introduction to List Definitions**
 
@@ -248,3 +249,63 @@ A site definition should be considered in three parts for deployment: the Webtem
 - Everything else. You should add your other files to a folder in the 15\TEMPLATES\SiteTemplates folder. The name of the folder must match the value of the Name attribute of the Template element in the Webtemp*.xml file. You can include any files needed (such as ".aspx" page files) in this folder. You should add your onet.xml file in an XML subfolder. 
 
 **Note:** When you add a site definition to a solution in Visual Studio, Visual Studio adds a Feature to the project—you do not need to include this Feature if you are only developing a site definition, so you can remove this from the project. Visual Studio also compiles an assembly whenever you build the project. If you have not added any code files to your solution (and so the assembly is empty), you can prevent Visual Studio from including the assembly in the SharePoint solution by changing the Include Assembly in Package project property. 
+
+## **Using Code to Provision a Custom Site**
+
+In addition to deploying a custom site definition, you can also deploy code to provision new sites. You can deploy a site by using code in addition to declarative markup, or you can write code to provision a site.
+
+To use code to provision a custom site, you must create a class that inherits from the **SPWebProvisioningProvider** class. You must then override the Provision method with your custom logic to provision the new site. 
+
+The Provision method accepts a **SPWebProvisioningProperties** parameter. You can use the properties of this parameter to obtain a reference to the new **SPWeb** object. When you use code to provision a site, the site does not have any initial state. 
+
+You can use the **ApplyWebTemplate** method of the **SPWeb** object to apply another site template as an initial state, for example the blank site template (STS#0). In addition, you can use the Data property of the **SPWebProvisioningProperties** parameter to retrieve a string value that is defined in the site definition configuration (Webtemp*.xml) file. 
+
+The following code example shows how to provision a site by using code.
+
+```C#
+	public class ContosoSite : SPWebProvisioningProvider
+	{
+	    public override Provision(SPWebProvisioningProperties props)
+	    {        
+	        // Obtain a reference to the new SPWeb object.
+	        SPWeb newWeb = props.Web;
+	        // Apply the blank site template.
+	        newWeb.ApplyWbTemplate(“STS#1”);
+	        // Retrieve configuration data.
+	        string data = props.Data;
+	        // Add lists, libraries, Features, pages, and other components to the site.
+	        // web.Lists.Add(…);
+	        // web.Features.Add(…);
+	    }
+	}
+```
+
+If you develop a custom site provisioning provider, you do not need to deploy a folder to the **SiteTemplates** folder, and you do not need to create an **Onet.xml** file; however, you must make some changes to the **Webtemp*.xml** file. In your Webtemp*.xml file, for each configuration you must add the **ProvisionAssembly**, **ProvisionClass**, and optionally **ProvisionData** attributes. 
+
+The **ProvisionAssembly** attribute should contain the strong name key for your assembly.
+
+The **ProvisionClass** attribute should contain the fully qualified class name for the provisioning provider. 
+
+The **ProvisionData** attribute is optional. If you choose to provide this attribute, the value of this attribute is available in the Provision method by using the Data property of the parameter. Because this attribute only enables you to specify a single string value, and if you need to pass significant configuration data to your custom provisioning class, you may consider storing a file name in the ProvisionData attribute, and then create a corresponding configuration file for use by your custom provisioning class. 
+
+You should deploy the assembly containing your custom site provisioning provider to the global assembly cache. 
+
+The following code example shows a Webtemp*.xml file that specifies a custom provisioning provider.
+
+```XML
+	<Templates xmlns:ows="Microsoft.SharePoint">
+	    <Template Name="ContosoSite" ID="12001">
+	        <Configuration ID="0"
+	            Title="Contoso Research Site"
+	            Hidden="FALSE"
+	            ImageUrl="/_layouts/15/ContosoSiteImage.png"
+	            Description="This is a custom site template for Contoso research projects."
+	            DisplayCategory="Contoso Sites"
+	            ProvisionAssembly=
+	                "ContosoAssembly, Version=1.0.0.0, Culture=neutral, PublicKeyToken=abcde1234567890a"
+	            ProvisionClass="Contoso.ContosoSite"
+	            ProvisionData="ResearchConfiguration.xml"
+	            RootWebOnly="FALSE"
+	    <Template>
+	</Templates>
+```
