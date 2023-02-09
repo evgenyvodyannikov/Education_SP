@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package dslVersion="1.0.0.0" 
+        Id="aff459a1-1f17-4d64-a210-f986a137d35c" 
+        solutionId="aff459a1-1f17-4d64-a210-f986a137d35c" 
+        xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel" 
+        name="SiteArchiveFeature"
+        sharePointProductVersion="15.0">
+</package>
