@@ -11,6 +11,7 @@
 7. [Deploying Site Definitions](#deploying-site-definitions)
 8. [Using Code to Provision a Custom Site](#using-code-to-provision-a-custom-site)
 9. [Feature Stapling](#feature-stapling)
+10. [Understanding the Site Hierarchy](#understanding-the-site-hierarchy)
 
 ## **Introduction to List Definitions**
 
@@ -348,3 +349,19 @@ The following code example shows how to staple a Feature to the Team Site site d
 A Feature stapler only impacts sites that are created within the scope at which the Feature stapler is activated. This enables you to add a Feature to a site definition selectively. You can choose the Farm, Web Application, or Site scope for the Feature stapler. The stapled Feature should have either the Site or Web scope. 
 
 After you deploy the stapled and stapler Features, SharePoint will add the stapled Feature to any new sites that are created, within the activation scope of the stapler Feature, and that are based on the site definition. SharePoint will not change any existing sites. If you need to add a Feature to existing sites that are based on a particular site definition, you must either: write code, use Windows PowerShell, or use the SharePoint interface, to add the new Feature to those sites.
+
+## **Understanding the Site Hierarchy**
+
+All SharePoint sites form part of the SharePoint site hierarchy. If you start with the root of the hierarchy, you can obtain references to any site in the farm by using collection classes that expose each item in the hierarchy:
+
+1. The **SPFarm** class represents the farm and is the root of the hierarchy. The SPFarm class exposes the Services property of type **SPServiceCollection**. 
+
+2. The **SPService** class represents services within the farm. The most common services are the content service and the administration service, both represented by the **SPWebService** class (the SPWebService class derives from the SPService class). The SPWebService class exposes the WebApplications property of type **SPWebApplicationCollection**. 
+
+3. The **SPWebApplication** class represents web applications. A typical SharePoint farm will have many web applications. This will include web applications for the Central Administration site, for SharePoint sites, and for service applications. The **SPWebApplication** class exposes the Sites property of type **SPSiteCollection**.
+
+4. The **SPSite** class represents site collections. The number of site collections in your farm will depend on your deployment requirements. The SPSite class exposes the AllWebs property of type **SPWebCollection**.
+
+5. The **SPWeb** class represents sites. Like site collections, the number of sites in your farm will depend on your deployment. 
+
+Although the **SPWeb** class is the bottom component in the site hierarchy, it does not represent the bottom of the SharePoint hierarchy. For example, an SPWeb instance contains a collection of lists, which in turn contain a collection of list items, each with a collection of fields, and a collection of attachments. 
