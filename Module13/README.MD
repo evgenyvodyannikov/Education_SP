@@ -7,6 +7,7 @@
 3. [The Visual Studio List Designer](#the-visual-studio-list-designer)
 4. [Provisioning Lists](#provisioning-lists)
 5. [Introduction to Site Definitions and Web Templates](#introduction-to-site-definitions-and-web-templates)
+6. [Developing a Site Definition Declaratively](#developing-a-site-definition-declaratively)
 
 ## **Introduction to List Definitions**
 
@@ -146,3 +147,89 @@ A significant difference when using a web template is that a web template does n
 If you create a site by using a web template, you must have the corresponding site definition installed in your SharePoint farm. If the original site definition is missing, you cannot use the web template. Another difference is how web templates are stored and cached. 
 
 Site definitions are stored on the file system, and are cached by the IIS worker process; whereas, web templates are stored in the content database. When you use a web template, it must be retrieved from the database. This is less efficient than a site definition. 
+
+## **Developing a Site Definition Declaratively**
+
+A declarative site definition contains two main components, a **Webtemp*.xml** file and a **template folder** that contains an **Onet.xml** file. Although you may (and usually will) include other files with your site definition, all declarative site definitions must contain these files. 
+
+**Webtemp*.xml file**
+
+SharePoint uses **Webtemp*.xml** files to identify site definitions that are available on the farm. You can include multiple site definitions in a Webtemp*.xml file, and each site definition can include multiple configurations. Webtemp*.xml files are stored in the 15\TEMPLATE\LCID\XML folder (where LCID is the locale ID; for example, 1033 for U.S. English). 
+
+Every Webtemp*.xml file must have a unique name, and you should neither overwrite nor edit any of the out-of-the-box Webtemp*.xml files. You can add any value in place of the * in the file name, but the file name must start with webtemp; for example, webtemp123.xml and webtemp_ab.xml are both valid file names. There is no link between the name of the Webtemp*.xml file and the corresponding site definition. 
+
+The Webtemp*.xml file contains a root **Templates element**, which contains a set of Template elements. You should add one Template element per site definition. The Template element has a Name attribute and an ID attribute. Both of these attributes must be unique in your farm. 
+
+The ID should be an integer; you should use a number above 10000 to avoid values that are used by SharePoint Foundation site definitions. 
+
+The value of the Name attribute must be a string value, and you must use this as the name of the folder that contains the Onet.xml file. 
+
+A Template element should contain one or more **Configuration elements**. You use the properties of the configuration element to determine how the site definition appears in the user interface. When you create an instance of a site definition, you must make reference to both the Name of the template (specified at the Template element level) and the ID of the configuration (specified at the Configuration element level). The ID of the configuration is an integer, and each Configuration element must have a unique configuration value; however, these do not need to be unique across the template; usually, your first configuration will have the ID 0. 
+
+The following code example shows a Webtemp*.xml file. 
+
+```XML
+	<Templates>
+	    <Template Name="ContosoSiteDefinition" ID="12000">
+	        <Configuration ID="0"
+	            Title="Contoso Support Team Site {Site definition title used in the SharePoint interface}"
+	            Hidden="FALSE {Used to determine whether to display the definition in the interface}"
+	            ImageUrl="{Server relative URL for a thumbnail image which represents the site definition}"
+	            Description="Support team site definition description {Description of the definition for the interface}"
+	            DisplayCategory="Contoso Sites {Category in which this site definition should be included}"
+	    </Template>
+	</Template>
+```
+
+**Template folder and Onet.xml file**
+
+Although the Webtemp*.xml file is important for SharePoint to identify available site definitions, it does not contain any detail of what each site should include. 
+
+You must create a folder in the 15\TEMPLATES\SiteTemplates folder to store the files used by your site definition. You must name the folder the same as the value of the Name attribute of the Template element. You should add any files you need for your site definition to this folder; for example, you should include any ".aspx" webpages and any images to this folder. 
+
+You can create subfolders and organize your file as appropriate.
+The folder must contain a subfolder named XML, which must contain an XML file named Onet.xml. This file defines the Features, lists, pages, and so on, that are included in each configuration of your site definition. Some settings defined in the site definition are common across all configurations of the site definition, whereas others are unique to individual configurations. 
+
+By creating multiple configurations of a site definition, you can create site definitions that are easier to maintain than developing a new site definition for each configuration (for example, if you need to specify an email footer, you only need to specify this once rather than multiple times), but with multiple site definitions, you have more control over each site definition. 
+
+You define configurations by including Configuration elements in the Onet.xml file. The ID of each of these configurations must match the ID of a configuration specified in the Webtemp*.xml file. 
+
+The following code example shows the main components of an Onet.xml file.
+
+```XML
+	<Project xmlns="http://schemas.microsoft.com/sharepoint/"  Title="ContosoSiteDefinition">
+	    <NavBars>
+	        <!-- Add NavBar and NavBarLink elements here to add navigation bars and links to your site. -->
+	    </NavBars>
+	    <Configurations>
+	        <!-- Add a Configuration element for each configuration defined in the webtemp*.xml file here. -->
+	        <Configuration ID="0" Title="SalesSiteDefintion">
+	            <Lists> 
+	                <!-- Add lists to include in this configuration here. -->
+	            </Lists>
+	            <SiteFeatures> 
+	                <!-- Add site collection Features to include in this configuration here. -->
+	            </SiteFeatures>
+	            <WebFeatures> 
+	                <!-- Add site Features to include in this configuration here. -->
+	            </WebFeatures>
+	            <Modules> 
+	                <!-- Add modules to include in this configuration here. -->
+	            </Modules>
+	        </Configuration>
+	    </Configurations>
+	    <Modules>
+	        <!-- Add Module elements here, for example to include pages or files in your site definition. --> 
+	    </Modules>
+	    <Components>
+	        <!-- Add custom components such as an external security provider here. -->
+	    </Components>
+	    <ServerEmailFooter>
+	        <!-- Specify the server email footer here. -->
+	    </ServerEmailFooter>
+	</Project>
+```
+
+**Assemblies**
+
+In addition to files in the SiteTemplates folder, and the Webtemp*.xml file, you may need to include assemblies that include compiled code required by your site definition. If you need to include any compiled code, you should deploy the assemblies to the global assembly cache. A common reason to include an assembly with a site definition is to include a class to customize the provisioning process for a site definition.
