@@ -14,6 +14,7 @@
 10. [Understanding the Site Hierarchy](#understanding-the-site-hierarchy)
 11. [Provisioning Sites](#provisioning-sites)
 12. [Host-named Site Collections](#host-named-site-collections)
+13. [Backing-up Site Collections](#backing-up-site-collections)
 
 ## **Introduction to List Definitions**
 
@@ -450,4 +451,29 @@ The following code example shows how to use code to create a new host-named site
 	    null, // Secondary site collection administrator display name
 	    null, // Secondary site collection administrator email address 
 	    true); // True if this is a host-named site collection, false if this is a path based site collection
+```
+
+## **Backing-up Site Collections**
+
+Backups are usually the domain of IT professionals, and you should always have a plan to recover the entire farm in the event of a disaster. 
+
+SharePoint provides out-of-the-box functionality to back up the farm; however, you may want to extend that functionality, or you may need to back up components before making changes, for example if there is a risk of failure, or if you need to maintain the data for archival. 
+
+The SharePoint object model includes the **Backup** and **Restore** methods of the **SPSiteCollection** class.
+
+When you invoke these methods, you must provide the **URL** of the site collection that you are either backing up or restoring, the file name and path for the backup on the server file system, and a Boolean indicating whether the process should overwrite either the existing file for a backup or the existing site collection for a restore. 
+
+The following code example shows how to backup and restore a site collection. 
+
+```C#
+	using(SPSite site = new SPSite("http://sales.contoso.com"))
+	{
+	    // Obtain a reference to the SPSiteCollection which contains this SPSite.
+	    // The SPSiteCollection is exposed as a property of the current SPSite instance's parent web application.
+	    SPSitemCollection siteCollection = site.WebApplication.Sites;
+	    // Backup the site collection.
+	    siteCollection.Backup(site.Url, @"C:\Backups\SiteBackup.backup", false);
+	    // Restore the site collection (overwrite the existing site collection).
+	    siteCollection.Restore(site.Url, @"C:\Backups\SiteBackup.backup", true);
+	}
 ```
