@@ -10,6 +10,7 @@
 6. [Developing a Site Definition Declaratively](#developing-a-site-definition-declaratively)
 7. [Deploying Site Definitions](#deploying-site-definitions)
 8. [Using Code to Provision a Custom Site](#using-code-to-provision-a-custom-site)
+9. [Feature Stapling](#feature-stapling)
 
 ## **Introduction to List Definitions**
 
@@ -309,3 +310,41 @@ The following code example shows a Webtemp*.xml file that specifies a custom pro
 	    <Template>
 	</Templates>
 ```
+
+## **Feature Stapling**
+
+A common requirement is to add a new Feature to a site definition. One option is to create a new site definition that includes the Feature. If an existing site definition already fulfills the remainder of your requirements, developing a new site definition is likely to introduce duplication and introduces risks of errors being introduced if a site definition is updated. 
+
+In addition, you would need to communicate to your administrators that they should use the new site definition. Your administrators may continue to use the existing or out-of-the-box site definitions despite your best efforts. 
+
+Another option is to update an existing site definition to include the Feature; however, there are problems with this solution:
+
+- You must not change out-of-the-box site definitions.
+
+- If you update an existing custom site definition, you may break any existing sites that use that site definition. 
+
+- You may need to add a Feature to a site definition only for sites in a particular site collection or web application.
+
+Feature stapling provides an alternative approach. You can **use Feature stapling** to **add a Feature to an existing site definition**. To add a Feature (the stapled Feature) to an existing site definition, you must create a new Feature (the stapler Feature). 
+
+The stapler Feature should contain an **Elements.xml** file that contains a **FeatureSiteTemplateAssociation** element. 
+
+The **FeatureSiteTemplateAssociation** element has two attributes that you must specify, the **Id** attribute, which should contain the ID of the stapled Feature, and the **TemplateName** attribute, which should contain the name and configuration of the site definition to which the stapled Feature should be added in the format SiteName#ConfigurationId. 
+
+To staple more than one Feature, to a site definition, or to staple the Feature to more than one site definition, you can add additional **FeatureSiteTemplateAssociation** elements. 
+
+The following code example shows how to staple a Feature to the Team Site site definition.
+
+```XML
+	<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+	    <FeatureSiteTemplateAssociation 
+	        Id="3E00ABF6-1301-4698-9BD1-5500725000F0"
+	        TemplateName="STS#0"
+	</Elements>
+```
+
+**Feature stapling scope**
+
+A Feature stapler only impacts sites that are created within the scope at which the Feature stapler is activated. This enables you to add a Feature to a site definition selectively. You can choose the Farm, Web Application, or Site scope for the Feature stapler. The stapled Feature should have either the Site or Web scope. 
+
+After you deploy the stapled and stapler Features, SharePoint will add the stapled Feature to any new sites that are created, within the activation scope of the stapler Feature, and that are based on the site definition. SharePoint will not change any existing sites. If you need to add a Feature to existing sites that are based on a particular site definition, you must either: write code, use Windows PowerShell, or use the SharePoint interface, to add the new Feature to those sites.
