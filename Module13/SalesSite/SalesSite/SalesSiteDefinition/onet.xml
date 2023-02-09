@@ -1,10 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Title="SalesSiteDefinition" Revision="2" ListDir="" xmlns:ows="Microsoft SharePoint" xmlns="http://schemas.microsoft.com/sharepoint/">
   <NavBars>
+    <NavBar ID="1002" Name="$Resources:core,category_Top;">
+      <NavBarLink Name="Global Sales Site" Url="http://sales.contoso.com" />
+      <NavBarLink Name="Contoso Home Page" Url="http://www.contoso.com" />
+    </NavBar>
   </NavBars>
   <Configurations>
     <Configuration ID="0" Name="SalesSiteDefinition">
-      <Lists/>
+      <Lists>
+        <List Type="101" Url="Lists/Contractor20%Agreements" Title="Sales Documents" Description="Use this library to store documents related to specific sales opportunities." />
+        <List Type="101" Url="Lists/Contractor20%Agreements" Title="Sales Resources" Description="Use this library to store generic documents that all members of the sales team can use to support any sales opportunity." />
+      </Lists>
       <SiteFeatures>
       </SiteFeatures>
       <WebFeatures>
