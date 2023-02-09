@@ -55,6 +55,12 @@
     <Compile Include="SalesWebDeletingReceiver\SalesWebDeletingReceiver.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="FeatureStapler\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{a42dc14c-3b96-4b4c-b6a8-1a49e317efc3}</SharePointProjectItemId>
+    </None>
+    <None Include="Features\SalesSiteEventReceiverFeatureStapler\SalesSiteEventReceiverFeatureStapler.feature">
+      <FeatureId>{4bad37a0-8f3a-4483-a7c2-a7dbb7205436}</FeatureId>
+    </None>
     <None Include="Features\WebDeletingEventReceiver\WebDeletingEventReceiver.feature">
       <FeatureId>{b1dd9ff3-5809-419e-9e0e-110ed9d0802e}</FeatureId>
     </None>
@@ -71,6 +77,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="FeatureStapler\Elements.xml" />
+    <Content Include="Features\SalesSiteEventReceiverFeatureStapler\SalesSiteEventReceiverFeatureStapler.Template.xml">
+      <DependentUpon>SalesSiteEventReceiverFeatureStapler.feature</DependentUpon>
+    </Content>
     <Content Include="Features\WebDeletingEventReceiver\WebDeletingEventReceiver.Template.xml">
       <DependentUpon>WebDeletingEventReceiver.feature</DependentUpon>
     </Content>
