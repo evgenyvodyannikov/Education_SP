@@ -61,9 +61,17 @@
     <None Include="Package\Package.Template.xml">
       <DependentUpon>Package.package</DependentUpon>
     </None>
+    <None Include="SalesSiteDefinition\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{c3eb00da-c576-4922-8890-39f27b7638fc}</SharePointProjectItemId>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Features\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SalesSiteDefinition\default.aspx" />
+    <Content Include="SalesSiteDefinition\onet.xml" />
+    <Content Include="SalesSiteDefinition\webtemp_SalesSiteDefinition.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
