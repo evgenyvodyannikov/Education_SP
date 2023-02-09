@@ -13,8 +13,10 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderId="PlaceHolderMain" runat="server">
     <h1>
-        Добро пожаловать на настраиваемый сайт
-        SalesSiteDefinition
+        Welcome to the Sales Portal
     </h1>
+    <p>Use the <a href="Lists/Contactor20%Agreements">Sales Documents</a> library to store documents related to a specific sales opportunity.</p>
+    <p>Use the <a href="Lists/Contactor20%Agreements">Sales Resources</a> library to store generic documents to support any sales opportunity.</p>
+    <WebPartPages:WebPartZone runat="server" ID="Center" Title="Center" />
 </asp:Content>
 
