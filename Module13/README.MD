@@ -13,6 +13,7 @@
 9. [Feature Stapling](#feature-stapling)
 10. [Understanding the Site Hierarchy](#understanding-the-site-hierarchy)
 11. [Provisioning Sites](#provisioning-sites)
+12. [Host-named Site Collections](#host-named-site-collections)
 
 ## **Introduction to List Definitions**
 
@@ -401,4 +402,52 @@ The following code example shows how to create a new site collection and a new s
 	    "STS#0", // Template ID and configuration
 	    false, // Boolean to indicate if this site should have unique permissions from the parent site collection.
     false); // Boolean to indicate is SharePoint should covert the existing site if it already exists
+```
+
+## **Host-named Site Collections**
+
+When you create a web application, you can choose to specify a host header. If you specify a host header, SharePoint will create a website in IIS, with a binding to match that host header. 
+
+IIS routes requests that include that host header to that web application. If you do not specify a host header, the web application will handle all requests that are on the correct port and do not have a host header that matches another web application. 
+
+If you choose to create a web application with a host header, you can simply use a domain name or subdomains to access your site collections. For example, instead of **http://sharepoint.contoso.com/sites/sales**, you could create a web application with the host header **http://sales.contoso.com**. 
+
+All sites within the sales site collection would then exist within the `sales.contoso.com` domain (these are known as path-based sites). In addition, you can create path-based site collections under the root site on any managed path. 
+
+This provides flexibility for site collection URLs, but if you need to create several site collections, this may decrease performance and add complexity for administrators, because every site collection requires its own web application, which in turn results in an extra process running on the server. 
+
+With SharePoint 2013, you can create site collections with host names. In this situation, you create a single web application without specifying a host header. Typically, this will respond to requests on port 80.
+
+With this approach, IIS routes all requests to the same web application, and SharePoint uses the host header to determine which site collection to process. Host-named site collections are the recommended approach for creating site collections; however, under some circumstances, they are not viable or would add significant complexity. 
+
+For example, corporate security policies or data protection policies may require that site collections run in separate web applications. In these circumstances, a web application with a host header may be a better selection. 
+
+**Creating host-named site collections**
+
+You cannot create a host-named site collection by using the SharePoint user interface; you must use the object model, or Windows PowerShell. First, you must create a web application to host the site collections. When you create the web application, you should not provide a host header. When you create a new site collection, you must use an overload of the Add method that includes the **useHostHeaderAsSiteName** parameter, and you must supply the value true to identify that the URL you have provided includes a host name. 
+
+If you use Windows PowerShell to create a new host-named site collection, you should specify the **HostHeaderWebApplication** parameter to achieve the same result.
+
+The following code example shows how to use code to create a new host-named site collection.
+
+```C#
+	// Obtain a reference to the web application.
+	// Use localhost as the web application does not have a host header.
+	SPWebApplication webApplication = SPWebApplication.Lookup(new Uri("http://localhost"));
+	// Add a new site by specifying true for the useHostHeaderAsSiteName parameter of the Add method 
+	// overload. 
+	webApplication.Sites.Add(
+	    "http://team.contoso.com",  // URL
+	    "Team Site", // Site title
+	    "This is a team site.", // Site description
+	    1033, // Locale ID
+	    "STS#0", // Site definition ID
+	    @"CONTOSO\Administrator", // Primary site collection administration user name
+	    "Administrator", // Primary site administrator display name
+	    "administrator@contoso.com", // Primary site administrator email address
+	    null, // Secondary site collection administrator user name (null to only have a single site collection 
+	           // administrator)
+	    null, // Secondary site collection administrator display name
+	    null, // Secondary site collection administrator email address 
+	    true); // True if this is a host-named site collection, false if this is a path based site collection
 ```
