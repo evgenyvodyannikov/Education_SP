@@ -12,6 +12,7 @@
 8. [Using Code to Provision a Custom Site](#using-code-to-provision-a-custom-site)
 9. [Feature Stapling](#feature-stapling)
 10. [Understanding the Site Hierarchy](#understanding-the-site-hierarchy)
+11. [Provisioning Sites](#provisioning-sites)
 
 ## **Introduction to List Definitions**
 
@@ -365,3 +366,39 @@ All SharePoint sites form part of the SharePoint site hierarchy. If you start wi
 5. The **SPWeb** class represents sites. Like site collections, the number of sites in your farm will depend on your deployment. 
 
 Although the **SPWeb** class is the bottom component in the site hierarchy, it does not represent the bottom of the SharePoint hierarchy. For example, an SPWeb instance contains a collection of lists, which in turn contain a collection of list items, each with a collection of fields, and a collection of attachments. 
+
+## **Provisioning Sites**
+
+You can provision sites either by using Windows PowerShell, by using the SharePoint object model, or by using the SharePoint user interface. 
+
+You must provision all sites in a site collection, which must exist in a web application. You can obtain a reference to a web application in code by using the static Lookup method of the **SPWebApplication** class, and specify a valid **Uri** object as the parameter.
+
+If you need to obtain a reference to a web application on a local port, that does not specify a host header, you can use localhost as the hostname to obtain the reference. If you use localhost instead of the machine name, your code will work on all servers in your server farm, whereas if you specify a server name, you will need to either look up the server name each time, or recompile your code for each server on which it might run. 
+
+To provision a new site collection, you should use the **Add** method of the **SPSiteCollection** class. You can obtain a reference to an instance of the **SPSiteCollection** class by using the **Sites** property of an instance of the **SPWebApplication** class. Alternatively, you can use the **New-SPSite cmdlet** in Windows PowerShell to create a new site collection. 
+
+To provision a new site, you should use the **Add** method of the **SPWebCollection** class. You can obtain a reference to an instance of the **SPWebCollection** by using the **AllWebs** property of an instance of the **SPSite** class. 
+
+You can obtain a reference to an instance of the **SPSite** class by using the class constructor, specifying the **URL** of the root of the site collection as the parameter. Alternatively, you can use the **New-SPWeb cmdlet** in Windows PowerShell to create a new site. 
+
+The following code example shows how to create a new site collection and a new site by using the SharePoint object model. 
+
+```C#
+	// Obtain a reference to the parent web application.
+	SPWebApplication webApplication = SPWebApplication.Lookup(new Uri("http://sharepoint.contoso.com"));
+	// Create a new site collection at the root of the web application. 
+	SPSite rootSite = webApplication.Sites.Add("", @"CONTOSO\Administrator", "administrator@contoso.com");
+	// Create a new site collection by using a server relative path. Use null instead of providing an email address.
+	SPSite site = webApplication.Sites.Add("Sites/SubSiteCollection", @"CONTOSO\Administrator", null);
+	// Create a new site at a specified URL
+	SPWeb web = rootSite.AllWebs.Add("Sites/SalesSite");
+	// Create a new site by specifying a template and other initial properties.
+	SPWeb teamWeb = rootSite.AllWebs.Add(
+	    "TeamSite", // Site collection relative URL
+	    "Team Site", // Site title
+	    "Team site description", // Site description
+	    1033, // Locale ID
+	    "STS#0", // Template ID and configuration
+	    false, // Boolean to indicate if this site should have unique permissions from the parent site collection.
+    false); // Boolean to indicate is SharePoint should covert the existing site if it already exists
+```
