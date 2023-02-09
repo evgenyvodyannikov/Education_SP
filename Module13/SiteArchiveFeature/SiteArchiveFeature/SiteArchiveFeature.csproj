@@ -55,7 +55,7 @@
     <Compile Include="SalesWebDeletingReceiver\SalesWebDeletingReceiver.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Features\Feature1\Feature1.feature">
+    <None Include="Features\WebDeletingEventReceiver\WebDeletingEventReceiver.feature">
       <FeatureId>{b1dd9ff3-5809-419e-9e0e-110ed9d0802e}</FeatureId>
     </None>
     <None Include="key.snk" />
@@ -71,8 +71,8 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Features\Feature1\Feature1.Template.xml">
-      <DependentUpon>Feature1.feature</DependentUpon>
+    <Content Include="Features\WebDeletingEventReceiver\WebDeletingEventReceiver.Template.xml">
+      <DependentUpon>WebDeletingEventReceiver.feature</DependentUpon>
     </Content>
     <Content Include="SalesWebDeletingReceiver\Elements.xml" />
   </ItemGroup>
