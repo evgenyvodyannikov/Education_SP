@@ -4,6 +4,7 @@
 
 1. [Introduction to List Definitions](#introduction-to-list-definitions)
 2. [Developing List Definitions](#developing-list-definitions)
+3. [The Visual Studio List Designer](#the-visual-studio-list-designer)
 
 ## **Introduction to List Definitions**
 
@@ -59,3 +60,27 @@ The following code example shows the key elements of a list schema in a Schema.x
 	    </Metadata>
 	</List>
 ```
+
+## **The Visual Studio List Designer**
+
+Although you can develop a list definition manually, it is usually significantly easier and faster to use the list designer in Visual Studio. 
+
+The list designer enables you to select items from lists instead of writing XML code. This is usually significantly easier because you do not need to look up the GUIDs of content types or columns that you want to include in your list. 
+
+It is also usually faster because most developers can select options from a list faster than write XML code. Because the XML code is automatically generated, the risk of an error is also reduced. 
+
+To use the Visual Studio list designer, you must add a list to a Visual Studio SharePoint solution. Visual Studio will ask you what type of list you want to create. You can choose to add a list instance based on an existing list definition. 
+
+In this case, SharePoint will simply add the files necessary to deploy a list instance. You can choose to create a customizable list definition and list instance. In this case, Visual Studio will also add all of the necessary files to define a list, including the manifest file, and schema file. In addition, regardless of your selection, if your solution does not already contain a Feature, Visual Studio will add a Feature to deploy the list instance (and template if appropriate). 
+
+After you add a list definition to your solution, you can use the list designer to:
+
+- Add columns to the list definition.
+
+- Manage the content types associated with the list definition (you can select either content types that you have added to the same Visual Studio solution or content types that are already deployed to the development SharePoint site, you can).
+
+- Define views for the list definition, by simply selecting from the list of available columns to include in each view. 
+
+- Specify the default list tile, URL, and description, as well as whether the list should be visible on the Quick Launch menu, and whether the list definition should be visible in the browser. 
+
+Visual Studio will automatically update the Schema.xml, manifest file, and Feature with the changes you make. This significantly reduces development time and means that you only need to edit the XML files if you need to make more advanced customizations, for example to configure custom forms.
