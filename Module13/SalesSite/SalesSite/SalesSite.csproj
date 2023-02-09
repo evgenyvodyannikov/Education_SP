@@ -55,7 +55,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Features\Feature1\Feature1.feature">
+    <None Include="Features\SalesLeadsList\SalesLeadsList.feature">
       <FeatureId>{1fe43f5d-c62f-412d-9384-425ea1720359}</FeatureId>
     </None>
     <None Include="key.snk" />
@@ -77,8 +77,8 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Features\Feature1\Feature1.Template.xml">
-      <DependentUpon>Feature1.feature</DependentUpon>
+    <Content Include="Features\SalesLeadsList\SalesLeadsList.Template.xml">
+      <DependentUpon>SalesLeadsList.feature</DependentUpon>
     </Content>
     <Content Include="SalesLeads\Elements.xml" />
     <Content Include="SalesLeads\SalesLeadsInstance\Elements.xml" />
