@@ -14,7 +14,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{C1CDDADD-2546-481F-9697-4EA41081F2FC};{14822709-B5A1-4724-98CA-57A101D1B079};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SandboxedSolution>False</SandboxedSolution>
-    <IncludeAssemblyInPackage>False</IncludeAssemblyInPackage>
+    <IncludeAssemblyInPackage>True</IncludeAssemblyInPackage>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -55,6 +55,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Features\Feature1\Feature1.feature">
+      <FeatureId>{1fe43f5d-c62f-412d-9384-425ea1720359}</FeatureId>
+    </None>
     <None Include="key.snk" />
     <None Include="Package\Package.package">
       <PackageId>{8d6e4ea2-6f39-4efa-bf74-fe9f05a023ac}</PackageId>
@@ -62,14 +65,24 @@
     <None Include="Package\Package.Template.xml">
       <DependentUpon>Package.package</DependentUpon>
     </None>
+    <None Include="SalesLeads\SalesLeadsInstance\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{adf07bfc-3147-47d7-80be-c1e3da3315b6}</SharePointProjectItemId>
+    </None>
+    <None Include="SalesLeads\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{0d44daea-4d8d-4d93-8ce8-b8bef3927378}</SharePointProjectItemId>
+    </None>
     <None Include="SalesSiteDefinition\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{c3eb00da-c576-4922-8890-39f27b7638fc}</SharePointProjectItemId>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Features\" />
-  </ItemGroup>
-  <ItemGroup>
+    <Content Include="Features\Feature1\Feature1.Template.xml">
+      <DependentUpon>Feature1.feature</DependentUpon>
+    </Content>
+    <Content Include="SalesLeads\Elements.xml" />
+    <Content Include="SalesLeads\SalesLeadsInstance\Elements.xml" />
+    <Content Include="SalesLeads\Schema.xml" />
     <Content Include="SalesSiteDefinition\default.aspx" />
     <Content Include="SalesSiteDefinition\onet.xml" />
     <Content Include="SalesSiteDefinition\webtemp_SalesSiteDefinition.xml" />
