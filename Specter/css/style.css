@@ -1310,6 +1310,22 @@ img.floatright, div.floatright {
 /*end forms*/
 /*end additional page fixes*/
 
-#s4-bodyContainer{
+#s4-bodyContainer {
 	padding-bottom: 0px;
+}
+
+#suiteBarLeft {
+	background-color: #993300;
+}
+
+#suiteBarRight {
+	background-color: #E5E5E5;
+}
+
+.ms-core-suiteLink-a:hover {
+	background-color: #009899;
+}
+
+#glovbalNavBox, .ms-clientcontrol-chromeheader {
+	background-color: #E5E5E5;
 }
