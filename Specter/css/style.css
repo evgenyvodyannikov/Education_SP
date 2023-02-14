@@ -1309,3 +1309,7 @@ img.floatright, div.floatright {
 }
 /*end forms*/
 /*end additional page fixes*/
+
+#s4-bodyContainer{
+	padding-bottom: 0px;
+}
