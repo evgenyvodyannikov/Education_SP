@@ -151,9 +151,8 @@ To build the master page directly from this HTML file, simply edit the page as y
                 <div class="wrapper cf">
                     <div id="logo">
                         <!--logo snippet-->
-                        <a href="/sites/123/_catalogs/masterpage/specter/index.html">
-                            <img src="/sites/123/_catalogs/masterpage/specter/img/logo.gif" alt="" />
-                        </a>
+                        <div data-name="SiteLogo"><SharePoint:AjaxDelta runat="server" BlockElement="True"><SharePoint:SPSimpleSiteLink runat="server" CssClass="" ID="x280a1f4d3c9a4f73a3d8f974ececb37c" NavigateUrl="~sitecollection"><SharePoint:SiteLogoImage name="onetidHeadbnnr0" runat="server" CssClass="" ID="x70b16af427f04b73b11700103090a388" LogoImageUrl="http://sharepoint/sites/123/_catalogs/masterpage/specter/img/logo.gif" /></SharePoint:SPSimpleSiteLink></SharePoint:AjaxDelta>
+                        </div>
                         <!--end logo snippet-->
                     </div>
                     <div class="tagline">
