@@ -1,0 +1,1 @@
+﻿<%@ServiceHost language= "C#" CodeBehind="Code/FileManager.cs" Factory="Microsoft.SharePoint.Client.Services.MultipleBaseAddressWebServiceHostFactory, Microsoft.SharePoint.Client.ServerRuntime, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" Service="MarketPlace.Services.FileManager.Code.FileManager" %>

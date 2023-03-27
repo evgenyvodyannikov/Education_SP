@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/" >
+  <Module Name="AdsListWebPart" List="113" Url="_catalogs/wp">
+    <File Path="AdsListWebPart\AdsListWebPart.webpart" Url="AdvertisementsList_AdsListWebPart.webpart" Type="GhostableInLibrary" >
+      <Property Name="Group" Value="Custom" />
+    </File>
+  </Module>
+</Elements>

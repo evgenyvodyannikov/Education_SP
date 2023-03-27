@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/" >
+  <Module Name="EditAdvertisementWebPart" List="113" Url="_catalogs/wp">
+    <File Path="EditAdvertisementWebPart\EditAdvertisementWebPart.webpart" Url="AdvertisementList_EditAdvertisementWebPart.webpart" Type="GhostableInLibrary" >
+      <Property Name="Group" Value="MarketPlace" />
+    </File>
+  </Module>
+</Elements>

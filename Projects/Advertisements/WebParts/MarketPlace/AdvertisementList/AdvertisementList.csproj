@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7A4D06CB-2AEF-4DAE-AB1B-FD4AFDA6E3FF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AdvertisementList</RootNamespace>
+    <AssemblyName>AdvertisementList</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetOfficeVersion>15.0</TargetOfficeVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{C1CDDADD-2546-481F-9697-4EA41081F2FC};{14822709-B5A1-4724-98CA-57A101D1B079};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <SandboxedSolution>False</SandboxedSolution>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.SharePoint" />
+    <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AdvertisementListWebPart\AdvertisementListWebPart.ascx.cs">
+      <DependentUpon>AdvertisementListWebPart.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="AdvertisementListWebPart\AdvertisementListWebPart.ascx.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AdvertisementListWebPart.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="EditAdvertisementWebPart\EditAdvertisementWebPart.ascx.cs">
+      <DependentUpon>EditAdvertisementWebPart.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="EditAdvertisementWebPart\EditAdvertisementWebPart.ascx.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditAdvertisementWebPart.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="FullAdvertisementWebPart\FullAdvertisementWebPart.ascx.cs">
+      <DependentUpon>FullAdvertisementWebPart.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="FullAdvertisementWebPart\FullAdvertisementWebPart.ascx.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FullAdvertisementWebPart.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AdvertisementListWebPart\AdvertisementListWebPart.webpart" />
+    <None Include="AdvertisementListWebPart\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{f48f09c7-faff-40b4-b372-3807fb0305c9}</SharePointProjectItemId>
+    </None>
+    <None Include="EditAdvertisementWebPart\EditAdvertisementWebPart.webpart" />
+    <None Include="EditAdvertisementWebPart\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{34bed770-f4d5-40d9-a2e1-6edd85e8e097}</SharePointProjectItemId>
+    </None>
+    <None Include="Features\AdvertisementListFeature.Site\AdvertisementListFeature.Site.feature">
+      <FeatureId>{23b89a0c-f743-40ea-8b19-0ed515f99ca0}</FeatureId>
+    </None>
+    <None Include="FullAdvertisementWebPart\FullAdvertisementWebPart.webpart" />
+    <None Include="FullAdvertisementWebPart\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{056e5fa5-3dd3-4ab6-a202-a8b5bd5212b4}</SharePointProjectItemId>
+    </None>
+    <None Include="key.snk" />
+    <None Include="Layouts\AdvertisementList\img\delete-icon.webp" />
+    <None Include="Layouts\AdvertisementList\libs\bootstrap\css\bootstrap-theme.css.map" />
+    <None Include="Layouts\AdvertisementList\libs\bootstrap\css\bootstrap.css.map" />
+    <None Include="Layouts\AdvertisementList\libs\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <None Include="Layouts\AdvertisementList\libs\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <None Include="Layouts\AdvertisementList\libs\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <None Include="Layouts\AdvertisementList\libs\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <None Include="Layouts\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{37bce0d5-18d6-4c13-8992-68c1eb2c99ba}</SharePointProjectItemId>
+    </None>
+    <None Include="Package\Package.package">
+      <PackageId>{2242dc05-9f82-4ae6-bfaf-84e9fa374d0c}</PackageId>
+    </None>
+    <None Include="Package\Package.Template.xml">
+      <DependentUpon>Package.package</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="AdvertisementListWebPart\AdvertisementListWebPart.ascx">
+      <Generator>SharePointWebPartCodeGenerator</Generator>
+      <LastGenOutput>AdvertisementListWebPart.ascx.g.cs</LastGenOutput>
+    </Content>
+    <Content Include="AdvertisementListWebPart\Elements.xml" />
+    <Content Include="EditAdvertisementWebPart\EditAdvertisementWebPart.ascx">
+      <Generator>SharePointWebPartCodeGenerator</Generator>
+      <LastGenOutput>EditAdvertisementWebPart.ascx.g.cs</LastGenOutput>
+    </Content>
+    <Content Include="EditAdvertisementWebPart\Elements.xml" />
+    <Content Include="Features\AdvertisementListFeature.Site\AdvertisementListFeature.Site.Template.xml">
+      <DependentUpon>AdvertisementListFeature.Site.feature</DependentUpon>
+    </Content>
+    <Content Include="FullAdvertisementWebPart\Elements.xml" />
+    <Content Include="FullAdvertisementWebPart\FullAdvertisementWebPart.ascx">
+      <Generator>SharePointWebPartCodeGenerator</Generator>
+      <LastGenOutput>FullAdvertisementWebPart.ascx.g.cs</LastGenOutput>
+    </Content>
+    <Content Include="Layouts\AdvertisementList\css\fancybox.css" />
+    <Content Include="Layouts\AdvertisementList\css\fotorama.css" />
+    <Content Include="Layouts\AdvertisementList\css\main.css" />
+    <Content Include="Layouts\AdvertisementList\css\media.css" />
+    <Content Include="Layouts\AdvertisementList\css\owl.carousel.min.css" />
+    <Content Include="Layouts\AdvertisementList\css\owl.theme.default.min.css" />
+    <Content Include="Layouts\AdvertisementList\img\1.png" />
+    <Content Include="Layouts\AdvertisementList\img\10.png" />
+    <Content Include="Layouts\AdvertisementList\img\2.png" />
+    <Content Include="Layouts\AdvertisementList\img\3.png" />
+    <Content Include="Layouts\AdvertisementList\img\4.png" />
+    <Content Include="Layouts\AdvertisementList\img\5.png" />
+    <Content Include="Layouts\AdvertisementList\img\6.png" />
+    <Content Include="Layouts\AdvertisementList\img\7.png" />
+    <Content Include="Layouts\AdvertisementList\img\8.png" />
+    <Content Include="Layouts\AdvertisementList\img\9.png" />
+    <Content Include="Layouts\AdvertisementList\img\arrow-down-3.svg" />
+    <Content Include="Layouts\AdvertisementList\img\arrow-slider-left.svg" />
+    <Content Include="Layouts\AdvertisementList\img\arrow-slider-right.svg" />
+    <Content Include="Layouts\AdvertisementList\img\arrow-up.svg" />
+    <Content Include="Layouts\AdvertisementList\img\arrow_down.svg" />
+    <Content Include="Layouts\AdvertisementList\img\arrow_down_black.svg" />
+    <Content Include="Layouts\AdvertisementList\img\camera.svg" />
+    <Content Include="Layouts\AdvertisementList\img\face.png" />
+    <Content Include="Layouts\AdvertisementList\img\face2.png" />
+    <Content Include="Layouts\AdvertisementList\img\fancybox\blank.gif" />
+    <Content Include="Layouts\AdvertisementList\img\fancybox\fancybox-x.png" />
+    <Content Include="Layouts\AdvertisementList\img\fancybox\fancybox-y.png" />
+    <Content Include="Layouts\AdvertisementList\img\fancybox\fancybox.png" />
+    <Content Include="Layouts\AdvertisementList\img\fancybox\fancy_close.png" />
+    <Content Include="Layouts\AdvertisementList\img\fancybox\fancy_loading.png" />
+    <Content Include="Layouts\AdvertisementList\img\fancybox\fancy_nav_left.png" />
+    <Content Include="Layouts\AdvertisementList\img\fancybox\fancy_nav_right.png" />
+    <Content Include="Layouts\AdvertisementList\img\fancybox\fancy_shadow_e.png" />
+    <Content Include="Layouts\AdvertisementList\img\fancybox\fancy_shadow_n.png" />
+    <Content Include="Layouts\AdvertisementList\img\fancybox\fancy_shadow_ne.png" />
+    <Content Include="Layouts\AdvertisementList\img\fancybox\fancy_shadow_nw.png" />
+    <Content Include="Layouts\AdvertisementList\img\fancybox\fancy_shadow_s.png" />
+    <Content Include="Layouts\AdvertisementList\img\fancybox\fancy_shadow_se.png" />
+    <Content Include="Layouts\AdvertisementList\img\fancybox\fancy_shadow_sw.png" />
+    <Content Include="Layouts\AdvertisementList\img\fancybox\fancy_shadow_w.png" />
+    <Content Include="Layouts\AdvertisementList\img\fancybox\fancy_title_left.png" />
+    <Content Include="Layouts\AdvertisementList\img\fancybox\fancy_title_main.png" />
+    <Content Include="Layouts\AdvertisementList\img\fancybox\fancy_title_over.png" />
+    <Content Include="Layouts\AdvertisementList\img\fancybox\fancy_title_right.png" />
+    <Content Include="Layouts\AdvertisementList\img\file.svg" />
+    <Content Include="Layouts\AdvertisementList\img\like-border.svg" />
+    <Content Include="Layouts\AdvertisementList\img\like.svg" />
+    <Content Include="Layouts\AdvertisementList\img\log.png" />
+    <Content Include="Layouts\AdvertisementList\img\logo.svg" />
+    <Content Include="Layouts\AdvertisementList\img\marketplace.png" />
+    <Content Include="Layouts\AdvertisementList\img\new1.png" />
+    <Content Include="Layouts\AdvertisementList\img\news.png" />
+    <Content Include="Layouts\AdvertisementList\img\no-data.jpg" />
+    <Content Include="Layouts\AdvertisementList\img\online-shopping.png" />
+    <Content Include="Layouts\AdvertisementList\img\picture-1.png" />
+    <Content Include="Layouts\AdvertisementList\img\picture-2.png" />
+    <Content Include="Layouts\AdvertisementList\img\rn-bank-our-life.svg" />
+    <Content Include="Layouts\AdvertisementList\img\searsh.svg" />
+    <Content Include="Layouts\AdvertisementList\img\slider-1.png" />
+    <Content Include="Layouts\AdvertisementList\img\slider-2.png" />
+    <Content Include="Layouts\AdvertisementList\img\slider-3.png" />
+    <Content Include="Layouts\AdvertisementList\img\slider-4.png" />
+    <Content Include="Layouts\AdvertisementList\img\slider-5.png" />
+    <Content Include="Layouts\AdvertisementList\img\slider-6.png" />
+    <Content Include="Layouts\AdvertisementList\img\top-bg1.png" />
+    <Content Include="Layouts\AdvertisementList\img\user.png" />
+    <Content Include="Layouts\AdvertisementList\img\x.svg" />
+    <Content Include="Layouts\AdvertisementList\js\common.js" />
+    <Content Include="Layouts\AdvertisementList\js\editAdvertisement.js" />
+    <Content Include="Layouts\AdvertisementList\js\fotorama.js" />
+    <Content Include="Layouts\AdvertisementList\js\fullAdvertisement.js" />
+    <Content Include="Layouts\AdvertisementList\js\jcf.checkbox.js" />
+    <Content Include="Layouts\AdvertisementList\js\jcf.js" />
+    <Content Include="Layouts\AdvertisementList\js\jcf.radio.js" />
+    <Content Include="Layouts\AdvertisementList\js\jquery.fancybox.js" />
+    <Content Include="Layouts\AdvertisementList\js\master.js" />
+    <Content Include="Layouts\AdvertisementList\js\owl.carousel.js" />
+    <Content Include="Layouts\AdvertisementList\js\script.js" />
+    <Content Include="Layouts\AdvertisementList\libs\bootstrap\css\bootstrap-grid.min.css" />
+    <Content Include="Layouts\AdvertisementList\libs\bootstrap\css\bootstrap-theme.css" />
+    <Content Include="Layouts\AdvertisementList\libs\bootstrap\css\bootstrap-theme.min.css" />
+    <Content Include="Layouts\AdvertisementList\libs\bootstrap\css\bootstrap.css" />
+    <Content Include="Layouts\AdvertisementList\libs\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Layouts\AdvertisementList\libs\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Layouts\AdvertisementList\libs\bootstrap\js\bootstrap.js" />
+    <Content Include="Layouts\AdvertisementList\libs\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Layouts\AdvertisementList\libs\bootstrap\js\npm.js" />
+    <Content Include="Layouts\AdvertisementList\libs\html5shiv\es5-shim.min.js" />
+    <Content Include="Layouts\AdvertisementList\libs\html5shiv\html5shiv-printshiv.min.js" />
+    <Content Include="Layouts\AdvertisementList\libs\html5shiv\html5shiv.min.js" />
+    <Content Include="Layouts\AdvertisementList\libs\jquery\jquery-1.11.2.min.js" />
+    <Content Include="Layouts\AdvertisementList\libs\modernizr\modernizr.js" />
+    <Content Include="Layouts\AdvertisementList\libs\plugins-scroll\plugins-scroll.js" />
+    <Content Include="Layouts\AdvertisementList\libs\respond\respond.min.js" />
+    <Content Include="Layouts\AdvertisementList\utils\helper.js" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(VSToolsPath)\SharePointTools\Microsoft.VisualStudio.SharePoint.targets" Condition="'$(VSToolsPath)' != ''" />
+</Project>

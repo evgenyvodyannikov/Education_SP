@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="b877c4b3-01dc-486d-a362-99ce3234bde8" solutionId="b877c4b3-01dc-486d-a362-99ce3234bde8" resetWebServer="false" sharePointProductVersion="15.0" name="MarketPlace.Services.FileManager" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <projectItems>
+    <projectItemReference itemId="f937fc93-6f86-483e-9b03-0cc9779eae71" />
+  </projectItems>
+</package>
